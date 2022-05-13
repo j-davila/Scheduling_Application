@@ -15,15 +15,19 @@
          <children>
             <TableView layoutX="32.0" layoutY="71.0" prefHeight="244.0" prefWidth="407.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
-                <TableColumn prefWidth="75.0" text="C2" />
+                <TableColumn prefWidth="75.0" text="ID" />
+                <TableColumn prefWidth="75.0" text="Name" />
+                  <TableColumn prefWidth="75.0" text="Address" />
+                  <TableColumn prefWidth="75.0" text="Postal Code" />
+                  <TableColumn prefWidth="75.0" text="Phone Number" />
+                  <TableColumn prefWidth="75.0" text="First-Level Division" />
               </columns>
             </TableView>
             <Label layoutX="170.0" layoutY="43.0" text="Customer Names" />
             <Label layoutX="710.0" layoutY="43.0" text="Appointments" />
             <TabPane layoutX="465.0" layoutY="71.0" prefHeight="244.0" prefWidth="566.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab text="Week">
+                <Tab fx:id="weekTab" text="Week">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="216.0" prefWidth="566.0">
                            <children>
@@ -37,7 +41,7 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                <Tab text="Month">
+                <Tab fx:id="monthTab" text="Month">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -55,10 +59,10 @@
             </TabPane>
             <Button fx:id="addBtn" layoutX="249.0" layoutY="326.0" mnemonicParsing="false" onAction="#addCustomer" text="Add" />
             <Button fx:id="updateBtn" layoutX="309.0" layoutY="326.0" mnemonicParsing="false" onAction="#updateCustomer" text="Update" />
-            <Button layoutX="388.0" layoutY="326.0" mnemonicParsing="false" text="Delete" />
-            <Button layoutX="833.0" layoutY="326.0" mnemonicParsing="false" text="Add" />
-            <Button layoutX="905.0" layoutY="326.0" mnemonicParsing="false" text="Update" />
-            <Button layoutX="980.0" layoutY="326.0" mnemonicParsing="false" text="Delete" />
+            <Button fx:id="dltCustomerBtn" layoutX="388.0" layoutY="326.0" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete" />
+            <Button fx:id="addAppointmentBtn" layoutX="833.0" layoutY="326.0" mnemonicParsing="false" onAction="#addAppointment" text="Add" />
+            <Button fx:id="updtAppointmentBtn" layoutX="918.0" layoutY="326.0" mnemonicParsing="false" onAction="#updateAppointment" text="Update" />
+            <Button fx:id="dltAppointmentBtn" layoutX="980.0" layoutY="326.0" mnemonicParsing="false" onAction="#deleteAppointment" text="Delete" />
             <TextField layoutX="290.0" layoutY="39.0" />
             <TextField layoutX="882.0" layoutY="39.0" />
             <Button fx:id="exitBtn" layoutX="1008.0" layoutY="377.0" mnemonicParsing="false" onAction="#exitProgram" text="Exit" />
