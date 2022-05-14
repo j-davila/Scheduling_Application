@@ -27,28 +27,44 @@
             <Label layoutX="710.0" layoutY="43.0" text="Appointments" />
             <TabPane layoutX="465.0" layoutY="71.0" prefHeight="244.0" prefWidth="566.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab fx:id="weekTab" text="Week">
+                <Tab fx:id="monthTab" text="Month">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="216.0" prefWidth="566.0">
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="215.0" prefWidth="517.0">
                            <children>
                               <TableView prefHeight="215.0" prefWidth="566.0">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="C1" />
-                                  <TableColumn prefWidth="75.0" text="C2" />
+                                  <TableColumn prefWidth="75.0" text="ID" />
+                                  <TableColumn prefWidth="75.0" text="Title" />
+                                    <TableColumn prefWidth="75.0" text="Description" />
+                                    <TableColumn prefWidth="75.0" text="Location" />
+                                    <TableColumn prefWidth="75.0" text="Contact" />
+                                    <TableColumn prefWidth="75.0" text="Type" />
+                                    <TableColumn prefWidth="75.0" text="Start Datetime" />
+                                    <TableColumn prefWidth="75.0" text="End Datetime" />
+                                    <TableColumn prefWidth="75.0" text="Customer ID" />
+                                    <TableColumn prefWidth="75.0" text="User ID" />
                                 </columns>
                               </TableView>
                            </children>
                         </AnchorPane>
                   </content>
                 </Tab>
-                <Tab fx:id="monthTab" text="Month">
+                <Tab fx:id="weekTab" text="Week">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <TableView prefHeight="215.0" prefWidth="566.0">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="C1" />
-                                  <TableColumn prefWidth="75.0" text="C2" />
+                                    <TableColumn prefWidth="75.0" text="ID" />
+                                    <TableColumn prefWidth="75.0" text="Title" />
+                                    <TableColumn prefWidth="75.0" text="Description" />
+                                    <TableColumn prefWidth="75.0" text="Location" />
+                                    <TableColumn prefWidth="75.0" text="Contact" />
+                                    <TableColumn prefWidth="75.0" text="Type" />
+                                    <TableColumn prefWidth="75.0" text="Start Datetime" />
+                                    <TableColumn prefWidth="75.0" text="End Datetime" />
+                                    <TableColumn prefWidth="75.0" text="Customer ID" />
+                                    <TableColumn prefWidth="75.0" text="User ID" />
                                 </columns>
                               </TableView>
                            </children>
@@ -61,7 +77,7 @@
             <Button fx:id="updateBtn" layoutX="309.0" layoutY="326.0" mnemonicParsing="false" onAction="#updateCustomer" text="Update" />
             <Button fx:id="dltCustomerBtn" layoutX="388.0" layoutY="326.0" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete" />
             <Button fx:id="addAppointmentBtn" layoutX="833.0" layoutY="326.0" mnemonicParsing="false" onAction="#addAppointment" text="Add" />
-            <Button fx:id="updtAppointmentBtn" layoutX="918.0" layoutY="326.0" mnemonicParsing="false" onAction="#updateAppointment" text="Update" />
+            <Button fx:id="updtAppointmentBtn" layoutX="902.0" layoutY="326.0" mnemonicParsing="false" onAction="#updateAppointment" text="Update" />
             <Button fx:id="dltAppointmentBtn" layoutX="980.0" layoutY="326.0" mnemonicParsing="false" onAction="#deleteAppointment" text="Delete" />
             <TextField layoutX="290.0" layoutY="39.0" />
             <TextField layoutX="882.0" layoutY="39.0" />

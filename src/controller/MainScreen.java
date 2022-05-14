@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import model.JDBC;
 
 import java.io.IOException;
 import java.net.URL;
@@ -16,6 +17,10 @@ import java.util.ResourceBundle;
 public class MainScreen implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        JDBC.openConnection();
+
+        //JDBC.closeConnection();
 
     }
 

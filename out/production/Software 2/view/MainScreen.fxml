@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 
 <AnchorPane prefHeight="466.0" prefWidth="1107.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainScreen">
    <children>
@@ -27,21 +28,33 @@
             <Label layoutX="710.0" layoutY="43.0" text="Appointments" />
             <TabPane layoutX="465.0" layoutY="71.0" prefHeight="244.0" prefWidth="566.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab fx:id="weekTab" text="Week">
+                <Tab fx:id="monthTab" text="Month">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="216.0" prefWidth="566.0">
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="215.0" prefWidth="517.0">
                            <children>
-                              <TableView prefHeight="215.0" prefWidth="566.0">
-                                <columns>
-                                  <TableColumn prefWidth="75.0" text="C1" />
-                                  <TableColumn prefWidth="75.0" text="C2" />
-                                </columns>
-                              </TableView>
+                              <StackPane layoutX="-1.0" prefHeight="215.0" prefWidth="566.0">
+                                 <children>
+                                    <TableView prefHeight="215.0" prefWidth="566.0">
+                                      <columns>
+                                        <TableColumn prefWidth="75.0" text="ID" />
+                                        <TableColumn prefWidth="75.0" text="Title" />
+                                          <TableColumn prefWidth="75.0" text="Description" />
+                                          <TableColumn prefWidth="75.0" text="Location" />
+                                          <TableColumn prefWidth="75.0" text="Contact" />
+                                          <TableColumn prefWidth="75.0" text="Type" />
+                                          <TableColumn prefWidth="75.0" text="Start Datetime" />
+                                          <TableColumn prefWidth="75.0" text="End Datetime" />
+                                          <TableColumn prefWidth="75.0" text="Customer ID" />
+                                          <TableColumn prefWidth="75.0" text="User ID" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                              </StackPane>
                            </children>
                         </AnchorPane>
                   </content>
                 </Tab>
-                <Tab fx:id="monthTab" text="Month">
+                <Tab fx:id="weekTab" text="Week">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>

@@ -31,6 +31,8 @@ public class LoginScreen implements Initializable {
 
     public void userLogin(ActionEvent actionEvent) throws IOException {
 
+        // If login successful then go to mainScreen, open connection to DB
+
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root,1100,450);
