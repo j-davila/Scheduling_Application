@@ -18,10 +18,6 @@ public class MainScreen implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        JDBC.openConnection();
-
-        //JDBC.closeConnection();
-
     }
 
     public void addCustomer(ActionEvent actionEvent) throws IOException {
@@ -66,6 +62,8 @@ public class MainScreen implements Initializable {
     }
 
     public void exitProgram(ActionEvent actionEvent) {
+
+        JDBC.closeConnection();
 
         System.exit(0);
     }
