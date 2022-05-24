@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import model.JDBC;
+import database.JDBC;
 
 import java.io.IOException;
 import java.net.URL;

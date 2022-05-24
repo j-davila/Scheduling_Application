@@ -1,9 +1,6 @@
-package model;
+package database;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.sql.*;
 
 public abstract class CustomerQuery {
 
@@ -59,6 +56,15 @@ public abstract class CustomerQuery {
 
         int rowsUpdated = statement.executeUpdate();
         return rowsUpdated;
+    }
+
+    // query gathers all customer records from the database
+    public static ResultSet getAllCustomers(Connection thisConnection) throws SQLException {
+        String query = "SELECT * FROM client_schedule.customers";
+
+        ResultSet results = thisConnection.createStatement().executeQuery(query);
+
+        return results;
     }
 
 }

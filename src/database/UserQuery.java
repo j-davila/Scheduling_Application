@@ -1,4 +1,4 @@
-package model;
+package database;
 
 public abstract class UserQuery {
 
