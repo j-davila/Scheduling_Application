@@ -1,15 +1,15 @@
 package model;
 
-public class customer {
+public class Customer {
 
     private int id;
     private String name;
     private String address;
-    private int postalCode;
+    private String postalCode;
     private String phone;
     private int divisionId;
 
-    public customer(int id, String name, String address, int postalCode, String phone, int divisionId){
+    public Customer(int id, String name, String address, String postalCode, String phone, int divisionId){
         this.id = id;
         this.name = name;
         this.address = address;
@@ -17,7 +17,6 @@ public class customer {
         this.phone = phone;
         this.divisionId = divisionId;
     }
-
 
     public int getId() {
         return id;
@@ -43,11 +42,11 @@ public class customer {
         this.address = address;
     }
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 

@@ -1,4 +1,6 @@
-package database;
+package utility;
+
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 
@@ -59,12 +61,11 @@ public abstract class CustomerQuery {
     }
 
     // query gathers all customer records from the database
-    public static ResultSet getAllCustomers(Connection thisConnection) throws SQLException {
+    public static ResultSet getAllCustomers() throws SQLException {
         String query = "SELECT * FROM client_schedule.customers";
 
-        ResultSet results = thisConnection.createStatement().executeQuery(query);
+        ResultSet results = JDBC.connection.createStatement().executeQuery(query);
 
         return results;
     }
-
 }

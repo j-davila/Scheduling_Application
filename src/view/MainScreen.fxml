@@ -4,18 +4,28 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="467.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainScreen">
+<AnchorPane prefHeight="762.0" prefWidth="1156.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainScreen">
    <children>
-      <AnchorPane layoutX="17.0" layoutY="21.0" prefHeight="416.0" prefWidth="1175.0">
+      <AnchorPane layoutX="6.0" layoutY="42.0" prefHeight="706.0" prefWidth="1128.0">
          <children>
-            <TableView layoutX="32.0" layoutY="71.0" prefHeight="244.0" prefWidth="407.0" />
-            <Label layoutX="170.0" layoutY="43.0" text="Customer Names" />
-            <Label layoutX="710.0" layoutY="43.0" text="Appointments" />
-            <TabPane layoutX="465.0" layoutY="71.0" prefHeight="244.0" prefWidth="566.0" tabClosingPolicy="UNAVAILABLE">
+            <TableView fx:id="customerTable" layoutX="32.0" layoutY="71.0" prefHeight="244.0" prefWidth="981.0">
+               <columns>
+                  <TableColumn fx:id="idColumn" prefWidth="75.0" text="Customer ID" />
+                  <TableColumn fx:id="nameColumn" prefWidth="129.0" text="Customer Name" />
+                  <TableColumn fx:id="addressColumn" prefWidth="286.0" text="Address" />
+                  <TableColumn fx:id="zipColumn" prefWidth="96.0" text="Postal Code" />
+                  <TableColumn fx:id="phoneColumn" prefWidth="128.0" text="Phone" />
+                  <TableColumn fx:id="fldColumn" prefWidth="133.0" text="First-Level Division" />
+                  <TableColumn fx:id="countryColumn" prefWidth="118.0" text="Country" />
+               </columns></TableView>
+            <Label layoutX="170.0" layoutY="43.0" text="Customers" />
+            <Label layoutX="505.0" layoutY="353.0" text="Appointments" />
+            <TabPane layoutX="32.0" layoutY="376.0" prefHeight="244.0" prefWidth="566.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="monthTab" text="Month">
                   <content>
@@ -40,12 +50,11 @@
             <Button fx:id="addBtn" layoutX="249.0" layoutY="326.0" mnemonicParsing="false" onAction="#addCustomer" text="Add" />
             <Button fx:id="updateBtn" layoutX="309.0" layoutY="326.0" mnemonicParsing="false" onAction="#updateCustomer" text="Update" />
             <Button fx:id="dltCustomerBtn" layoutX="388.0" layoutY="326.0" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete" />
-            <Button fx:id="addAppointmentBtn" layoutX="833.0" layoutY="326.0" mnemonicParsing="false" onAction="#addAppointment" text="Add" />
-            <Button fx:id="updtAppointmentBtn" layoutX="902.0" layoutY="326.0" mnemonicParsing="false" onAction="#updateAppointment" text="Update" />
-            <Button fx:id="dltAppointmentBtn" layoutX="980.0" layoutY="326.0" mnemonicParsing="false" onAction="#deleteAppointment" text="Delete" />
-            <TextField layoutX="290.0" layoutY="39.0" />
-            <TextField layoutX="882.0" layoutY="39.0" />
-            <Button fx:id="exitBtn" layoutX="1008.0" layoutY="377.0" mnemonicParsing="false" onAction="#exitProgram" text="Exit" />
+            <Button fx:id="addAppointmentBtn" layoutX="249.0" layoutY="638.0" mnemonicParsing="false" onAction="#addAppointment" text="Add" />
+            <Button fx:id="updtAppointmentBtn" layoutX="337.0" layoutY="638.0" mnemonicParsing="false" onAction="#updateAppointment" text="Update" />
+            <Button fx:id="dltAppointmentBtn" layoutX="414.0" layoutY="638.0" mnemonicParsing="false" onAction="#deleteAppointment" text="Delete" />
+            <TextField fx:id="customerSearch" layoutX="290.0" layoutY="39.0" />
+            <Button fx:id="exitBtn" layoutX="769.0" layoutY="651.0" mnemonicParsing="false" onAction="#exitProgram" text="Exit" />
          </children>
       </AnchorPane>
    </children>

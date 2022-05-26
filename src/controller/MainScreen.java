@@ -1,23 +1,128 @@
 package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
+import javafx.scene.control.TextField;
+import utility.CustomerQuery;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import database.JDBC;
+import utility.JDBC;
+import model.Customer;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainScreen implements Initializable {
+
+    @FXML
+    private TextField customerSearch;
+
+    @FXML
+    private TableColumn<Customer, Integer> idColumn;
+
+    @FXML
+    private TableColumn<Customer,String> nameColumn;
+
+    @FXML
+    private TableColumn<Customer,String> addressColumn;
+
+    @FXML
+    private TableColumn<Customer, String> zipColumn;
+
+    @FXML
+    private TableColumn<Customer, String> phoneColumn;
+
+    @FXML
+    private TableColumn<Customer,Integer> fldColumn;
+
+//    @FXML
+//    private TableColumn<Customer, String> countryColumn;
+
+    @FXML
+    private TableView<Customer> customerTable;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        zipColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        fldColumn.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
+
+        ResultSet rs = null;
+
+        ObservableList<Customer> testList = FXCollections.observableArrayList();
+
+        try {
+            rs = CustomerQuery.getAllCustomers();
+
+            while (rs.next()) {
+                int id = rs.getInt("Customer_ID");
+                String name = rs.getString("Customer_Name");
+                String address = rs.getString("Address");
+                String zip = rs.getString("Postal_Code");
+                String phone = rs.getString("Phone");
+                int fld = rs.getInt("Division_ID");
+
+
+                //Assuming you have a user object
+                Customer testCustomer = new Customer(id, name, address, zip, phone,fld);
+
+                testList.add(testCustomer);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        FilteredList<Customer> filterTest = new FilteredList<>(testList, b -> true);
+
+        // The logic inside the predicate filters the content of the tableview using ID or part name.
+        customerSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterTest.setPredicate(part -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+//                try {
+//                    if (Inventory.lookupPart(Integer.parseInt(newValue)).getId() == part.getId()) {
+//                        return true;
+//                    }
+//                } catch (NumberFormatException | NullPointerException e) {
+//                    return false;
+//                } finally {
+//                    try{
+//                        String lowerNewValue = newValue.toLowerCase();
+//                        if (Inventory.lookupPart(lowerNewValue).contains(part)){
+//                            return true;
+//                        }
+//                    }catch (NullPointerException e){
+//                        return false;
+//                    }
+//                }
+                return false;
+            });
+        });
+        SortedList<Customer> sortTest = new SortedList<>(filterTest);
+        sortTest.comparatorProperty().bind(customerTable.comparatorProperty());
+        customerTable.setItems(sortTest);
     }
 
     public void addCustomer(ActionEvent actionEvent) throws IOException {

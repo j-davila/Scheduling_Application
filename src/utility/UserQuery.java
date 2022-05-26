@@ -1,4 +1,4 @@
-package database;
+package utility;
 
 public abstract class UserQuery {
 

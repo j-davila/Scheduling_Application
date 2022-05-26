@@ -35,7 +35,7 @@ public class LoginScreen implements Initializable {
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root,1100,450);
+        Scene scene = new Scene(root,1156,762);
         stage.setScene(scene);
         stage.show();
     }
