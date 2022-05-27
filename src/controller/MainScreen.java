@@ -51,11 +51,13 @@ public class MainScreen implements Initializable {
     @FXML
     private TableColumn<Customer,Integer> fldColumn;
 
-//    @FXML
-//    private TableColumn<Customer, String> countryColumn;
+    @FXML
+    private TableColumn<Customer, String> countryColumn;
 
     @FXML
     private TableView<Customer> customerTable;
+
+    public static String currentUser;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -67,11 +69,12 @@ public class MainScreen implements Initializable {
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         fldColumn.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
 
-        ResultSet rs = null;
-
+        ResultSet rs;
         ObservableList<Customer> testList = FXCollections.observableArrayList();
 
         try {
+
+            // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
             rs = CustomerQuery.getAllCustomers();
 
             while (rs.next()) {
@@ -82,8 +85,6 @@ public class MainScreen implements Initializable {
                 String phone = rs.getString("Phone");
                 int fld = rs.getInt("Division_ID");
 
-
-                //Assuming you have a user object
                 Customer testCustomer = new Customer(id, name, address, zip, phone,fld);
 
                 testList.add(testCustomer);
@@ -120,9 +121,14 @@ public class MainScreen implements Initializable {
                 return false;
             });
         });
+
         SortedList<Customer> sortTest = new SortedList<>(filterTest);
         sortTest.comparatorProperty().bind(customerTable.comparatorProperty());
         customerTable.setItems(sortTest);
+    }
+
+    public void getCurrentUser(String user){
+        currentUser = user;
     }
 
     public void addCustomer(ActionEvent actionEvent) throws IOException {

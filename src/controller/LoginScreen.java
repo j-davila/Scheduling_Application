@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import javax.swing.plaf.synth.Region;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -31,12 +32,20 @@ public class LoginScreen implements Initializable {
 
     public void userLogin(ActionEvent actionEvent) throws IOException {
 
-        // If login successful then go to mainScreen, open connection to DB
+        // If login successful then go to mainScreen
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
+        String user = userNameText.getText();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
         Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+        Parent root = loader.load();
+
         Scene scene = new Scene(root,1156,762);
         stage.setScene(scene);
+
+        MainScreen mainScreen = loader.getController();
+        mainScreen.getCurrentUser(user);
+
         stage.show();
     }
 }

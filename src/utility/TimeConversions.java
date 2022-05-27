@@ -1,11 +1,10 @@
 package utility;
 
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.*;
 
-public class Time {
+public class TimeConversions {
 
     // Returns timestamp for SQl database
   public static Timestamp toTimestamp(LocalDateTime now){

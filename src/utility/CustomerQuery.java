@@ -8,7 +8,7 @@ public abstract class CustomerQuery {
 
     //Add, update, delete customer
 
-    public static int insert(String name, String address, int postalCode, String phone, Timestamp createDate, String createdBy,
+    public static int insert(String name, String address, String postalCode, String phone, Timestamp createDate, String createdBy,
                              Timestamp lastUpdated, String lastUpdatedBy, int divisionId) throws SQLException {
 
         String query = "INSERT INTO client_schedule.customers(Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, " +
@@ -17,7 +17,7 @@ public abstract class CustomerQuery {
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
         statement.setString(1,name);
         statement.setString(2,address);
-        statement.setInt(3,postalCode);
+        statement.setString(3,postalCode);
         statement.setString(4,phone);
         statement.setTimestamp(5,createDate);
         statement.setString(6, createdBy);
