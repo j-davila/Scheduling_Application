@@ -12,7 +12,7 @@ public abstract class CustomerQuery {
                              Timestamp lastUpdated, String lastUpdatedBy, int divisionId) throws SQLException {
 
         String query = "INSERT INTO client_schedule.customers(Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, " +
-                "Last_Update,Last_Updated_By, Division_ID) VALUES(?,?)";
+                "Last_Update,Last_Updated_By, Division_ID) VALUES(?,?,?,?,?,?,?,?,?)";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
         statement.setString(1,name);

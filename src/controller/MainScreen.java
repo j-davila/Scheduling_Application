@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Region;
 import utility.CustomerQuery;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
@@ -19,6 +20,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import utility.JDBC;
 import model.Customer;
+import utility.Lists;
 
 import java.awt.*;
 import java.io.IOException;
@@ -52,9 +54,6 @@ public class MainScreen implements Initializable {
     private TableColumn<Customer,Integer> fldColumn;
 
     @FXML
-    private TableColumn<Customer, String> countryColumn;
-
-    @FXML
     private TableView<Customer> customerTable;
 
     public static String currentUser;
@@ -70,7 +69,6 @@ public class MainScreen implements Initializable {
         fldColumn.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
 
         ResultSet rs;
-        ObservableList<Customer> testList = FXCollections.observableArrayList();
 
         try {
 
@@ -87,13 +85,13 @@ public class MainScreen implements Initializable {
 
                 Customer testCustomer = new Customer(id, name, address, zip, phone,fld);
 
-                testList.add(testCustomer);
+                Lists.addCustomer(testCustomer);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        FilteredList<Customer> filterTest = new FilteredList<>(testList, b -> true);
+        FilteredList<Customer> filterTest = new FilteredList<>(Lists.getAllCustomers(), b -> true);
 
         // The logic inside the predicate filters the content of the tableview using ID or part name.
         customerSearch.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -125,6 +123,7 @@ public class MainScreen implements Initializable {
         SortedList<Customer> sortTest = new SortedList<>(filterTest);
         sortTest.comparatorProperty().bind(customerTable.comparatorProperty());
         customerTable.setItems(sortTest);
+
     }
 
     public void getCurrentUser(String user){
@@ -139,13 +138,38 @@ public class MainScreen implements Initializable {
         stage.show();
     }
 
-    public void updateCustomer(ActionEvent actionEvent) throws IOException {
+    public void updateCustomer(ActionEvent actionEvent) throws IOException, SQLException {
+        try{
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyCustomerScreen.fxml")));
-        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 519, 469);
-        stage.setScene(scene);
-        stage.show();
+            Customer testCustomer = customerTable.getSelectionModel().getSelectedItem();
+            int id = customerTable.getSelectionModel().getSelectedItem().getId();
+            String name = customerTable.getSelectionModel().getSelectedItem().getName();
+            String address = customerTable.getSelectionModel().getSelectedItem().getAddress();
+            String zip = customerTable.getSelectionModel().getSelectedItem().getPostalCode();
+            String phone = customerTable.getSelectionModel().getSelectedItem().getPhone();
+            int fld = customerTable.getSelectionModel().getSelectedItem().getDivisionId();
+
+            Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyCustomerScreen.fxml"));
+            Region root = loader.load();
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            ModifyCustomerScreen modifyCustomerScreen = loader.getController();
+            modifyCustomerScreen.setFields(id,name,address,zip,phone,fld);
+            modifyCustomerScreen.getCustomer(testCustomer);
+
+            stage.show();
+
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+
+//        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyCustomerScreen.fxml")));
+//        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+//        Scene scene = new Scene(root, 519, 469);
+//        stage.setScene(scene);
+//        stage.show();
     }
 
     public void deleteCustomer(ActionEvent actionEvent) {

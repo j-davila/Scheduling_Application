@@ -14,16 +14,24 @@ public abstract class FirstLevelDivQuery {
         return results;
     }
 
-    public static ResultSet getDivision(int country) throws SQLException {
+    public static ResultSet getDivisionByCountry(int country) throws SQLException {
 
         String query = "SELECT * FROM client_schedule.first_level_divisions WHERE Country_ID = ?";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
         statement.setInt(1, country);
 
-        ResultSet results = statement.executeQuery();
+        return statement.executeQuery();
+    }
 
-        return results;
+    public static ResultSet getDivision(int divisionId) throws SQLException {
+
+        String query = "SELECT * FROM client_schedule.first_level_divisions WHERE Division_ID = ?";
+
+        PreparedStatement statement = JDBC.connection.prepareStatement(query);
+        statement.setInt(1, divisionId);
+
+        return statement.executeQuery();
     }
 
 }

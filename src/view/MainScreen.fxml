@@ -13,7 +13,7 @@
    <children>
       <AnchorPane layoutX="6.0" layoutY="42.0" prefHeight="706.0" prefWidth="1128.0">
          <children>
-            <TableView fx:id="customerTable" layoutX="32.0" layoutY="71.0" prefHeight="244.0" prefWidth="981.0">
+            <TableView fx:id="customerTable" layoutX="32.0" layoutY="71.0" prefHeight="244.0" prefWidth="848.0">
                <columns>
                   <TableColumn fx:id="idColumn" prefWidth="75.0" text="Customer ID" />
                   <TableColumn fx:id="nameColumn" prefWidth="129.0" text="Customer Name" />
@@ -21,7 +21,6 @@
                   <TableColumn fx:id="zipColumn" prefWidth="96.0" text="Postal Code" />
                   <TableColumn fx:id="phoneColumn" prefWidth="128.0" text="Phone" />
                   <TableColumn fx:id="fldColumn" prefWidth="133.0" text="First-Level Division" />
-                  <TableColumn fx:id="countryColumn" prefWidth="118.0" text="Country" />
                </columns></TableView>
             <Label layoutX="170.0" layoutY="43.0" text="Customers" />
             <Label layoutX="505.0" layoutY="353.0" text="Appointments" />

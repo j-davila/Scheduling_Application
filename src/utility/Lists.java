@@ -16,4 +16,9 @@ public class Lists {
         allCustomers.add(customer);
     }
 
+    public static void clearCustomerList(){
+
+        allCustomers.clear();;
+    }
+
 }

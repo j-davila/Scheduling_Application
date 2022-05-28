@@ -80,7 +80,7 @@ public class AddCustomerScreen implements Initializable {
         Country selectedCountry = countryCombo.getSelectionModel().getSelectedItem();
 
         try {
-            ResultSet rs = FirstLevelDivQuery.getDivision(selectedCountry.getId());
+            ResultSet rs = FirstLevelDivQuery.getDivisionByCountry(selectedCountry.getId());
 
             while (rs.next()) {
 
@@ -147,16 +147,13 @@ public class AddCustomerScreen implements Initializable {
             stage.setScene(scene);
             stage.show();
 
-        } catch(NullPointerException | IllegalArgumentException e){
+        } catch(NullPointerException | IllegalArgumentException | SQLException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Input Error");
             alert.setHeaderText("Invalid Input");
             alert.setContentText(e.getMessage());
 
             alert.showAndWait();
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -172,34 +169,13 @@ public class AddCustomerScreen implements Initializable {
     public void changeCountry(ActionEvent actionEvent) {
 
         ObservableList<Division> divisiontest = FXCollections.observableArrayList();
-        ObservableList<Country> countryTest = FXCollections.observableArrayList();
-
-        try {
-
-            ResultSet rs2 = CountryQuery.getAllCountries();
-
-            while (rs2.next()) {
-
-                int id = rs2.getInt("Country_ID");
-                String name = rs2.getString("Country");
-
-                Country newCountry = new Country(id, name);
-
-                countryTest.add(newCountry);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        countryCombo.setItems(countryTest);
-        countryCombo.setVisibleRowCount(5);
-        countryCombo.getSelectionModel().selectFirst();
 
         Country selectedCountry = countryCombo.getSelectionModel().getSelectedItem();
 
+        divisiontest.clear();
+
         try {
-            ResultSet rs = FirstLevelDivQuery.getDivision(selectedCountry.getId());
+            ResultSet rs = FirstLevelDivQuery.getDivisionByCountry(selectedCountry.getId());
 
             while (rs.next()) {
 
