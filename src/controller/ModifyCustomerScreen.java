@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -16,6 +17,7 @@ import model.Country;
 import model.Customer;
 import model.Division;
 import utility.CountryQuery;
+import utility.CustomerQuery;
 import utility.FirstLevelDivQuery;
 import utility.Lists;
 
@@ -23,6 +25,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -53,6 +57,30 @@ public class ModifyCustomerScreen implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        ObservableList<Country> countryTest = FXCollections.observableArrayList();
+
+        try {
+
+            ResultSet rs2 = CountryQuery.getAllCountries();
+
+            while (rs2.next()) {
+
+                int id = rs2.getInt("Country_ID");
+                String name = rs2.getString("Country");
+
+                Country newCountry = new Country(id, name);
+
+                countryTest.add(newCountry);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        countryCombo.setItems(countryTest);
+        countryCombo.setVisibleRowCount(5);
+
     }
 
     public void setFields(int id,String name, String address, String zip, String phone, int fld) throws SQLException {
@@ -91,20 +119,69 @@ public class ModifyCustomerScreen implements Initializable {
 
     public void saveCustomer(ActionEvent actionEvent) throws IOException {
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
-        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1100, 450);
-        stage.setScene(scene);
-        stage.show();
+        try {
+
+            String name;
+            String address;
+            String zip;
+            String phoneNumber;
+            int divisionId;
+            int id;
+
+            // if-else statements validate user input and throw detailed exceptions specific to the invalid entry.
+            if(nameTxt.getText().isEmpty()){
+                throw new NullPointerException("Please enter a part name in the Name field");
+            }else{
+                name = nameTxt.getText();
+            }
+
+            if (addressTxt.getText().isEmpty()) {
+                throw new NullPointerException("Please enter a part name in the Name field");
+            }else {
+                address = addressTxt.getText();
+            }
+
+            if (zipTxt.getText().isEmpty()) {
+                throw new NullPointerException("Please enter a part name in the Name field");
+            }else {
+                zip = zipTxt.getText();
+            }
+
+            if (numberTxt.getText().isEmpty()) {
+                throw new NullPointerException("Please enter a part name in the Name field");
+            }else {
+                phoneNumber = numberTxt.getText();
+            }
+
+            id = Integer.parseInt(idTxt.getText());
+
+            divisionId = firstlevelCombo.getSelectionModel().getSelectedItem().getId();
+
+            Timestamp createDate = Timestamp.valueOf(LocalDateTime.now());
+
+            CustomerQuery.update(name, address, zip, phoneNumber, createDate, MainScreen.currentUser, divisionId, id);
+
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
+            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root, 1156, 752);
+            stage.setScene(scene);
+            stage.show();
+
+        } catch(NullPointerException | IllegalArgumentException | SQLException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Input Error");
+            alert.setHeaderText("Invalid Input");
+            alert.setContentText(e.getMessage());
+
+            alert.showAndWait();
+        }
     }
 
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
 
-        Lists.clearCustomerList();
-
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1100, 450);
+        Scene scene = new Scene(root, 1156, 752);
         stage.setScene(scene);
         stage.show();
     }

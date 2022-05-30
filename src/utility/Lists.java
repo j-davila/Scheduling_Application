@@ -18,7 +18,7 @@ public class Lists {
 
     public static void clearCustomerList(){
 
-        allCustomers.clear();;
+        allCustomers.clear();
     }
 
 }

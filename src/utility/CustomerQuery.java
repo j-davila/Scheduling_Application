@@ -29,8 +29,8 @@ public abstract class CustomerQuery {
         return rowsUpdated;
    }
 
-   public static int update(int iD, String name, String address, int postalCode, String phone,
-                            Timestamp lastUpdated, String lastUpdatedBy, int divisionId) throws SQLException {
+   public static int update(String name, String address, String postalCode, String phone,
+                            Timestamp lastUpdated, String lastUpdatedBy, int divisionId, int id) throws SQLException {
 
         String query = "UPDATE client_schedule.customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone= ?, Last_Update = ?," +
                 "Last_Updated_By = ?, Division_ID = ? WHERE Customer_ID = ?";
@@ -38,12 +38,12 @@ public abstract class CustomerQuery {
        PreparedStatement statement = JDBC.connection.prepareStatement(query);
        statement.setString(1,name);
        statement.setString(2,address);
-       statement.setInt(3,postalCode);
+       statement.setString(3,postalCode);
        statement.setString(4,phone);
        statement.setTimestamp(5, lastUpdated);
        statement.setString(6, lastUpdatedBy);
        statement.setInt(7, divisionId);
-       statement.setInt(8, iD);
+       statement.setInt(8, id);
 
        int rowsUpdated = statement.executeUpdate();
        return rowsUpdated;

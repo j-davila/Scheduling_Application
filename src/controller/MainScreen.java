@@ -58,8 +58,12 @@ public class MainScreen implements Initializable {
 
     public static String currentUser;
 
+    public Customer testCustomer;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        Lists.clearCustomerList();
 
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -83,7 +87,7 @@ public class MainScreen implements Initializable {
                 String phone = rs.getString("Phone");
                 int fld = rs.getInt("Division_ID");
 
-                Customer testCustomer = new Customer(id, name, address, zip, phone,fld);
+                testCustomer = new Customer(id, name, address, zip, phone,fld);
 
                 Lists.addCustomer(testCustomer);
             }
@@ -164,15 +168,79 @@ public class MainScreen implements Initializable {
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
-
-//        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyCustomerScreen.fxml")));
-//        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-//        Scene scene = new Scene(root, 519, 469);
-//        stage.setScene(scene);
-//        stage.show();
     }
 
-    public void deleteCustomer(ActionEvent actionEvent) {
+    public void deleteCustomer(ActionEvent actionEvent) throws SQLException {
+
+        int id = customerTable.getSelectionModel().getSelectedItem().getId();
+
+        CustomerQuery.delete(id);
+
+        Lists.clearCustomerList();
+
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        zipColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        fldColumn.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
+
+        ResultSet rs;
+
+        try {
+
+            // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
+            rs = CustomerQuery.getAllCustomers();
+
+            while (rs.next()) {
+                int custId = rs.getInt("Customer_ID");
+                String name = rs.getString("Customer_Name");
+                String address = rs.getString("Address");
+                String zip = rs.getString("Postal_Code");
+                String phone = rs.getString("Phone");
+                int fld = rs.getInt("Division_ID");
+
+                testCustomer = new Customer(custId, name, address, zip, phone,fld);
+
+                Lists.addCustomer(testCustomer);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        FilteredList<Customer> filterTest = new FilteredList<>(Lists.getAllCustomers(), b -> true);
+
+        // The logic inside the predicate filters the content of the tableview using ID or part name.
+        customerSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterTest.setPredicate(part -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+//                try {
+//                    if (Inventory.lookupPart(Integer.parseInt(newValue)).getId() == part.getId()) {
+//                        return true;
+//                    }
+//                } catch (NumberFormatException | NullPointerException e) {
+//                    return false;
+//                } finally {
+//                    try{
+//                        String lowerNewValue = newValue.toLowerCase();
+//                        if (Inventory.lookupPart(lowerNewValue).contains(part)){
+//                            return true;
+//                        }
+//                    }catch (NullPointerException e){
+//                        return false;
+//                    }
+//                }
+                return false;
+            });
+        });
+
+        SortedList<Customer> sortTest = new SortedList<>(filterTest);
+        sortTest.comparatorProperty().bind(customerTable.comparatorProperty());
+        customerTable.setItems(sortTest);
+
     }
 
     public void addAppointment(ActionEvent actionEvent) throws IOException {
