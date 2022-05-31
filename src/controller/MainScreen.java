@@ -3,8 +3,14 @@ package controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.Event;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
+import model.Appointment;
+import utility.AppointmentQuery;
 import utility.CustomerQuery;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
@@ -13,9 +19,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import utility.JDBC;
@@ -27,10 +30,82 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainScreen implements Initializable {
+
+    @FXML
+    private Tab weekTab;
+    @FXML
+    private Tab monthTab;
+
+    @FXML
+    private TableView<Appointment> monthTable;
+
+    @FXML
+    private TableColumn monthAppIdColumn;
+
+    @FXML
+    private TableColumn monthTitleColumn;
+
+    @FXML
+    private TableColumn monthDescrColumn;
+
+    @FXML
+    private TableColumn monthLocColumn;
+
+    @FXML
+    private TableColumn monthCntColumn;
+
+    @FXML
+    private TableColumn monthTypeColumn;
+
+    @FXML
+    private TableColumn monthStartColumn;
+
+    @FXML
+    private TableColumn monthEndColumn;
+
+    @FXML
+    private TableColumn monthCustIdColumn;
+
+    @FXML
+    private TableColumn monthUserIdColumn;
+
+    @FXML
+    private TableView<Appointment> weekTable;
+
+    @FXML
+    private TableColumn weekAppIdColumn;
+
+    @FXML
+    private TableColumn weekTitleColumn;
+
+    @FXML
+    private TableColumn weekDescrColumn;
+
+    @FXML
+    private TableColumn weekLocColumn;
+
+    @FXML
+    private TableColumn weekContactColumn;
+
+    @FXML
+    private TableColumn weekTypeColumn;
+
+    @FXML
+    private TableColumn weekStartColumn;
+
+    @FXML
+    private TableColumn weekEndColumn;
+
+    @FXML
+    private TableColumn weekCustIdColumn;
+
+    @FXML
+    private TableColumn weekUserIdColumn;
 
     @FXML
     private TextField customerSearch;
@@ -58,12 +133,11 @@ public class MainScreen implements Initializable {
 
     public static String currentUser;
 
-    public Customer testCustomer;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         Lists.clearCustomerList();
+        Lists.clearAppointmentList();
 
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -72,37 +146,38 @@ public class MainScreen implements Initializable {
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         fldColumn.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
 
-        ResultSet rs;
+        monthAppIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        monthTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        monthDescrColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        monthLocColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
+        monthTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        monthStartColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        monthEndColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        monthCustIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        monthUserIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        monthCntColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
 
-        try {
+        weekAppIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        weekTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        weekDescrColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        weekLocColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
+        weekTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        weekStartColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        weekEndColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        weekCustIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        weekUserIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        weekContactColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
 
-            // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
-            rs = CustomerQuery.getAllCustomers();
 
-            while (rs.next()) {
-                int id = rs.getInt("Customer_ID");
-                String name = rs.getString("Customer_Name");
-                String address = rs.getString("Address");
-                String zip = rs.getString("Postal_Code");
-                String phone = rs.getString("Phone");
-                int fld = rs.getInt("Division_ID");
-
-                testCustomer = new Customer(id, name, address, zip, phone,fld);
-
-                Lists.addCustomer(testCustomer);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Lists.customerResult();
 
         FilteredList<Customer> filterTest = new FilteredList<>(Lists.getAllCustomers(), b -> true);
 
         // The logic inside the predicate filters the content of the tableview using ID or part name.
-        customerSearch.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterTest.setPredicate(part -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
+        customerSearch.textProperty().addListener((observable, oldValue, newValue) -> filterTest.setPredicate(customer -> {
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
 
 //                try {
 //                    if (Inventory.lookupPart(Integer.parseInt(newValue)).getId() == part.getId()) {
@@ -120,13 +195,22 @@ public class MainScreen implements Initializable {
 //                        return false;
 //                    }
 //                }
-                return false;
-            });
-        });
+            return false;
+        }));
 
         SortedList<Customer> sortTest = new SortedList<>(filterTest);
         sortTest.comparatorProperty().bind(customerTable.comparatorProperty());
         customerTable.setItems(sortTest);
+
+        /*************************************************************************/
+
+        Lists.appointmentResult();
+
+        FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+
+        SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
+        sortTest2.comparatorProperty().bind(monthTable.comparatorProperty());
+        monthTable.setItems(sortTest2);
 
     }
 
@@ -142,7 +226,8 @@ public class MainScreen implements Initializable {
         stage.show();
     }
 
-    public void updateCustomer(ActionEvent actionEvent) throws IOException, SQLException {
+    public void updateCustomer(ActionEvent actionEvent) throws IOException {
+
         try{
 
             Customer testCustomer = customerTable.getSelectionModel().getSelectedItem();
@@ -178,64 +263,9 @@ public class MainScreen implements Initializable {
 
         Lists.clearCustomerList();
 
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
-        zipColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
-        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        fldColumn.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
-
-        ResultSet rs;
-
-        try {
-
-            // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
-            rs = CustomerQuery.getAllCustomers();
-
-            while (rs.next()) {
-                int custId = rs.getInt("Customer_ID");
-                String name = rs.getString("Customer_Name");
-                String address = rs.getString("Address");
-                String zip = rs.getString("Postal_Code");
-                String phone = rs.getString("Phone");
-                int fld = rs.getInt("Division_ID");
-
-                testCustomer = new Customer(custId, name, address, zip, phone,fld);
-
-                Lists.addCustomer(testCustomer);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Lists.customerResult();
 
         FilteredList<Customer> filterTest = new FilteredList<>(Lists.getAllCustomers(), b -> true);
-
-        // The logic inside the predicate filters the content of the tableview using ID or part name.
-        customerSearch.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterTest.setPredicate(part -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-
-//                try {
-//                    if (Inventory.lookupPart(Integer.parseInt(newValue)).getId() == part.getId()) {
-//                        return true;
-//                    }
-//                } catch (NumberFormatException | NullPointerException e) {
-//                    return false;
-//                } finally {
-//                    try{
-//                        String lowerNewValue = newValue.toLowerCase();
-//                        if (Inventory.lookupPart(lowerNewValue).contains(part)){
-//                            return true;
-//                        }
-//                    }catch (NullPointerException e){
-//                        return false;
-//                    }
-//                }
-                return false;
-            });
-        });
 
         SortedList<Customer> sortTest = new SortedList<>(filterTest);
         sortTest.comparatorProperty().bind(customerTable.comparatorProperty());
@@ -262,6 +292,49 @@ public class MainScreen implements Initializable {
     }
 
     public void deleteAppointment(ActionEvent actionEvent) {
+    }
+
+    public void toWeekTab(Event event) {
+
+        Lists.clearAppointmentList();
+
+        Lists.appointmentResult();
+
+        FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+
+        SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
+        sortTest2.comparatorProperty().bind(weekTable.comparatorProperty());
+        weekTable.setItems(sortTest2);
+
+    }
+
+    public void toMonthTab(Event event) {
+
+        Lists.clearAppointmentList();
+
+        Lists.appointmentResult();
+
+        FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+
+        SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
+        sortTest2.comparatorProperty().bind(monthTable.comparatorProperty());
+        monthTable.setItems(sortTest2);
+    }
+
+    public void customerSelected(MouseEvent mouseEvent) throws SQLException {
+
+        Lists.clearAscAppointmentList();
+
+        int custId = customerTable.getSelectionModel().getSelectedItem().getId();
+
+        Lists.ascAppointmentResults(custId);
+
+        FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAscAppointments(), b -> true);
+
+        SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
+        sortTest2.comparatorProperty().bind(monthTable.comparatorProperty());
+        monthTable.setItems(sortTest2);
+
     }
 
     public void exitProgram(ActionEvent actionEvent) {

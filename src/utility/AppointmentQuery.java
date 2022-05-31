@@ -1,6 +1,7 @@
 package utility;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
@@ -12,7 +13,7 @@ public abstract class AppointmentQuery {
                              int userId, int contactId) throws SQLException {
 
         String query = "INSERT INTO client_schedule.appointments(Title, Description, Location, Type, Start, End,Create_Date, " +
-                "Created_by,Last_Update,Last_Updated_By, Customer_ID,User_ID, Contact_ID) VALUES(?,?)";
+                "Created_by,Last_Update,Last_Updated_By, Customer_ID,User_ID, Contact_ID) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
         statement.setString(1,title);
@@ -62,7 +63,7 @@ public abstract class AppointmentQuery {
     }
 
     public static int delete(int iD) throws SQLException {
-        String query = "DELETE from client_schedule.customers WHERE Appoinment_ID = ?";
+        String query = "DELETE from client_schedule.customers WHERE Appointment_ID = ?";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
         statement.setInt(1, iD);
@@ -70,4 +71,24 @@ public abstract class AppointmentQuery {
         int rowsUpdated = statement.executeUpdate();
         return rowsUpdated;
     }
+
+    public static ResultSet getAllAppointments() throws SQLException {
+        String query = "SELECT * FROM client_schedule.appointments";
+
+        ResultSet results = JDBC.connection.createStatement().executeQuery(query);
+
+        return results;
+    }
+
+    public static ResultSet relatedAppointments(int custId) throws SQLException {
+
+        String query = "SELECT * FROM client_schedule.appointments WHERE Customer_ID = ?";
+
+        PreparedStatement statement = JDBC.connection.prepareStatement(query);
+        statement.setInt(1, custId);
+
+        return statement.executeQuery();
+
+    }
+
 }

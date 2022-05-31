@@ -13,7 +13,7 @@
    <children>
       <AnchorPane layoutX="6.0" layoutY="42.0" prefHeight="706.0" prefWidth="1128.0">
          <children>
-            <TableView fx:id="customerTable" layoutX="32.0" layoutY="71.0" prefHeight="244.0" prefWidth="848.0">
+            <TableView fx:id="customerTable" layoutX="32.0" layoutY="71.0" onMouseClicked="#customerSelected" prefHeight="244.0" prefWidth="848.0">
                <columns>
                   <TableColumn fx:id="idColumn" prefWidth="75.0" text="Customer ID" />
                   <TableColumn fx:id="nameColumn" prefWidth="129.0" text="Customer Name" />
@@ -24,22 +24,48 @@
                </columns></TableView>
             <Label layoutX="170.0" layoutY="43.0" text="Customers" />
             <Label layoutX="505.0" layoutY="353.0" text="Appointments" />
-            <TabPane layoutX="32.0" layoutY="376.0" prefHeight="244.0" prefWidth="566.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane layoutX="32.0" layoutY="376.0" prefHeight="244.0" prefWidth="848.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab fx:id="monthTab" text="Month">
+                <Tab fx:id="monthTab" onSelectionChanged="#toMonthTab" text="Month">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="215.0" prefWidth="517.0">
                            <children>
-                              <TableView prefHeight="215.0" prefWidth="566.0" />
+                              <TableView fx:id="monthTable" layoutY="-3.0" prefHeight="218.0" prefWidth="848.0">
+                                 <columns>
+                                    <TableColumn fx:id="monthAppIdColumn" prefWidth="109.0" text="Appointment ID" />
+                                    <TableColumn fx:id="monthTitleColumn" prefWidth="89.0" text="Title" />
+                                    <TableColumn fx:id="monthDescrColumn" prefWidth="86.0" text="Description" />
+                                    <TableColumn fx:id="monthLocColumn" prefWidth="87.0" text="Location" />
+                                    <TableColumn fx:id="monthTypeColumn" prefWidth="84.0" text="Type" />
+                                    <TableColumn fx:id="monthStartColumn" prefWidth="74.0" text="Start" />
+                                    <TableColumn fx:id="monthEndColumn" prefWidth="72.0" text="End" />
+                                    <TableColumn fx:id="monthCustIdColumn" prefWidth="75.0" text="Customer ID" />
+                                    <TableColumn fx:id="monthUserIdColumn" prefWidth="83.0" text="User ID" />
+                                    <TableColumn fx:id="monthCntColumn" prefWidth="88.0" text="Contact" />
+                                 </columns></TableView>
                            </children>
                         </AnchorPane>
                   </content>
                 </Tab>
-                <Tab fx:id="weekTab" text="Week">
+                <Tab fx:id="weekTab" onSelectionChanged="#toWeekTab" text="Week">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TableView prefHeight="215.0" prefWidth="566.0" />
+                              <TableView prefHeight="215.0" prefWidth="848.0" />
+                              <TableView fx:id="weekTable" layoutY="-3.0" prefHeight="220.0" prefWidth="848.0">
+                                 <columns>
+                                    <TableColumn fx:id="weekAppIdColumn" prefWidth="109.0" text="Appointment ID" />
+                                    <TableColumn fx:id="weekTitleColumn" prefWidth="89.0" text="Title" />
+                                    <TableColumn fx:id="weekDescrColumn" prefWidth="86.0" text="Description" />
+                                    <TableColumn fx:id="weekLocColumn" prefWidth="87.0" text="Location" />
+                                    <TableColumn fx:id="weekContactColumn" prefWidth="88.0" text="Contact" />
+                                    <TableColumn fx:id="weekTypeColumn" prefWidth="84.0" text="Type" />
+                                    <TableColumn fx:id="weekStartColumn" prefWidth="74.0" text="Start" />
+                                    <TableColumn fx:id="weekEndColumn" prefWidth="72.0" text="End" />
+                                    <TableColumn fx:id="weekCustIdColumn" prefWidth="75.0" text="Customer ID" />
+                                    <TableColumn fx:id="weekUserIdColumn" prefWidth="83.0" text="User ID" />
+                                 </columns>
+                              </TableView>
                            </children>
                         </AnchorPane>
                   </content>

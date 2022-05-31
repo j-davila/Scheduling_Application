@@ -35,27 +35,45 @@ public class LoginScreen implements Initializable {
 
     public void userLogin(ActionEvent actionEvent) throws IOException, SQLException {
 
+        /*Remove after testing*/
+        String user = userNameText.getText();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
+        Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root,1156,762);
+        stage.setScene(scene);
+
+        MainScreen mainScreen = loader.getController();
+        mainScreen.getCurrentUser(user);
+
+        stage.show();
+        /*Remove after testing*/
+
+
+        //Login code
         // If login successful then go to mainScreen
 
-        String user;
-
-        ResultSet rs = UserQuery.getUser(userNameText.getText(), passwordText.getText());
-
-        if(rs.next() != false){
-
-            user = userNameText.getText();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
-            Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
-            Parent root = loader.load();
-
-            Scene scene = new Scene(root,1156,762);
-            stage.setScene(scene);
-
-            MainScreen mainScreen = loader.getController();
-            mainScreen.getCurrentUser(user);
-
-            stage.show();
-        }
+//        String user;
+//
+//        ResultSet rs = UserQuery.getUser(userNameText.getText(), passwordText.getText());
+//
+//        if(rs.next() != false){
+//
+//            user = userNameText.getText();
+//
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
+//            Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+//            Parent root = loader.load();
+//
+//            Scene scene = new Scene(root,1156,762);
+//            stage.setScene(scene);
+//
+//            MainScreen mainScreen = loader.getController();
+//            mainScreen.getCurrentUser(user);
+//
+//            stage.show();
+//        }
     }
 }

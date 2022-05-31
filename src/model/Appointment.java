@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -8,21 +9,26 @@ public class Appointment {
     private String title;
     private String description;
     private String location;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+
+    private String type;
+    private Timestamp startDate;
+    private Timestamp endDate;
     private int customerID;
     private int userId;
+    private int contact;
 
-    public Appointment(int id, String title, String description, String location, LocalDateTime startDate, LocalDateTime endDate, int customerID, int userId){
+    public Appointment(int id, String title, String description, String location,String type, Timestamp startDate, Timestamp endDate, int customerID, int userId, int contact){
 
         this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
+        this.type = type;
         this.startDate = startDate;
         this.endDate = endDate;
         this.customerID = customerID;
         this.userId = userId;
+        this.contact = contact;
     }
 
 
@@ -58,19 +64,19 @@ public class Appointment {
         this.location = location;
     }
 
-    public LocalDateTime getStartDate() {
+    public Timestamp getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public Timestamp getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(Timestamp endDate) {
         this.endDate = endDate;
     }
 
@@ -88,5 +94,21 @@ public class Appointment {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public int getContact() {
+        return contact;
+    }
+
+    public void setContact(int contact) {
+        this.contact = contact;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

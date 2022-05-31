@@ -130,25 +130,25 @@ public class ModifyCustomerScreen implements Initializable {
 
             // if-else statements validate user input and throw detailed exceptions specific to the invalid entry.
             if(nameTxt.getText().isEmpty()){
-                throw new NullPointerException("Please enter a part name in the Name field");
+                throw new NullPointerException("Name field is empty");
             }else{
                 name = nameTxt.getText();
             }
 
             if (addressTxt.getText().isEmpty()) {
-                throw new NullPointerException("Please enter a part name in the Name field");
+                throw new NullPointerException("Address field is empty");
             }else {
                 address = addressTxt.getText();
             }
 
             if (zipTxt.getText().isEmpty()) {
-                throw new NullPointerException("Please enter a part name in the Name field");
+                throw new NullPointerException("Zip field is empty");
             }else {
                 zip = zipTxt.getText();
             }
 
             if (numberTxt.getText().isEmpty()) {
-                throw new NullPointerException("Please enter a part name in the Name field");
+                throw new NullPointerException("Phone number field is empty");
             }else {
                 phoneNumber = numberTxt.getText();
             }
