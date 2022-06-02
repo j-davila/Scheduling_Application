@@ -19,4 +19,21 @@ public abstract class UserQuery {
         return statement.executeQuery();
     }
 
+    public static ResultSet getAllUsers() throws SQLException {
+        String query = "SELECT * FROM client_schedule.users";
+
+        ResultSet results = JDBC.connection.createStatement().executeQuery(query);
+
+        return results;
+    }
+
+    public static ResultSet getUser(int userId) throws SQLException {
+        String query = "SELECT * FROM client_schedule.users WHERE User_ID = ?";
+
+        PreparedStatement statement = JDBC.connection.prepareStatement(query);
+        statement.setInt(1, userId);
+
+        return statement.executeQuery();
+    }
+
 }

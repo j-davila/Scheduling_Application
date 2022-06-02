@@ -68,4 +68,13 @@ public abstract class CustomerQuery {
 
         return results;
     }
+
+    public static ResultSet getCustomer(int customerId) throws SQLException {
+        String query = "SELECT * FROM client_schedule.customers WHERE Customer_ID = ?";
+
+        PreparedStatement statement = JDBC.connection.prepareStatement(query);
+        statement.setInt(1, customerId);
+
+        return statement.executeQuery();
+    }
 }

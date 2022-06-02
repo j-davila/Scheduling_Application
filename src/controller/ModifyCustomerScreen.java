@@ -53,32 +53,16 @@ public class ModifyCustomerScreen implements Initializable {
     @FXML
     private ComboBox<Country> countryCombo;
 
-    public static Customer thisCustomer;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        ObservableList<Country> countryTest = FXCollections.observableArrayList();
-
         try {
-
-            ResultSet rs2 = CountryQuery.getAllCountries();
-
-            while (rs2.next()) {
-
-                int id = rs2.getInt("Country_ID");
-                String name = rs2.getString("Country");
-
-                Country newCountry = new Country(id, name);
-
-                countryTest.add(newCountry);
-            }
-
+            Lists.countryResult();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        countryCombo.setItems(countryTest);
+        countryCombo.setItems(Lists.getAllCountries());
         countryCombo.setVisibleRowCount(5);
 
     }
@@ -111,10 +95,6 @@ public class ModifyCustomerScreen implements Initializable {
         firstlevelCombo.setValue(testDivision);
         countryCombo.setValue(testCountry);
 
-    }
-
-    public void getCustomer(Customer customer){
-        thisCustomer = customer;
     }
 
     public void saveCustomer(ActionEvent actionEvent) throws IOException {

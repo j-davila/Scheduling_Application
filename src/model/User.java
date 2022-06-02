@@ -12,6 +12,11 @@ public class User {
         this.userName = userName;
     }
 
+    public User(int userId, String userName){
+        this.userId = userId;
+        this.userName = userName;
+    }
+
     public int getUserId(){
         return userId;
     }
@@ -34,5 +39,10 @@ public class User {
 
     public void setPassword(String password){
         this.password = password;
+    }
+
+    @Override
+    public String toString(){
+        return(userName);
     }
 }

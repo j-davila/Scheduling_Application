@@ -31,6 +31,9 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -45,67 +48,67 @@ public class MainScreen implements Initializable {
     private TableView<Appointment> monthTable;
 
     @FXML
-    private TableColumn monthAppIdColumn;
+    private TableColumn<Appointment, Integer> monthAppIdColumn;
 
     @FXML
-    private TableColumn monthTitleColumn;
+    private TableColumn<Appointment, String> monthTitleColumn;
 
     @FXML
-    private TableColumn monthDescrColumn;
+    private TableColumn<Appointment, String> monthDescrColumn;
 
     @FXML
-    private TableColumn monthLocColumn;
+    private TableColumn<Appointment, String> monthLocColumn;
 
     @FXML
-    private TableColumn monthCntColumn;
+    private TableColumn<Appointment, Integer> monthCntColumn;
 
     @FXML
-    private TableColumn monthTypeColumn;
+    private TableColumn<Appointment, String> monthTypeColumn;
 
     @FXML
-    private TableColumn monthStartColumn;
+    private TableColumn<Appointment, Timestamp> monthStartColumn;
 
     @FXML
-    private TableColumn monthEndColumn;
+    private TableColumn<Appointment, Timestamp> monthEndColumn;
 
     @FXML
-    private TableColumn monthCustIdColumn;
+    private TableColumn<Appointment, Integer> monthCustIdColumn;
 
     @FXML
-    private TableColumn monthUserIdColumn;
+    private TableColumn<Appointment, Integer> monthUserIdColumn;
 
     @FXML
     private TableView<Appointment> weekTable;
 
     @FXML
-    private TableColumn weekAppIdColumn;
+    private TableColumn<Appointment, Integer> weekAppIdColumn;
 
     @FXML
-    private TableColumn weekTitleColumn;
+    private TableColumn<Appointment, String> weekTitleColumn;
 
     @FXML
-    private TableColumn weekDescrColumn;
+    private TableColumn<Appointment, String> weekDescrColumn;
 
     @FXML
-    private TableColumn weekLocColumn;
+    private TableColumn<Appointment, String> weekLocColumn;
 
     @FXML
-    private TableColumn weekContactColumn;
+    private TableColumn<Appointment, Integer> weekContactColumn;
 
     @FXML
-    private TableColumn weekTypeColumn;
+    private TableColumn<Appointment, String> weekTypeColumn;
 
     @FXML
-    private TableColumn weekStartColumn;
+    private TableColumn<Appointment, Timestamp> weekStartColumn;
 
     @FXML
-    private TableColumn weekEndColumn;
+    private TableColumn<Appointment, Timestamp> weekEndColumn;
 
     @FXML
-    private TableColumn weekCustIdColumn;
+    private TableColumn<Appointment, Integer> weekCustIdColumn;
 
     @FXML
-    private TableColumn weekUserIdColumn;
+    private TableColumn<Appointment, Integer> weekUserIdColumn;
 
     @FXML
     private TextField customerSearch;
@@ -169,7 +172,11 @@ public class MainScreen implements Initializable {
         weekContactColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
 
 
-        Lists.customerResult();
+        try {
+            Lists.customerResult();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         FilteredList<Customer> filterTest = new FilteredList<>(Lists.getAllCustomers(), b -> true);
 
@@ -204,7 +211,11 @@ public class MainScreen implements Initializable {
 
         /*************************************************************************/
 
-        Lists.appointmentResult();
+        try {
+            Lists.appointmentResult();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
@@ -230,7 +241,6 @@ public class MainScreen implements Initializable {
 
         try{
 
-            Customer testCustomer = customerTable.getSelectionModel().getSelectedItem();
             int id = customerTable.getSelectionModel().getSelectedItem().getId();
             String name = customerTable.getSelectionModel().getSelectedItem().getName();
             String address = customerTable.getSelectionModel().getSelectedItem().getAddress();
@@ -246,7 +256,6 @@ public class MainScreen implements Initializable {
             stage.setScene(scene);
             ModifyCustomerScreen modifyCustomerScreen = loader.getController();
             modifyCustomerScreen.setFields(id,name,address,zip,phone,fld);
-            modifyCustomerScreen.getCustomer(testCustomer);
 
             stage.show();
 
@@ -277,24 +286,115 @@ public class MainScreen implements Initializable {
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AddAppointmentScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 519, 533);
+        Scene scene = new Scene(root, 681, 533);
         stage.setScene(scene);
         stage.show();
     }
 
     public void updateAppointment(ActionEvent actionEvent) throws IOException {
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyAppointmentScreen.fxml")));
-        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 519, 533);
-        stage.setScene(scene);
-        stage.show();
+        if(monthTab.isSelected()){
+
+            try{
+
+                int appId = monthTable.getSelectionModel().getSelectedItem().getId();
+                String title = monthTable.getSelectionModel().getSelectedItem().getTitle();
+                String location = monthTable.getSelectionModel().getSelectedItem().getLocation();
+                String type = monthTable.getSelectionModel().getSelectedItem().getType();
+                String description = monthTable.getSelectionModel().getSelectedItem().getDescription();
+                LocalDate date = monthTable.getSelectionModel().getSelectedItem().getStartDate().toLocalDateTime().toLocalDate();
+                LocalTime startTime = monthTable.getSelectionModel().getSelectedItem().getStartDate().toLocalDateTime().toLocalTime();
+                LocalTime endTime = monthTable.getSelectionModel().getSelectedItem().getEndDate().toLocalDateTime().toLocalTime();
+                int customerId = monthTable.getSelectionModel().getSelectedItem().getCustomerID();
+                int contactId = monthTable.getSelectionModel().getSelectedItem().getContact();
+                int userId = monthTable.getSelectionModel().getSelectedItem().getUserId();
+
+                Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyAppointmentScreen.fxml"));
+                Region root = loader.load();
+
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                ModifyAppointmentScreen modifyAppointmentScreen = loader.getController();
+                modifyAppointmentScreen.setFields(appId, title, location, type, description, date, startTime, endTime, customerId, contactId, userId);
+
+                stage.show();
+
+            }catch (SQLException e){
+                throw new RuntimeException(e);
+            }
+        } else{
+
+            try{
+
+                int appId = weekTable.getSelectionModel().getSelectedItem().getId();
+                String title = weekTable.getSelectionModel().getSelectedItem().getTitle();
+                String location = weekTable.getSelectionModel().getSelectedItem().getLocation();
+                String type = weekTable.getSelectionModel().getSelectedItem().getType();
+                String description = weekTable.getSelectionModel().getSelectedItem().getDescription();
+                LocalDate date = weekTable.getSelectionModel().getSelectedItem().getStartDate().toLocalDateTime().toLocalDate();
+                LocalTime startTime = weekTable.getSelectionModel().getSelectedItem().getStartDate().toLocalDateTime().toLocalTime();
+                LocalTime endTime = weekTable.getSelectionModel().getSelectedItem().getEndDate().toLocalDateTime().toLocalTime();
+                int customerId = weekTable.getSelectionModel().getSelectedItem().getCustomerID();
+                int contactId = weekTable.getSelectionModel().getSelectedItem().getContact();
+                int userId = weekTable.getSelectionModel().getSelectedItem().getUserId();
+
+                Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyAppointmentScreen.fxml"));
+                Region root = loader.load();
+
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                ModifyAppointmentScreen modifyAppointmentScreen = loader.getController();
+                modifyAppointmentScreen.setFields(appId, title, location, type, description, date, startTime, endTime, customerId, contactId, userId);
+
+                stage.show();
+
+            }catch (SQLException e){
+                throw new RuntimeException(e);
+            }
+        }
     }
 
-    public void deleteAppointment(ActionEvent actionEvent) {
+    public void deleteAppointment(ActionEvent actionEvent) throws SQLException {
+
+        if(monthTab.isSelected()){
+
+            int id = monthTable.getSelectionModel().getSelectedItem().getId();
+
+            AppointmentQuery.delete(id);
+
+            Lists.clearAppointmentList();
+
+            Lists.appointmentResult();
+
+            FilteredList<Appointment> filterTest = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+
+            SortedList<Appointment> sortTest = new SortedList<>(filterTest);
+            sortTest.comparatorProperty().bind(monthTable.comparatorProperty());
+            monthTable.setItems(sortTest);
+
+        } else {
+
+            int id = weekTable.getSelectionModel().getSelectedItem().getId();
+
+            AppointmentQuery.delete(id);
+
+            Lists.clearAppointmentList();
+
+            Lists.appointmentResult();
+
+            FilteredList<Appointment> filterTest = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+
+            SortedList<Appointment> sortTest = new SortedList<>(filterTest);
+            sortTest.comparatorProperty().bind(weekTable.comparatorProperty());
+            weekTable.setItems(sortTest);
+
+        }
+
     }
 
-    public void toWeekTab(Event event) {
+    public void toWeekTab(Event event) throws SQLException {
 
         Lists.clearAppointmentList();
 
@@ -308,7 +408,7 @@ public class MainScreen implements Initializable {
 
     }
 
-    public void toMonthTab(Event event) {
+    public void toMonthTab(Event event) throws SQLException {
 
         Lists.clearAppointmentList();
 

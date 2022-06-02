@@ -79,4 +79,9 @@ public class Customer {
     public void setAppointments(ObservableList<Appointment> appointments) {
         this.appointments = appointments;
     }
+
+    @Override
+    public String toString(){
+        return(name);
+    }
 }

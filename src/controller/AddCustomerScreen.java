@@ -19,6 +19,7 @@ import model.Division;
 import utility.CountryQuery;
 import utility.CustomerQuery;
 import utility.FirstLevelDivQuery;
+import utility.Lists;
 
 import java.io.IOException;
 import java.net.URL;
@@ -53,27 +54,14 @@ public class AddCustomerScreen implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         ObservableList<Division> divisiontest = FXCollections.observableArrayList();
-        ObservableList<Country> countryTest = FXCollections.observableArrayList();
 
         try {
-
-            ResultSet rs2 = CountryQuery.getAllCountries();
-
-            while (rs2.next()) {
-
-                int id = rs2.getInt("Country_ID");
-                String name = rs2.getString("Country");
-
-                Country newCountry = new Country(id, name);
-
-                countryTest.add(newCountry);
-            }
-
+            Lists.countryResult();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        countryCombo.setItems(countryTest);
+        countryCombo.setItems(Lists.getAllCountries());
         countryCombo.setVisibleRowCount(5);
         countryCombo.getSelectionModel().selectFirst();
 
