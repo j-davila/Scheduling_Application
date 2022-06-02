@@ -7,6 +7,7 @@ import model.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Locale;
 
 public class Lists {
 
@@ -74,12 +75,53 @@ public class Lists {
         return allCountries;
     }
 
+    public static void clearCountryList(){
+
+        allCountries.clear();
+    }
+
     public static ObservableList<User> getAllusers() {
         return allUsers;
     }
 
     public static void addUser(User user){
         allUsers.add(user);
+    }
+
+    public static ObservableList<Division> getAlldivisions() {
+        return allDivisions;
+    }
+
+    public static void addDivision(Division division){
+        allDivisions.add(division);
+    }
+
+    public static void clearDivisionList(){
+
+        allDivisions.clear();
+    }
+
+    public static Customer lookupCustomer(int id) throws NumberFormatException, NullPointerException{
+        ObservableList<Customer> tempCustomer = getAllCustomers();
+        for(int i = 0; i < tempCustomer.size(); i++){
+            Customer thisCustomer = tempCustomer.get(i);
+            if(thisCustomer.getId() == id){
+                return thisCustomer;
+            }
+        }
+        return null;
+    }
+
+    public static ObservableList<Customer> lookupCustomer(String customerName){
+
+        ObservableList<Customer> tempAllCustomers = getAllCustomers();
+        ObservableList<Customer> returnList = FXCollections.observableArrayList();
+        for(Customer thisCustomer: tempAllCustomers){
+            if(thisCustomer.getName().toLowerCase(Locale.ROOT).contains(customerName)){
+                returnList.add(thisCustomer);
+            }
+        }
+        return FXCollections.observableArrayList(returnList);
     }
 
     public static void appointmentResult() throws SQLException {
@@ -101,8 +143,31 @@ public class Lists {
 
            Appointment testAppointment = new Appointment(id,title,description,location,type,start,end,customerId,userId,contactId);
 
-           Lists.addAppointment(testAppointment);
+           addAppointment(testAppointment);
        }
+    }
+
+    public static void appointmentResultWeek() throws SQLException {
+
+        // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
+        ResultSet rs2 = AppointmentQuery.getWeekAppointments();
+
+        while (rs2.next()) {
+            int id = rs2.getInt("Appointment_ID");
+            String title = rs2.getString("Title");
+            String description = rs2.getString("Description");
+            String location = rs2.getString("Location");
+            String type = rs2.getString("Type");
+            Timestamp start = rs2.getTimestamp("Start");
+            Timestamp end = rs2.getTimestamp("End");
+            int customerId = rs2.getInt("Customer_ID");
+            int userId = rs2.getInt("User_ID");
+            int contactId = rs2.getInt("Contact_ID");
+
+            Appointment testAppointment = new Appointment(id,title,description,location,type,start,end,customerId,userId,contactId);
+
+            addAppointment(testAppointment);
+        }
     }
 
     public static void ascAppointmentResults(int custId) throws SQLException {
@@ -124,7 +189,7 @@ public class Lists {
 
             Appointment testAppointment = new Appointment(id,title,description,location,type,start,end,customerId,userId,contactId);
 
-            Lists.addAscAppointment(testAppointment);
+            addAscAppointment(testAppointment);
         }
     }
 
@@ -143,7 +208,7 @@ public class Lists {
 
             Customer testCustomer = new Customer(id, name, address, zip, phone,fld,associatedAppointments);
 
-            Lists.addCustomer(testCustomer);
+            addCustomer(testCustomer);
         }
     }
 
@@ -159,7 +224,7 @@ public class Lists {
 
             Contact newContact = new Contact(id, name, email);
 
-            Lists.addContact(newContact);
+            addContact(newContact);
         }
     }
 
@@ -174,7 +239,7 @@ public class Lists {
 
             Country newCountry = new Country(id, name);
 
-            Lists.addCountry(newCountry);
+            addCountry(newCountry);
         }
 
     }
@@ -190,9 +255,24 @@ public class Lists {
 
             User newUser = new User(id, name);
 
-            Lists.addUser(newUser);
+            addUser(newUser);
         }
 
     }
 
+    public static void divisionResultByCountry(int countryId) throws SQLException {
+
+        ResultSet rs = FirstLevelDivQuery.getDivisionByCountry(countryId);
+
+        while (rs.next()) {
+
+            int divId = rs.getInt("Division_ID");
+            String division = rs.getString("Division");
+            int id = rs.getInt("Country_ID");
+
+            Division newDivision = new Division(divId, division, id);
+
+            addDivision(newDivision);
+        }
+    }
 }

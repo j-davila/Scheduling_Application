@@ -56,6 +56,8 @@ public class ModifyCustomerScreen implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        Lists.clearCountryList();
+
         try {
             Lists.countryResult();
         } catch (SQLException e) {
@@ -166,32 +168,15 @@ public class ModifyCustomerScreen implements Initializable {
         stage.show();
     }
 
-    public void changeCountry(ActionEvent actionEvent) {
+    public void changeCountry(ActionEvent actionEvent) throws SQLException {
 
-        ObservableList<Division> divisiontest = FXCollections.observableArrayList();
+        Lists.clearDivisionList();
 
         Country selectedCountry = countryCombo.getSelectionModel().getSelectedItem();
 
-        divisiontest.clear();
+        Lists.divisionResultByCountry(selectedCountry.getId());
 
-        try {
-            ResultSet rs = FirstLevelDivQuery.getDivisionByCountry(selectedCountry.getId());
-
-            while (rs.next()) {
-
-                int id = rs.getInt("Division_ID");
-                String division = rs.getString("Division");
-                int countryId = rs.getInt("Country_ID");
-
-                Division newDivision = new Division(id, division, countryId);
-
-                divisiontest.add(newDivision);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        firstlevelCombo.setItems(divisiontest);
+        firstlevelCombo.setItems(Lists.getAlldivisions());
         firstlevelCombo.setVisibleRowCount(5);
         firstlevelCombo.getSelectionModel().selectFirst();
     }

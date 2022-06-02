@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 public abstract class AppointmentQuery {
 
     //add, update, delete appointment
-    public static int insert(String title, String description, String location, String type, Timestamp startDate, Timestamp endDate,
+    public static void insert(String title, String description, String location, String type, Timestamp startDate, Timestamp endDate,
                              Timestamp createDate,String createdBy,Timestamp lastUpdated, String lastUpdatedBy, int customerId,
                              int userId, int contactId) throws SQLException {
 
@@ -30,11 +30,10 @@ public abstract class AppointmentQuery {
         statement.setInt(12, userId);
         statement.setInt(13, contactId);
 
-        int rowsUpdated = statement.executeUpdate();
-        return rowsUpdated;
+        statement.executeUpdate();
     }
 
-    public static int update(String title, String description, String location, String type, Timestamp startDate, Timestamp endDate,
+    public static void update(String title, String description, String location, String type, Timestamp startDate, Timestamp endDate,
                              Timestamp lastUpdated, String lastUpdatedBy, int customerId,
                              int userId, int contactId, int iD) throws SQLException {
 
@@ -55,27 +54,23 @@ public abstract class AppointmentQuery {
         statement.setInt(11, contactId);
         statement.setInt(12, iD);
 
-        int rowsUpdated = statement.executeUpdate();
-        return rowsUpdated;
+        statement.executeUpdate();
 
     }
 
-    public static int delete(int iD) throws SQLException {
+    public static void delete(int iD) throws SQLException {
         String query = "DELETE from client_schedule.appointments WHERE Appointment_ID = ?";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
         statement.setInt(1, iD);
 
-        int rowsUpdated = statement.executeUpdate();
-        return rowsUpdated;
+        statement.executeUpdate();
     }
 
     public static ResultSet getAllAppointments() throws SQLException {
-        String query = "SELECT * FROM client_schedule.appointments";
+        String query = "SELECT * FROM client_schedule.appointments ORDER BY START";
 
-        ResultSet results = JDBC.connection.createStatement().executeQuery(query);
-
-        return results;
+        return JDBC.connection.createStatement().executeQuery(query);
     }
 
     public static ResultSet relatedAppointments(int custId) throws SQLException {
@@ -88,5 +83,12 @@ public abstract class AppointmentQuery {
         return statement.executeQuery();
 
     }
+
+    public static ResultSet getWeekAppointments() throws SQLException {
+        String query = "SELECT * FROM client_schedule.appointments WHERE DAYOFWEEK(START) BETWEEN DAYOFWEEK(NOW()) AND 7";
+
+        return JDBC.connection.createStatement().executeQuery(query);
+    }
+
 
 }
