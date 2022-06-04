@@ -6,7 +6,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import utility.UserQuery;
@@ -16,64 +18,86 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.ZoneId;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class LoginScreen implements Initializable {
 
+    @FXML
+    private Label zoneLabel;
     @FXML
     private TextField userNameText;
 
     @FXML
     private TextField passwordText;
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
+
+        zoneLabel.setText(String.valueOf(localZone));
 
     }
 
     public void userLogin(ActionEvent actionEvent) throws IOException, SQLException {
-
         /*Remove after testing*/
-        String user = userNameText.getText();
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
-        Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
-        Parent root = loader.load();
-
-        Scene scene = new Scene(root,1156,762);
-        stage.setScene(scene);
-
-        MainScreen mainScreen = loader.getController();
-        mainScreen.getCurrentUser(user);
-
-        stage.show();
+//        String user = userNameText.getText();
+//
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
+//        Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+//        Parent root = loader.load();
+//
+//        Scene scene = new Scene(root,1156,762);
+//        stage.setScene(scene);
+//
+//        MainScreen mainScreen = loader.getController();
+//        mainScreen.getCurrentUser(user);
+//
+//        stage.show();
         /*Remove after testing*/
 
 
         //Login code
         // If login successful then go to mainScreen
 
-//        String user;
-//
-//        ResultSet rs = UserQuery.getUser(userNameText.getText(), passwordText.getText());
-//
-//        if(rs.next() != false){
-//
-//            user = userNameText.getText();
-//
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
-//            Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
-//            Parent root = loader.load();
-//
-//            Scene scene = new Scene(root,1156,762);
-//            stage.setScene(scene);
-//
-//            MainScreen mainScreen = loader.getController();
-//            mainScreen.getCurrentUser(user);
-//
-//            stage.show();
-//        }
+        try{
+            String user;
+
+            ResultSet rs = UserQuery.getUser(userNameText.getText(), passwordText.getText());
+
+            if(rs.next() != false){
+
+                user = userNameText.getText();
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
+                Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+                Parent root = loader.load();
+
+                Scene scene = new Scene(root,1156,762);
+                stage.setScene(scene);
+
+                MainScreen mainScreen = loader.getController();
+                mainScreen.getCurrentUser(user);
+
+                stage.show();
+            }else if(userNameText.getText().isEmpty()){
+                throw new NullPointerException("Enter a Username");
+            } else if (passwordText.getText().isEmpty()) {
+                throw new NullPointerException("Enter a Password");
+            }else{
+                throw new NullPointerException("Invalid username or password");
+            }
+
+        }catch(NullPointerException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Input Error");
+            alert.setHeaderText("Invalid Input");
+            alert.setContentText(e.getMessage());
+
+            alert.showAndWait();
+        }
     }
 }

@@ -4,13 +4,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public abstract class AppointmentQuery {
 
     //add, update, delete appointment
-    public static void insert(String title, String description, String location, String type, Timestamp startDate, Timestamp endDate,
-                             Timestamp createDate,String createdBy,Timestamp lastUpdated, String lastUpdatedBy, int customerId,
-                             int userId, int contactId) throws SQLException {
+    public static void insert(String title, String description, String location, String type, Instant startDate, Instant endDate,
+                              Instant createDate, String createdBy, Timestamp lastUpdated, String lastUpdatedBy, int customerId,
+                              int userId, int contactId) throws SQLException {
 
         String query = "INSERT INTO client_schedule.appointments(Title, Description, Location, Type, Start, End,Create_Date, " +
                 "Created_by,Last_Update,Last_Updated_By, Customer_ID,User_ID, Contact_ID) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -20,11 +23,11 @@ public abstract class AppointmentQuery {
         statement.setString(2,description);
         statement.setString(3,location);
         statement.setString(4,type);
-        statement.setTimestamp(5,startDate);
-        statement.setTimestamp(6, endDate);
-        statement.setTimestamp(7, createDate);
+        statement.setTimestamp(5,Timestamp.from(startDate), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
+        statement.setTimestamp(6, Timestamp.from(endDate), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
+        statement.setTimestamp(7, Timestamp.from(createDate), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
         statement.setString(8, createdBy);
-        statement.setTimestamp(9, lastUpdated);
+        statement.setTimestamp(9, lastUpdated, Calendar.getInstance(TimeZone.getTimeZone("UTC")));
         statement.setString(10, lastUpdatedBy);
         statement.setInt(11, customerId);
         statement.setInt(12, userId);
@@ -33,7 +36,7 @@ public abstract class AppointmentQuery {
         statement.executeUpdate();
     }
 
-    public static void update(String title, String description, String location, String type, Timestamp startDate, Timestamp endDate,
+    public static void update(String title, String description, String location, String type, Instant startDate, Instant endDate,
                              Timestamp lastUpdated, String lastUpdatedBy, int customerId,
                              int userId, int contactId, int iD) throws SQLException {
 
@@ -45,9 +48,9 @@ public abstract class AppointmentQuery {
         statement.setString(2,description);
         statement.setString(3,location);
         statement.setString(4,type);
-        statement.setTimestamp(5,startDate);
-        statement.setTimestamp(6, endDate);
-        statement.setTimestamp(7, lastUpdated);
+        statement.setTimestamp(5,Timestamp.from(startDate), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
+        statement.setTimestamp(6, Timestamp.from(endDate), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
+        statement.setTimestamp(7, lastUpdated, Calendar.getInstance(TimeZone.getTimeZone("UTC")));
         statement.setString(8, lastUpdatedBy);
         statement.setInt(9, customerId);
         statement.setInt(10, userId);
@@ -85,7 +88,7 @@ public abstract class AppointmentQuery {
     }
 
     public static ResultSet getWeekAppointments() throws SQLException {
-        String query = "SELECT * FROM client_schedule.appointments WHERE DAYOFWEEK(START) BETWEEN DAYOFWEEK(NOW()) AND 7";
+        String query = "SELECT * FROM client_schedule.appointments WHERE WEEK(START) = WEEK(NOW())";
 
         return JDBC.connection.createStatement().executeQuery(query);
     }

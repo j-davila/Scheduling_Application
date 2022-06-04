@@ -3,12 +3,17 @@ package utility;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public abstract class CustomerQuery {
 
     //Add, update, delete customer
 
-    public static int insert(String name, String address, String postalCode, String phone, Timestamp createDate, String createdBy,
+    public static int insert(String name, String address, String postalCode, String phone, Instant createDate, String createdBy,
                              Timestamp lastUpdated, String lastUpdatedBy, int divisionId) throws SQLException {
 
         String query = "INSERT INTO client_schedule.customers(Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, " +
@@ -19,9 +24,9 @@ public abstract class CustomerQuery {
         statement.setString(2,address);
         statement.setString(3,postalCode);
         statement.setString(4,phone);
-        statement.setTimestamp(5,createDate);
+        statement.setTimestamp(5, Timestamp.from(createDate), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
         statement.setString(6, createdBy);
-        statement.setTimestamp(7, lastUpdated);
+        statement.setTimestamp(7, lastUpdated, Calendar.getInstance(TimeZone.getTimeZone("UTC")));
         statement.setString(8, lastUpdatedBy);
         statement.setInt(9, divisionId);
 
@@ -40,7 +45,7 @@ public abstract class CustomerQuery {
        statement.setString(2,address);
        statement.setString(3,postalCode);
        statement.setString(4,phone);
-       statement.setTimestamp(5, lastUpdated);
+       statement.setTimestamp(5, lastUpdated, Calendar.getInstance(TimeZone.getTimeZone("UTC")));
        statement.setString(6, lastUpdatedBy);
        statement.setInt(7, divisionId);
        statement.setInt(8, id);

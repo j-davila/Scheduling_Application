@@ -1,8 +1,10 @@
 package model;
 
+import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class Appointment {
     private int id;
@@ -11,13 +13,13 @@ public class Appointment {
     private String location;
 
     private String type;
-    private Timestamp startDate;
-    private Timestamp endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private int customerID;
     private int userId;
     private int contact;
 
-    public Appointment(int id, String title, String description, String location,String type, Timestamp startDate, Timestamp endDate, int customerID, int userId, int contact){
+    public Appointment(int id, String title, String description, String location,String type, LocalDateTime startDate, LocalDateTime endDate, int customerID, int userId, int contact){
 
         this.id = id;
         this.title = title;
@@ -30,7 +32,6 @@ public class Appointment {
         this.userId = userId;
         this.contact = contact;
     }
-
 
     public int getId() {
         return id;
@@ -64,19 +65,19 @@ public class Appointment {
         this.location = location;
     }
 
-    public Timestamp getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Timestamp startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public Timestamp getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Timestamp endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 

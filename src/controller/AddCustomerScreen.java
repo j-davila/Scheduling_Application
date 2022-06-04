@@ -26,7 +26,9 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -112,9 +114,9 @@ public class AddCustomerScreen implements Initializable {
             }
 
             Division selectedDivision = firstlevelCombo.getSelectionModel().getSelectedItem();
-            Timestamp createDate = Timestamp.valueOf(LocalDateTime.now());
+            ZonedDateTime createDate = ZonedDateTime.now();
 
-            CustomerQuery.insert(name, address, zip, phoneNumber, createDate, MainScreen.currentUser, createDate, MainScreen.currentUser, selectedDivision.getId());
+            CustomerQuery.insert(name, address, zip, phoneNumber, Instant.from(createDate), MainScreen.currentUser, Timestamp.from(Instant.from(createDate)), MainScreen.currentUser, selectedDivision.getId());
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();

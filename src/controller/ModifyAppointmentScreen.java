@@ -19,11 +19,10 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class ModifyAppointmentScreen implements Initializable {
 
@@ -74,13 +73,25 @@ public class ModifyAppointmentScreen implements Initializable {
         contactCombo.setItems(Lists.getAllContacts());
         contactCombo.setVisibleRowCount(5);
 
+        ZoneId estZone = ZoneId.of("America/New_York");
+        ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
+
         LocalTime start = LocalTime.of(8, 0);
         LocalTime end = LocalTime.of(22,0);
 
-        while(start.isBefore(end.plusSeconds(1))){
-            startTimeCombo.getItems().add(start);
-            endTimeCombo.getItems().add(start);
-            start = start.plusMinutes(30);
+        ZonedDateTime businessHrsStart = ZonedDateTime.of(LocalDate.now(), start, estZone);
+        ZonedDateTime businessHrsEnd = ZonedDateTime.of(LocalDate.now(), end, estZone);
+
+        ZonedDateTime localStart = businessHrsStart.withZoneSameInstant(localZone);
+        ZonedDateTime localEnd = businessHrsEnd.withZoneSameInstant(localZone);
+
+        LocalTime testStart = localStart.toLocalTime();
+
+
+        while(testStart.isBefore(localEnd.toLocalTime().plusSeconds(1))){
+            startTimeCombo.getItems().add(testStart);
+            endTimeCombo.getItems().add(testStart);
+            testStart = testStart.plusMinutes(30);
         }
 
         try {
@@ -193,21 +204,23 @@ public class ModifyAppointmentScreen implements Initializable {
             }
 
             appId = Integer.parseInt(appIdTxt.getText());
-            Timestamp updateDate = Timestamp.valueOf(LocalDateTime.now());
+            lastUpdated = Timestamp.valueOf(LocalDateTime.now());
 
             date =  startCalendar.getValue();
 
             startTime = startTimeCombo.getValue();
             endTime = endTimeCombo.getValue();
 
-            LocalDateTime appointmentStart = LocalDateTime.of(date, startTime);
-            LocalDateTime appointmentEnd = LocalDateTime.of(date, endTime);
+            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
+
+            ZonedDateTime appointmentStart = ZonedDateTime.of(date, startTime,localZone);
+            ZonedDateTime appointmentEnd = ZonedDateTime.of(date, endTime, localZone);
 
             customerId = customerCombo.getSelectionModel().getSelectedItem().getId();
             contactId = contactCombo.getSelectionModel().getSelectedItem().getContactId();
             userId = userCombo.getSelectionModel().getSelectedItem().getUserId();
 
-            AppointmentQuery.update(title, description, location, type, Timestamp.valueOf(appointmentStart), Timestamp.valueOf(appointmentEnd), updateDate, MainScreen.currentUser,
+            AppointmentQuery.update(title, description, location, type, Instant.from(appointmentStart), Instant.from(appointmentEnd), lastUpdated, MainScreen.currentUser,
                     customerId, userId, contactId, appId);
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
