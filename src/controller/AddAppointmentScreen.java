@@ -1,5 +1,6 @@
 package controller;
 
+import database.AppointmentQuery;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -59,6 +60,7 @@ public class AddAppointmentScreen implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         Lists.clearCustomerList();
+        Lists.clearAppointmentList();
 
         try {
             Lists.contactResult();
@@ -132,33 +134,44 @@ public class AddAppointmentScreen implements Initializable {
 
             // if-else statements validate user input and throw detailed exceptions specific to the invalid entry.
             if(titleTxt.getText().isEmpty()){
-                throw new NullPointerException("Please enter a part name in the Name field");
+                throw new NullPointerException("Please enter a title in the Title field.");
             }else{
                title = titleTxt.getText();
             }
 
             if(descriptionTxt.getText().isEmpty()){
-                throw new NullPointerException("Please enter a part name in the Name field");
+                throw new NullPointerException("Please enter a description in the Description field.");
             }else{
                 description = descriptionTxt.getText();
             }
 
             if (locationTxt.getText().isEmpty()) {
-                throw new NullPointerException("Please enter a part name in the Name field");
+                throw new NullPointerException("Please enter a location in the Location field.");
             }else {
                 location = locationTxt.getText();
             }
 
             if (typeTxt.getText().isEmpty()) {
-                throw new NullPointerException("Please enter a part name in the Name field");
+                throw new NullPointerException("Please enter a type in the Type field.");
             }else {
                 type = typeTxt.getText();
             }
 
-            startDate =  startCalendar.getValue();
+            if (startCalendar.getValue() == null) {
+                throw new NullPointerException("Please select a date.");
+            }else {
+                startDate =  startCalendar.getValue();
+            }
 
-            startTime = startTimeCombo.getValue();
             endTime = endTimeCombo.getValue();
+
+            if(startTimeCombo.getValue().isAfter(endTime)){
+                throw new IllegalArgumentException("Start time is after end time.");
+            }else if(startTimeCombo.getValue().equals(endTime)){
+                throw new IllegalArgumentException("Start time is equal to end time.");
+            }else{
+                startTime = startTimeCombo.getValue();
+        }
 
             ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
 
@@ -167,21 +180,31 @@ public class AddAppointmentScreen implements Initializable {
             ZonedDateTime appointmentStart = ZonedDateTime.of(startDate, startTime,localZone);
             ZonedDateTime appointmentEnd = ZonedDateTime.of(startDate, endTime, localZone);
 
-            contactId = contactCombo.getSelectionModel().getSelectedItem().getContactId();
+            Lists.appTimeCompResult(Timestamp.from(Instant.from(appointmentStart)), Timestamp.from(Instant.from(appointmentEnd)));
 
-            customerId = customerCombo.getSelectionModel().getSelectedItem().getId();
+            ObservableList testAppoint = Lists.getAllAppointments();
 
-            userId = userCombo.getSelectionModel().getSelectedItem().getUserId();
+            if(testAppoint.isEmpty()){
+                contactId = contactCombo.getSelectionModel().getSelectedItem().getContactId();
 
-            AppointmentQuery.insert(title, description, location, type,Instant.from(appointmentStart),
-                    Instant.from(appointmentEnd),Instant.from(createDate), MainScreen.currentUser,Timestamp.from(Instant.from(createDate)),
-                    MainScreen.currentUser, customerId, userId, contactId);
+                customerId = customerCombo.getSelectionModel().getSelectedItem().getId();
 
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
-            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1156, 752);
-            stage.setScene(scene);
-            stage.show();
+                userId = userCombo.getSelectionModel().getSelectedItem().getUserId();
+
+                AppointmentQuery.insert(title, description, location, type,Instant.from(appointmentStart),
+                        Instant.from(appointmentEnd),Instant.from(createDate), MainScreen.currentUser,Timestamp.from(Instant.from(createDate)),
+                        MainScreen.currentUser, customerId, userId, contactId);
+
+                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
+                Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root, 1156, 752);
+                stage.setScene(scene);
+                stage.show();
+
+            }else {
+                throw new IllegalArgumentException("The appointment times conflict with an existing appointment.");
+
+            }
 
         } catch(NullPointerException | IllegalArgumentException | SQLException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);

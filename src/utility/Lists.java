@@ -1,5 +1,6 @@
 package utility;
 
+import database.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.*;
@@ -8,13 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
 
 public class Lists {
 
@@ -235,6 +231,71 @@ public class Lists {
             addAscAppointment(testAppointment);
         }
     }
+
+    public static void appTimeCompResult(Timestamp startTime, Timestamp endTime) throws SQLException {
+
+        // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
+        ResultSet rs2 = AppointmentQuery.timeOverlap(startTime, endTime);
+
+        while (rs2.next()) {
+            int id = rs2.getInt("Appointment_ID");
+            String title = rs2.getString("Title");
+            String description = rs2.getString("Description");
+            String location = rs2.getString("Location");
+            String type = rs2.getString("Type");
+            Timestamp start = rs2.getTimestamp("Start");
+            Timestamp end = rs2.getTimestamp("End");
+            int customerId = rs2.getInt("Customer_ID");
+            int userId = rs2.getInt("User_ID");
+            int contactId = rs2.getInt("Contact_ID");
+
+            ZoneId utcZone = ZoneId.of("UTC");
+
+            ZonedDateTime utcStart = start.toLocalDateTime().atZone(utcZone);
+            ZonedDateTime utcEnd = end.toLocalDateTime().atZone(utcZone);
+
+            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
+
+            ZonedDateTime localStartTime = utcStart.withZoneSameInstant(localZone);
+            ZonedDateTime localEndTime = utcEnd.withZoneSameInstant(localZone);
+
+            // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
+
+            Appointment testAppointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),customerId,userId,contactId);
+
+            addAppointment(testAppointment);
+        }
+    }
+
+    public static Appointment upcomingAppointment(Timestamp timestamp) throws SQLException {
+
+        // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
+        ResultSet rs2 = AppointmentQuery.relatedAppointment(timestamp);
+
+        Appointment testAppointment = null;
+
+        while (rs2.next()) {
+            int id = rs2.getInt("Appointment_ID");
+            Timestamp start = rs2.getTimestamp("Start");
+            Timestamp end = rs2.getTimestamp("End");
+
+            ZoneId utcZone = ZoneId.of("UTC");
+
+            ZonedDateTime utcStart = start.toLocalDateTime().atZone(utcZone);
+            ZonedDateTime utcEnd = end.toLocalDateTime().atZone(utcZone);
+
+            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
+
+            ZonedDateTime localStartTime = utcStart.withZoneSameInstant(localZone);
+            ZonedDateTime localEndTime = utcEnd.withZoneSameInstant(localZone);
+
+            // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
+
+            testAppointment = new Appointment(id,localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime());
+        }
+        return testAppointment;
+    }
+
 
     public static void customerResult() throws SQLException {
 

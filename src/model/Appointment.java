@@ -33,6 +33,13 @@ public class Appointment {
         this.contact = contact;
     }
 
+    public Appointment(int id, LocalDateTime startDate, LocalDateTime endDate){
+
+        this.id = id;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public int getId() {
         return id;
     }

@@ -1,5 +1,9 @@
 package controller;
 
+import database.AppointmentQuery;
+import database.ContactQuery;
+import database.CustomerQuery;
+import database.UserQuery;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,7 +12,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import model.Appointment;
 import model.Contact;
 import model.Customer;
 import model.User;
@@ -133,31 +136,31 @@ public class ModifyAppointmentScreen implements Initializable {
         ResultSet rs3 = UserQuery.getUser(userId);
         Lists.ascAppointmentResults(customerId);
 
-        Customer testCustomer = null;
-        Contact testContact = null;
-        User testUser = null;
+        Customer customer = null;
+        Contact contact = null;
+        User user = null;
 
         while(rs1.next()){
 
-            testCustomer = new Customer(rs1.getInt("Customer_ID"), rs1.getString("Customer_Name"), rs1.getString("Address"),
+            customer = new Customer(rs1.getInt("Customer_ID"), rs1.getString("Customer_Name"), rs1.getString("Address"),
                     rs1.getString("Address"), rs1.getString("Phone"), rs1.getInt("Division_ID"), Lists.getAllAscAppointments());
         }
 
         while(rs2.next()){
 
-            testContact = new Contact(rs2.getInt("Contact_ID"), rs2.getString("Contact_Name"), rs2.getString("Email"));
+            contact = new Contact(rs2.getInt("Contact_ID"), rs2.getString("Contact_Name"), rs2.getString("Email"));
 
         }
 
         while(rs3.next()){
 
-            testUser = new User(rs3.getInt("User_ID"), rs3.getString("User_Name"));
+            user = new User(rs3.getInt("User_ID"), rs3.getString("User_Name"));
 
         }
 
-        customerCombo.setValue(testCustomer);
-        contactCombo.setValue(testContact);
-        userCombo.setValue(testUser);
+        customerCombo.setValue(customer);
+        contactCombo.setValue(contact);
+        userCombo.setValue(user);
 
     }
 
@@ -172,7 +175,7 @@ public class ModifyAppointmentScreen implements Initializable {
             LocalDate date;
             LocalTime startTime;
             LocalTime endTime;
-            Timestamp lastUpdated;
+            ZonedDateTime lastUpdated;
             int customerId;
             int userId;
             int contactId;
@@ -180,36 +183,48 @@ public class ModifyAppointmentScreen implements Initializable {
 
             // if-else statements validate user input and throw detailed exceptions specific to the invalid entry.
             if(titleTxt.getText().isEmpty()){
-                throw new NullPointerException("Name field is empty");
+                throw new NullPointerException("Please enter a title in the Title field.");
             }else{
                 title = titleTxt.getText();
             }
 
             if (descriptionTxt.getText().isEmpty()) {
-                throw new NullPointerException("Address field is empty");
+                throw new NullPointerException("Please enter a description in the Description field.");
             }else {
                 description = descriptionTxt.getText();
             }
 
             if (locationTxt.getText().isEmpty()) {
-                throw new NullPointerException("Zip field is empty");
+                throw new NullPointerException("Please enter a location in the Location field.");
             }else {
                 location = locationTxt.getText();
             }
 
             if (typeTxt.getText().isEmpty()) {
-                throw new NullPointerException("Phone number field is empty");
+                throw new NullPointerException("Please enter a type in the Type field.");
             }else {
                 type = typeTxt.getText();
             }
 
-            appId = Integer.parseInt(appIdTxt.getText());
-            lastUpdated = Timestamp.valueOf(LocalDateTime.now());
+            if (startCalendar.getValue() == null) {
+                throw new NullPointerException("Please select a date.");
+            }else {
+                date =  startCalendar.getValue();
+            }
 
-            date =  startCalendar.getValue();
-
-            startTime = startTimeCombo.getValue();
             endTime = endTimeCombo.getValue();
+
+            if(startTimeCombo.getValue().isAfter(endTime)){
+                throw new IllegalArgumentException("Start time is after end time.");
+            }else if(startTimeCombo.getValue().equals(endTime)){
+                throw new IllegalArgumentException("Start time is equal to end time.");
+            }else{
+                startTime = startTimeCombo.getValue();
+            }
+
+            appId = Integer.parseInt(appIdTxt.getText());
+
+            lastUpdated = ZonedDateTime.now();
 
             ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
 
@@ -220,7 +235,7 @@ public class ModifyAppointmentScreen implements Initializable {
             contactId = contactCombo.getSelectionModel().getSelectedItem().getContactId();
             userId = userCombo.getSelectionModel().getSelectedItem().getUserId();
 
-            AppointmentQuery.update(title, description, location, type, Instant.from(appointmentStart), Instant.from(appointmentEnd), lastUpdated, MainScreen.currentUser,
+            AppointmentQuery.update(title, description, location, type, Instant.from(appointmentStart), Instant.from(appointmentEnd), Timestamp.from(Instant.from(lastUpdated)), MainScreen.currentUser,
                     customerId, userId, contactId, appId);
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));

@@ -1,4 +1,4 @@
-package utility;
+package database;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -87,11 +87,35 @@ public abstract class AppointmentQuery {
 
     }
 
+    public static ResultSet relatedAppointment(Timestamp timestamp) throws SQLException {
+
+        String query = "SELECT * FROM client_schedule.appointments WHERE MINUTE(Start) = MINUTE(?)";
+
+        PreparedStatement statement = JDBC.connection.prepareStatement(query);
+        statement.setTimestamp(1, timestamp);
+
+        return statement.executeQuery();
+
+    }
+
     public static ResultSet getWeekAppointments() throws SQLException {
         String query = "SELECT * FROM client_schedule.appointments WHERE WEEK(START) = WEEK(NOW())";
 
         return JDBC.connection.createStatement().executeQuery(query);
     }
 
+    public static ResultSet timeOverlap(Timestamp startTime, Timestamp endTime) throws SQLException {
+
+        String query = "SELECT * FROM client_schedule.appointments WHERE DATE(Start) BETWEEN DATE(?) and DATE(?) OR DATE(Start) < DATE(?) AND DATE(END) < DATE(?)";
+
+        PreparedStatement statement = JDBC.connection.prepareStatement(query);
+        statement.setTimestamp(1, startTime);
+        statement.setTimestamp(2, endTime);
+        statement.setTimestamp(3, startTime);
+        statement.setTimestamp(4, endTime);
+
+        return statement.executeQuery();
+
+    }
 
 }

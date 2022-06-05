@@ -11,93 +11,115 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import utility.UserQuery;
+import database.UserQuery;
 
-import javax.swing.plaf.synth.Region;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.ZoneId;
-import java.util.Objects;
+import java.time.ZonedDateTime;
+import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 
 public class LoginScreen implements Initializable {
 
     @FXML
+    private Label usernameLbl;
+
+    @FXML
+    private Label passwordLbl;
+
+    @FXML
+    private Button loginBtn;
+
+    @FXML
     private Label zoneLabel;
+
     @FXML
     private TextField userNameText;
 
     @FXML
     private TextField passwordText;
 
+    private Locale local = Locale.getDefault();
+
+    private ResourceBundle test;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
+        if(local.getLanguage().equals("fr")){
 
-        zoneLabel.setText(String.valueOf(localZone));
+            test = ResourceBundle.getBundle("utility/Lang_Fr", local);
+
+            usernameLbl.setText(test.getString("usernameLbl"));
+            passwordLbl.setText(test.getString("passwordLbl"));
+            loginBtn.setText(test.getString("login"));
+        } else {
+            test = ResourceBundle.getBundle("utility/Lang_En", local);
+        }
 
     }
 
     public void userLogin(ActionEvent actionEvent) throws IOException, SQLException {
         /*Remove after testing*/
-//        String user = userNameText.getText();
-//
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
-//        Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
-//        Parent root = loader.load();
-//
-//        Scene scene = new Scene(root,1156,762);
-//        stage.setScene(scene);
-//
-//        MainScreen mainScreen = loader.getController();
-//        mainScreen.getCurrentUser(user);
-//
-//        stage.show();
+        String user = userNameText.getText();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
+        Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root,1156,762);
+        stage.setScene(scene);
+
+        MainScreen mainScreen = loader.getController();
+        mainScreen.getCurrentUser(user);
+
+        stage.show();
         /*Remove after testing*/
 
 
         //Login code
         // If login successful then go to mainScreen
 
-        try{
-            String user;
-
-            ResultSet rs = UserQuery.getUser(userNameText.getText(), passwordText.getText());
-
-            if(rs.next() != false){
-
-                user = userNameText.getText();
-
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
-                Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
-                Parent root = loader.load();
-
-                Scene scene = new Scene(root,1156,762);
-                stage.setScene(scene);
-
-                MainScreen mainScreen = loader.getController();
-                mainScreen.getCurrentUser(user);
-
-                stage.show();
-            }else if(userNameText.getText().isEmpty()){
-                throw new NullPointerException("Enter a Username");
-            } else if (passwordText.getText().isEmpty()) {
-                throw new NullPointerException("Enter a Password");
-            }else{
-                throw new NullPointerException("Invalid username or password");
-            }
-
-        }catch(NullPointerException e){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Input Error");
-            alert.setHeaderText("Invalid Input");
-            alert.setContentText(e.getMessage());
-
-            alert.showAndWait();
-        }
+//        try{
+//
+//            String user;
+//
+//            ResultSet rs = UserQuery.getUser(userNameText.getText(), passwordText.getText());
+//
+//            if(rs.next() != false){
+//
+//                user = userNameText.getText();
+//
+//                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
+//                Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+//                Parent root = loader.load();
+//
+//                Scene scene = new Scene(root,1156,762);
+//                stage.setScene(scene);
+//
+//                MainScreen mainScreen = loader.getController();
+//                mainScreen.getCurrentUser(user);
+//
+//                stage.show();
+//            }else if(userNameText.getText().isEmpty()){
+//                throw new NullPointerException(test.getString("usernameError"));
+//            } else if (passwordText.getText().isEmpty()) {
+//                throw new NullPointerException(test.getString("passwordError"));
+//            }else{
+//                throw new NullPointerException(test.getString("nullError"));
+//            }
+//
+//        }catch(NullPointerException e){
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setTitle(test.getString("inputError"));
+//            alert.setHeaderText(test.getString("invalidInput"));
+//            alert.setContentText(e.getMessage());
+//
+//            alert.showAndWait();
+//        }
     }
 }

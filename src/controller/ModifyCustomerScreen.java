@@ -1,7 +1,5 @@
 package controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,11 +12,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Country;
-import model.Customer;
 import model.Division;
-import utility.CountryQuery;
-import utility.CustomerQuery;
-import utility.FirstLevelDivQuery;
+import database.CountryQuery;
+import database.CustomerQuery;
+import database.FirstLevelDivQuery;
 import utility.Lists;
 
 import java.io.IOException;
@@ -26,7 +23,8 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -107,6 +105,7 @@ public class ModifyCustomerScreen implements Initializable {
             String address;
             String zip;
             String phoneNumber;
+            ZonedDateTime lastUpdated;
             int divisionId;
             int id;
 
@@ -139,9 +138,9 @@ public class ModifyCustomerScreen implements Initializable {
 
             divisionId = firstlevelCombo.getSelectionModel().getSelectedItem().getId();
 
-            Timestamp createDate = Timestamp.valueOf(LocalDateTime.now());
+            lastUpdated = ZonedDateTime.now();
 
-            CustomerQuery.update(name, address, zip, phoneNumber, createDate, MainScreen.currentUser, divisionId, id);
+            CustomerQuery.update(name, address, zip, phoneNumber, Timestamp.from(Instant.from(lastUpdated)), MainScreen.currentUser, divisionId, id);
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();

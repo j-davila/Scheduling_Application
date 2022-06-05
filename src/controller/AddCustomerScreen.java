@@ -1,8 +1,5 @@
 package controller;
 
-import com.mysql.cj.protocol.Resultset;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,18 +13,14 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Country;
 import model.Division;
-import utility.CountryQuery;
-import utility.CustomerQuery;
-import utility.FirstLevelDivQuery;
+import database.CustomerQuery;
 import utility.Lists;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.ResourceBundle;

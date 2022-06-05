@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.Event;
@@ -10,8 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import model.Appointment;
-import utility.AppointmentQuery;
-import utility.CustomerQuery;
+import database.AppointmentQuery;
+import database.CustomerQuery;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,24 +20,21 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import utility.JDBC;
+import database.JDBC;
 import model.Customer;
 import utility.Lists;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 
 public class MainScreen implements Initializable {
 
@@ -215,6 +211,31 @@ public class MainScreen implements Initializable {
         /*************************************************************************/
 
         try {
+
+            ZonedDateTime userLoginTime = ZonedDateTime.now();
+            Appointment test = Lists.upcomingAppointment(Timestamp.from(Instant.from(userLoginTime)));
+
+            if (test == null){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Appointment");
+                alert.setHeaderText("Upcoming Appointments");
+                alert.setContentText("There are no upcoming appointments.");
+                alert.show();
+
+            }else{
+
+                Alert appInfo = new Alert(Alert.AlertType.INFORMATION);
+                appInfo.setTitle("Appointment");
+                appInfo.setHeaderText("Upcoming Appointments");
+                appInfo.setContentText("Appointment ID: " + test.getId() + "\n" + "Appointment Time: " + test.getStartDate());
+                appInfo.show();
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
             Lists.appointmentResult();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -225,6 +246,7 @@ public class MainScreen implements Initializable {
         SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
         sortTest2.comparatorProperty().bind(monthTable.comparatorProperty());
         monthTable.setItems(sortTest2);
+
 
     }
 
@@ -422,7 +444,7 @@ public class MainScreen implements Initializable {
                     Alert deletionInfo = new Alert(Alert.AlertType.INFORMATION);
                     deletionInfo.setTitle("Deletion Confirmation");
                     deletionInfo.setHeaderText("Appointment Details");
-                    deletionInfo.setContentText("Appointment ID: " + appointment.getId() + " " + "Appointment Type: " + appointment.getType());
+                    deletionInfo.setContentText("Appointment ID: " + appointment.getId() + "\n" + "Appointment Type: " + appointment.getType());
                     deletionInfo.show();
 
                 } else {
