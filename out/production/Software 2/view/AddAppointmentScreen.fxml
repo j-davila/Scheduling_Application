@@ -23,7 +23,6 @@
             <Label layoutX="65.0" layoutY="88.0" text="Title" />
             <Button fx:id="saveBtn" layoutX="101.0" layoutY="436.0" mnemonicParsing="false" onAction="#saveAppointment" text="Save" />
             <Button fx:id="cancelBtn" layoutX="231.0" layoutY="436.0" mnemonicParsing="false" onAction="#cancelAdd" text="Cancel" />
-            <TextField fx:id="typeTxt" layoutX="34.0" layoutY="229.0" />
             <Label layoutX="41.0" layoutY="202.0" text="Type" />
             <Label layoutX="241.0" layoutY="29.0" text="Date" />
             <Label layoutX="224.0" layoutY="155.0" text="Customer" />
@@ -36,6 +35,7 @@
             <ComboBox fx:id="endTimeCombo" layoutX="404.0" layoutY="115.0" prefWidth="150.0" />
             <Label layoutX="227.0" layoutY="88.0" text="Start Time" />
             <Label layoutX="427.0" layoutY="88.0" text="End Time" />
+            <ComboBox fx:id="typeCombo" layoutX="34.0" layoutY="230.0" prefWidth="150.0" />
          </children>
       </AnchorPane>
    </children>

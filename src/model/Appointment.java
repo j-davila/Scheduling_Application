@@ -40,6 +40,16 @@ public class Appointment {
         this.endDate = endDate;
     }
 
+    public Appointment(int id, String title, String description,String type, LocalDateTime startDate, LocalDateTime endDate, int customerID){
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.type = type;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.customerID = customerID;
+    }
+
     public int getId() {
         return id;
     }

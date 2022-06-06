@@ -2,6 +2,7 @@ package utility;
 
 import database.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import model.*;
 
@@ -21,6 +22,30 @@ public class Lists {
     private static ObservableList<Country> allCountries = FXCollections.observableArrayList();
     private static ObservableList<User> allUsers = FXCollections.observableArrayList();
     private static ObservableList<Division> allDivisions = FXCollections.observableArrayList();
+
+    private static ObservableList<String> types = FXCollections.observableArrayList();
+
+    public static ObservableList getAllTypes(){
+
+        types.add(new String("Planning Session"));
+        types.add(new String("De-Briefing"));
+        types.add(new String("Brainstorming"));
+        types.add(new String("One-on-One"));
+        types.add(new String("Team-Building"));
+        types.add(new String("Check-In"));
+        types.add(new String("Quartely Planning"));
+        types.add(new String("Sprint Planning"));
+        types.add(new String("Daily Scrum"));
+        types.add(new String("Sprint Review"));
+
+        return types;
+
+    }
+
+    public static void clearTypeList(){
+        types.clear();
+    }
+
 
     public static ObservableList<Customer> getAllCustomers() {
         return allCustomers;
@@ -162,6 +187,41 @@ public class Lists {
        }
     }
 
+    public static void appointmentResultMonth() throws SQLException {
+
+        // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
+        ResultSet rs2 = AppointmentQuery.getMonthAppointments();
+
+        while (rs2.next()) {
+            int id = rs2.getInt("Appointment_ID");
+            String title = rs2.getString("Title");
+            String description = rs2.getString("Description");
+            String location = rs2.getString("Location");
+            String type = rs2.getString("Type");
+            Timestamp start = rs2.getTimestamp("Start");
+            Timestamp end = rs2.getTimestamp("End");
+            int customerId = rs2.getInt("Customer_ID");
+            int userId = rs2.getInt("User_ID");
+            int contactId = rs2.getInt("Contact_ID");
+
+            ZoneId utcZone = ZoneId.of("UTC");
+
+            ZonedDateTime utcStart = start.toLocalDateTime().atZone(utcZone);
+            ZonedDateTime utcEnd = end.toLocalDateTime().atZone(utcZone);
+
+            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
+
+            ZonedDateTime localStartTime = utcStart.withZoneSameInstant(localZone);
+            ZonedDateTime localEndTime = utcEnd.withZoneSameInstant(localZone);
+
+            // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
+
+            Appointment testAppointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),customerId,userId,contactId);
+
+            addAppointment(testAppointment);
+        }
+    }
+
     public static void appointmentResultWeek() throws SQLException {
 
         // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
@@ -232,7 +292,7 @@ public class Lists {
         }
     }
 
-    public static void appTimeCompResult(Timestamp startTime, Timestamp endTime) throws SQLException {
+    public static void appTimeCompResult(Instant startTime, Instant endTime) throws SQLException {
 
         // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
         ResultSet rs2 = AppointmentQuery.timeOverlap(startTime, endTime);
@@ -267,10 +327,10 @@ public class Lists {
         }
     }
 
-    public static Appointment upcomingAppointment(Timestamp timestamp) throws SQLException {
+    public static Appointment upcomingAppointment(Instant instant) throws SQLException {
 
         // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
-        ResultSet rs2 = AppointmentQuery.relatedAppointment(timestamp);
+        ResultSet rs2 = AppointmentQuery.relatedAppointment(instant);
 
         Appointment testAppointment = null;
 
@@ -313,6 +373,38 @@ public class Lists {
             Customer testCustomer = new Customer(id, name, address, zip, phone,fld,associatedAppointments);
 
             addCustomer(testCustomer);
+        }
+    }
+
+    public static void contactSchedule(int contactId) throws SQLException {
+
+        // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
+        ResultSet rs2 = AppointmentQuery.contactAppointments(contactId);
+
+        while (rs2.next()) {
+            int id = rs2.getInt("Appointment_ID");
+            String title = rs2.getString("Title");
+            String description = rs2.getString("Description");
+            String type = rs2.getString("Type");
+            Timestamp start = rs2.getTimestamp("Start");
+            Timestamp end = rs2.getTimestamp("End");
+            int customerId = rs2.getInt("Customer_ID");
+
+            ZoneId utcZone = ZoneId.of("UTC");
+
+            ZonedDateTime utcStart = start.toLocalDateTime().atZone(utcZone);
+            ZonedDateTime utcEnd = end.toLocalDateTime().atZone(utcZone);
+
+            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
+
+            ZonedDateTime localStartTime = utcStart.withZoneSameInstant(localZone);
+            ZonedDateTime localEndTime = utcEnd.withZoneSameInstant(localZone);
+
+            // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
+
+           Appointment testAppointment = new Appointment(id, title, description, type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(), customerId);
+
+            addAppointment(testAppointment);
         }
     }
 

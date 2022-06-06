@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane prefHeight="597.0" prefWidth="839.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportScreen">
+   <children>
+      <Pane layoutX="23.0" layoutY="31.0" prefHeight="551.0" prefWidth="776.0">
+         <children>
+            <TableView fx:id="contactTable" layoutX="30.0" layoutY="276.0" prefHeight="200.0" prefWidth="694.0">
+              <columns>
+                <TableColumn fx:id="appIdColumn" prefWidth="75.0" text="ID" />
+                <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Title" />
+                  <TableColumn fx:id="typeColumn" prefWidth="75.0" text="Type" />
+                  <TableColumn fx:id="descrColumn" prefWidth="75.0" text="Description" />
+                  <TableColumn fx:id="startColumn" prefWidth="75.0" text="Start" />
+                  <TableColumn fx:id="endColumn" prefWidth="75.0" text="End" />
+                  <TableColumn fx:id="customerColumn" prefWidth="75.0" text="Customer" />
+              </columns>
+            </TableView>
+            <ComboBox fx:id="contactCombo" layoutX="30.0" layoutY="234.0" prefWidth="150.0" />
+            <Label layoutX="36.0" layoutY="200.0" text="Contacts" />
+            <Label layoutX="36.0" layoutY="31.0" text="Month" />
+            <ComboBox fx:id="appMonthCombo" layoutX="30.0" layoutY="57.0" prefWidth="150.0" />
+            <ComboBox fx:id="appTypeCombo" layoutX="214.0" layoutY="57.0" prefWidth="150.0" />
+            <Label layoutX="214.0" layoutY="32.0" text="Appointment Type" />
+            <Label fx:id="appTotalLbl" layoutX="411.0" layoutY="57.0" prefHeight="25.0" prefWidth="46.0" style="-fx-border-color: black;" />
+            <Label layoutX="411.0" layoutY="32.0" text="Total" />
+            <Label layoutX="674.0" layoutY="32.0" text="Month" />
+            <Label layoutX="662.0" layoutY="106.0" text="Customer" />
+            <Label layoutX="674.0" layoutY="191.0" text="Total" />
+            <ComboBox fx:id="custMonthCombo" layoutX="613.0" layoutY="57.0" prefWidth="150.0" />
+            <ComboBox fx:id="custCombo" layoutX="613.0" layoutY="142.0" prefWidth="150.0" />
+            <Label fx:id="custTotalLbl" layoutX="658.0" layoutY="217.0" prefHeight="25.0" prefWidth="51.0" style="-fx-border-color: black;" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

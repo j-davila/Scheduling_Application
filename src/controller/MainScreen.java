@@ -28,10 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -39,7 +36,44 @@ import java.util.ResourceBundle;
 public class MainScreen implements Initializable {
 
     @FXML
+    private Tab allTab;
+
+    @FXML
+    private TableView<Appointment> allTable;
+
+    @FXML
+    private TableColumn<Appointment, Integer> allAppIdColumn;
+
+    @FXML
+    private TableColumn<Appointment, String> allTitleColumn;
+
+    @FXML
+    private TableColumn<Appointment, String> allDescrColumn;
+
+    @FXML
+    private TableColumn<Appointment, String> allLocColumn;
+
+    @FXML
+    private TableColumn<Appointment, Integer> allCntColumn;
+
+    @FXML
+    private TableColumn<Appointment, String> allTypeColumn;
+
+    @FXML
+    private TableColumn<Appointment, LocalDateTime> allStartColumn;
+
+    @FXML
+    private TableColumn<Appointment, LocalDateTime> allEndColumn;
+
+    @FXML
+    private TableColumn<Appointment, Integer> allCustIdColumn;
+
+    @FXML
+    private TableColumn<Appointment, Integer> allUserIdColumn;
+
+    @FXML
     private Tab weekTab;
+
     @FXML
     private Tab monthTab;
 
@@ -65,10 +99,10 @@ public class MainScreen implements Initializable {
     private TableColumn<Appointment, String> monthTypeColumn;
 
     @FXML
-    private TableColumn<Appointment, Timestamp> monthStartColumn;
+    private TableColumn<Appointment, LocalDateTime> monthStartColumn;
 
     @FXML
-    private TableColumn<Appointment, Timestamp> monthEndColumn;
+    private TableColumn<Appointment, LocalDateTime> monthEndColumn;
 
     @FXML
     private TableColumn<Appointment, Integer> monthCustIdColumn;
@@ -98,10 +132,10 @@ public class MainScreen implements Initializable {
     private TableColumn<Appointment, String> weekTypeColumn;
 
     @FXML
-    private TableColumn<Appointment, Timestamp> weekStartColumn;
+    private TableColumn<Appointment, LocalDateTime> weekStartColumn;
 
     @FXML
-    private TableColumn<Appointment, Timestamp> weekEndColumn;
+    private TableColumn<Appointment, LocalDateTime> weekEndColumn;
 
     @FXML
     private TableColumn<Appointment, Integer> weekCustIdColumn;
@@ -147,6 +181,17 @@ public class MainScreen implements Initializable {
         zipColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         fldColumn.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
+
+        allAppIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        allTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        allDescrColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        allLocColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
+        allTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        allStartColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        allEndColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        allCustIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        allUserIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        allCntColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
 
         monthAppIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         monthTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -208,12 +253,11 @@ public class MainScreen implements Initializable {
         sortTest.comparatorProperty().bind(customerTable.comparatorProperty());
         customerTable.setItems(sortTest);
 
-        /*************************************************************************/
-
         try {
 
-            ZonedDateTime userLoginTime = ZonedDateTime.now();
-            Appointment test = Lists.upcomingAppointment(Timestamp.from(Instant.from(userLoginTime)));
+            Instant userLoginTime= Instant.now();
+
+            Appointment test = Lists.upcomingAppointment(userLoginTime);
 
             if (test == null){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -244,8 +288,8 @@ public class MainScreen implements Initializable {
         FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
         SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
-        sortTest2.comparatorProperty().bind(monthTable.comparatorProperty());
-        monthTable.setItems(sortTest2);
+        sortTest2.comparatorProperty().bind(allTable.comparatorProperty());
+        allTable.setItems(sortTest2);
 
 
     }
@@ -353,7 +397,37 @@ public class MainScreen implements Initializable {
 
     public void updateAppointment(ActionEvent actionEvent) throws IOException {
 
-        if(monthTab.isSelected()){
+        if(allTab.isSelected()){
+
+            try{
+
+                int appId = allTable.getSelectionModel().getSelectedItem().getId();
+                String title = allTable.getSelectionModel().getSelectedItem().getTitle();
+                String location = allTable.getSelectionModel().getSelectedItem().getLocation();
+                String type = allTable.getSelectionModel().getSelectedItem().getType();
+                String description = allTable.getSelectionModel().getSelectedItem().getDescription();
+                LocalDate date = allTable.getSelectionModel().getSelectedItem().getStartDate().toLocalDate();
+                LocalTime startTime = allTable.getSelectionModel().getSelectedItem().getStartDate().toLocalTime();
+                LocalTime endTime = allTable.getSelectionModel().getSelectedItem().getEndDate().toLocalTime();
+                int customerId = allTable.getSelectionModel().getSelectedItem().getCustomerID();
+                int contactId = allTable.getSelectionModel().getSelectedItem().getContact();
+                int userId = allTable.getSelectionModel().getSelectedItem().getUserId();
+
+                Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyAppointmentScreen.fxml"));
+                Region root = loader.load();
+
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                ModifyAppointmentScreen modifyAppointmentScreen = loader.getController();
+                modifyAppointmentScreen.setFields(appId, title, location, type, description, date, startTime, endTime, customerId, contactId, userId);
+
+                stage.show();
+
+            }catch (SQLException e){
+                throw new RuntimeException(e);
+            }
+        } else if(monthTab.isSelected()){
 
             try{
 
@@ -383,7 +457,7 @@ public class MainScreen implements Initializable {
             }catch (SQLException e){
                 throw new RuntimeException(e);
             }
-        } else{
+        }else{
 
             try{
 
@@ -411,7 +485,7 @@ public class MainScreen implements Initializable {
                 stage.show();
 
             }catch (SQLException e){
-                throw new RuntimeException(e);
+            throw new RuntimeException(e);
             }
         }
     }
@@ -420,7 +494,37 @@ public class MainScreen implements Initializable {
 
         try{
 
-            if(monthTab.isSelected()){
+            if(allTab.isSelected()){
+
+                Appointment appointment = allTable.getSelectionModel().getSelectedItem();
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirm Deletion");
+                alert.setHeaderText("The selected appointment will be deleted.");
+                alert.setContentText("Would you like to delete this appointment?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK){
+                    AppointmentQuery.delete(appointment.getId());
+                    Lists.clearAppointmentList();
+                    Lists.appointmentResult();
+
+                    FilteredList<Appointment> filterTest = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+
+                    SortedList<Appointment> sortTest = new SortedList<>(filterTest);
+                    sortTest.comparatorProperty().bind(allTable.comparatorProperty());
+                    allTable.setItems(sortTest);
+
+                    Alert deletionInfo = new Alert(Alert.AlertType.INFORMATION);
+                    deletionInfo.setTitle("Deletion Confirmation");
+                    deletionInfo.setHeaderText("Appointment Details");
+                    deletionInfo.setContentText("Appointment ID: " + appointment.getId() + "\n" + "Appointment Type: " + appointment.getType());
+                    deletionInfo.show();
+
+                } else {
+                    alert.close();
+                }
+            } else if(monthTab.isSelected()){
 
                 Appointment appointment = monthTable.getSelectionModel().getSelectedItem();
 
@@ -433,7 +537,7 @@ public class MainScreen implements Initializable {
                 if (result.get() == ButtonType.OK){
                     AppointmentQuery.delete(appointment.getId());
                     Lists.clearAppointmentList();
-                    Lists.appointmentResult();
+                    Lists.appointmentResultMonth();
 
                     FilteredList<Appointment> filterTest = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
@@ -452,7 +556,7 @@ public class MainScreen implements Initializable {
                 }
             } else {
 
-                Appointment appointment = monthTable.getSelectionModel().getSelectedItem();
+                Appointment appointment = weekTable.getSelectionModel().getSelectedItem();
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Confirm Deletion");
@@ -463,7 +567,7 @@ public class MainScreen implements Initializable {
                 if (result.get() == ButtonType.OK){
                     AppointmentQuery.delete(appointment.getId());
                     Lists.clearAppointmentList();
-                    Lists.appointmentResult();
+                    Lists.appointmentResultWeek();
 
                     FilteredList<Appointment> filterTest = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
@@ -509,7 +613,7 @@ public class MainScreen implements Initializable {
         Lists.clearAppointmentList();
 
         try {
-            Lists.appointmentResult();
+            Lists.appointmentResultMonth();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -521,6 +625,23 @@ public class MainScreen implements Initializable {
         monthTable.setItems(sortTest2);
     }
 
+    public void toAllTab(Event event) {
+
+        Lists.clearAppointmentList();
+
+        try {
+            Lists.appointmentResult();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+
+        SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
+        sortTest2.comparatorProperty().bind(allTable.comparatorProperty());
+        allTable.setItems(sortTest2);
+    }
+
     public void customerSelected(MouseEvent mouseEvent) throws SQLException {
 
         Lists.clearAscAppointmentList();
@@ -528,7 +649,27 @@ public class MainScreen implements Initializable {
 
         Customer customer = customerTable.getSelectionModel().getSelectedItem();
 
-        if(monthTab.isSelected()){
+        if(allTab.isSelected()){
+            if(customer != null){
+                Lists.ascAppointmentResults(customer.getId());
+
+                customerTable.getSelectionModel().getSelectedItem().setAppointments(Lists.getAllAscAppointments());
+
+                FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAscAppointments(), b -> true);
+
+                SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
+                sortTest2.comparatorProperty().bind(allTable.comparatorProperty());
+                allTable.setItems(sortTest2);
+            }else{
+                Lists.appointmentResult();
+
+                FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+
+                SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
+                sortTest2.comparatorProperty().bind(allTable.comparatorProperty());
+                allTable.setItems(sortTest2);
+            }
+        } else if(monthTab.isSelected()){
             if(customer != null){
                 Lists.ascAppointmentResults(customer.getId());
 
@@ -570,6 +711,15 @@ public class MainScreen implements Initializable {
                 weekTable.setItems(sortTest2);
             }
         }
+    }
+
+    public void goToReports(ActionEvent actionEvent) throws IOException {
+
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ReportsScreen.fxml")));
+        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, 839, 597);
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void exitProgram(ActionEvent actionEvent) {

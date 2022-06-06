@@ -51,7 +51,7 @@ public class AddAppointmentScreen implements Initializable {
     private TextField titleTxt;
 
     @FXML
-    private TextField typeTxt;
+    private ComboBox<String> typeCombo;
 
     @FXML
     private TextArea descriptionTxt;
@@ -59,8 +59,15 @@ public class AddAppointmentScreen implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        Lists.clearTypeList();
         Lists.clearCustomerList();
         Lists.clearAppointmentList();
+
+        Lists.getAllTypes();
+
+        typeCombo.setItems(Lists.getAllTypes());
+        typeCombo.setVisibleRowCount(5);
+        typeCombo.getSelectionModel().selectFirst();
 
         try {
             Lists.contactResult();
@@ -151,11 +158,6 @@ public class AddAppointmentScreen implements Initializable {
                 location = locationTxt.getText();
             }
 
-            if (typeTxt.getText().isEmpty()) {
-                throw new NullPointerException("Please enter a type in the Type field.");
-            }else {
-                type = typeTxt.getText();
-            }
 
             if (startCalendar.getValue() == null) {
                 throw new NullPointerException("Please select a date.");
@@ -171,7 +173,9 @@ public class AddAppointmentScreen implements Initializable {
                 throw new IllegalArgumentException("Start time is equal to end time.");
             }else{
                 startTime = startTimeCombo.getValue();
-        }
+            }
+
+            type = typeCombo.getSelectionModel().getSelectedItem();
 
             ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
 
@@ -180,7 +184,7 @@ public class AddAppointmentScreen implements Initializable {
             ZonedDateTime appointmentStart = ZonedDateTime.of(startDate, startTime,localZone);
             ZonedDateTime appointmentEnd = ZonedDateTime.of(startDate, endTime, localZone);
 
-            Lists.appTimeCompResult(Timestamp.from(Instant.from(appointmentStart)), Timestamp.from(Instant.from(appointmentEnd)));
+            Lists.appTimeCompResult(Instant.from(appointmentStart), Instant.from(appointmentEnd));
 
             ObservableList testAppoint = Lists.getAllAppointments();
 

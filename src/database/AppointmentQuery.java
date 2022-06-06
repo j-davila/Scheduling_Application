@@ -87,15 +87,32 @@ public abstract class AppointmentQuery {
 
     }
 
-    public static ResultSet relatedAppointment(Timestamp timestamp) throws SQLException {
+    public static ResultSet relatedAppointment(Instant appTime) throws SQLException {
 
-        String query = "SELECT * FROM client_schedule.appointments WHERE MINUTE(Start) = MINUTE(?)";
+        String query = "SELECT * FROM client_schedule.appointments WHERE TIMESTAMPDIFF(MINUTE,?, Start) BETWEEN 0 and 15 ";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
-        statement.setTimestamp(1, timestamp);
+        statement.setTimestamp(1, Timestamp.from(appTime),  Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 
         return statement.executeQuery();
 
+    }
+
+    public static ResultSet contactAppointments(int contactId) throws SQLException {
+
+        String query = "SELECT * FROM client_schedule.appointments WHERE Contact_ID = ?";
+
+        PreparedStatement statement = JDBC.connection.prepareStatement(query);
+        statement.setInt(1, contactId);
+
+        return statement.executeQuery();
+
+    }
+
+    public static ResultSet getMonthAppointments() throws SQLException {
+        String query = "SELECT * FROM client_schedule.appointments WHERE MONTH(START) = MONTH(NOW())";
+
+        return JDBC.connection.createStatement().executeQuery(query);
     }
 
     public static ResultSet getWeekAppointments() throws SQLException {
@@ -104,15 +121,15 @@ public abstract class AppointmentQuery {
         return JDBC.connection.createStatement().executeQuery(query);
     }
 
-    public static ResultSet timeOverlap(Timestamp startTime, Timestamp endTime) throws SQLException {
+    public static ResultSet timeOverlap(Instant startTime, Instant endTime) throws SQLException {
 
-        String query = "SELECT * FROM client_schedule.appointments WHERE DATE(Start) BETWEEN DATE(?) and DATE(?) OR DATE(Start) < DATE(?) AND DATE(END) < DATE(?)";
+        String query = "SELECT * FROM client_schedule.appointments WHERE (Start > ? and Start < ?) OR (End > ? and End < ?)";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
-        statement.setTimestamp(1, startTime);
-        statement.setTimestamp(2, endTime);
-        statement.setTimestamp(3, startTime);
-        statement.setTimestamp(4, endTime);
+        statement.setTimestamp(1, Timestamp.from(startTime), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
+        statement.setTimestamp(2, Timestamp.from(endTime), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
+        statement.setTimestamp(3, Timestamp.from(startTime), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
+        statement.setTimestamp(4, Timestamp.from(endTime), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 
         return statement.executeQuery();
 
