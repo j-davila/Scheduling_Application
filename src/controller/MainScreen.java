@@ -715,6 +715,8 @@ public class MainScreen implements Initializable {
 
     public void goToReports(ActionEvent actionEvent) throws IOException {
 
+        Lists.clearContactList();
+
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ReportsScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 839, 597);

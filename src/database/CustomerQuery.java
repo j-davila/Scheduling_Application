@@ -78,4 +78,16 @@ public abstract class CustomerQuery {
 
         return statement.executeQuery();
     }
+
+    public static ResultSet numberOfCustomers(int fldId ) throws SQLException {
+
+        String query = "SELECT COUNT(DISTINCT(Customer_ID)) AS quantity FROM client_schedule.customers WHERE Division_ID = ?";
+
+        PreparedStatement statement = JDBC.connection.prepareStatement(query);
+        statement.setInt(1, fldId);
+
+        return statement.executeQuery();
+
+    }
+
 }

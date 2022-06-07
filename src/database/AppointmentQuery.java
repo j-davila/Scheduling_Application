@@ -135,4 +135,15 @@ public abstract class AppointmentQuery {
 
     }
 
+    public static ResultSet numberOfAppointments(String month, String type) throws SQLException {
+
+        String query = "SELECT COUNT(TYPE) AS quantity FROM client_schedule.appointments WHERE MONTH(Start) = MONTH(str_to_date(?, '%M')) AND TYPE = ?";
+
+        PreparedStatement statement = JDBC.connection.prepareStatement(query);
+        statement.setString(1, month);
+        statement.setString(2, type);
+
+        return statement.executeQuery();
+
+    }
 }
