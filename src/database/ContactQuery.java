@@ -22,5 +22,4 @@ public abstract class ContactQuery {
 
         return statement.executeQuery();
     }
-
 }

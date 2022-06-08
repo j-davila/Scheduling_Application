@@ -2,20 +2,16 @@ package utility;
 
 import database.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import model.*;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
-import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
 public class Lists {
-
     private static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
     private static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
     private static ObservableList<Appointment> associatedAppointments = FXCollections.observableArrayList();
@@ -26,8 +22,7 @@ public class Lists {
     private static ObservableList<String> types = FXCollections.observableArrayList();
     private static ObservableList<String> months = FXCollections.observableArrayList();
 
-    public static ObservableList getAllTypes(){
-
+    public static ObservableList<String> getAllTypes(){
         types.add("Planning Session");
         types.add("De-Briefing");
         types.add("Brainstorming");
@@ -42,8 +37,7 @@ public class Lists {
         return types;
     }
 
-    public static ObservableList setAllMonths(){
-
+    public static void setAllMonths(){
         months.add("January");
         months.add("February");
         months.add("March");
@@ -56,8 +50,6 @@ public class Lists {
         months.add("October");
         months.add("November");
         months.add("December");
-
-        return months;
     }
 
     public static void clearTypeList(){
@@ -77,7 +69,6 @@ public class Lists {
     }
 
     public static void clearCustomerList(){
-
         allCustomers.clear();
     }
 
@@ -98,12 +89,10 @@ public class Lists {
     }
 
     public static void clearAppointmentList(){
-
         allAppointments.clear();
     }
 
     public static void clearAscAppointmentList(){
-
         associatedAppointments.clear();
     }
 
@@ -174,7 +163,6 @@ public class Lists {
     }
 
     public static ObservableList<Customer> lookupCustomer(String customerName){
-
         ObservableList<Customer> tempAllCustomers = getAllCustomers();
         ObservableList<Customer> returnList = FXCollections.observableArrayList();
         for(Customer thisCustomer: tempAllCustomers){
@@ -214,9 +202,10 @@ public class Lists {
 
             // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
 
-            Appointment testAppointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),customerId,userId,contactId);
+            Appointment appointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),
+                    customerId,userId,contactId);
 
-            addAppointment(testAppointment);
+            addAppointment(appointment);
        }
     }
 
@@ -249,9 +238,10 @@ public class Lists {
 
             // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
 
-            Appointment testAppointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),customerId,userId,contactId);
+            Appointment appointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),
+                    customerId,userId,contactId);
 
-            addAppointment(testAppointment);
+            addAppointment(appointment);
         }
     }
 
@@ -284,9 +274,10 @@ public class Lists {
 
             // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
 
-            Appointment testAppointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),customerId,userId,contactId);
+            Appointment appointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),
+                    customerId,userId,contactId);
 
-            addAppointment(testAppointment);
+            addAppointment(appointment);
         }
     }
 
@@ -319,9 +310,10 @@ public class Lists {
 
             // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
 
-            Appointment testAppointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),customerId,userId,contactId);
+            Appointment appointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),
+                    customerId,userId,contactId);
 
-            addAscAppointment(testAppointment);
+            addAscAppointment(appointment);
         }
     }
 
@@ -354,9 +346,10 @@ public class Lists {
 
             // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
 
-            Appointment testAppointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),customerId,userId,contactId);
+            Appointment appointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),
+                    customerId,userId,contactId);
 
-            addAppointment(testAppointment);
+            addAppointment(appointment);
         }
     }
 
@@ -365,7 +358,7 @@ public class Lists {
         // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
         ResultSet rs2 = AppointmentQuery.relatedAppointment(instant);
 
-        Appointment testAppointment = null;
+        Appointment appointment = null;
 
         while (rs2.next()) {
             int id = rs2.getInt("Appointment_ID");
@@ -384,13 +377,12 @@ public class Lists {
 
             // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
 
-            testAppointment = new Appointment(id,localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime());
+            appointment = new Appointment(id,localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime());
         }
-        return testAppointment;
+        return appointment;
     }
 
     public static Integer numberOfAppointments(String month, String type) throws SQLException {
-
         ResultSet rs2 = AppointmentQuery.numberOfAppointments(month, type);
 
         int count = 0;
@@ -414,14 +406,13 @@ public class Lists {
             String phone = rs.getString("Phone");
             int fld = rs.getInt("Division_ID");
 
-            Customer testCustomer = new Customer(id, name, address, zip, phone,fld,associatedAppointments);
+            Customer customer = new Customer(id, name, address, zip, phone,fld,associatedAppointments);
 
-            addCustomer(testCustomer);
+            addCustomer(customer);
         }
     }
 
     public static Integer numberOfCustomers(int fldID) throws SQLException {
-
         ResultSet rs2 = CustomerQuery.numberOfCustomers(fldID);
 
         int count = 0;
@@ -458,15 +449,14 @@ public class Lists {
 
                 // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
 
-                Appointment testAppointment = new Appointment(id, title, description, type, localStartTime.toLocalDateTime(), localEndTime.toLocalDateTime(), customerId);
+                Appointment appointment = new Appointment(id, title, description, type, localStartTime.toLocalDateTime(), localEndTime.toLocalDateTime(), customerId);
 
-                addAppointment(testAppointment);
+                addAppointment(appointment);
             }
         }
     }
 
     public static void contactResult() throws SQLException {
-
        ResultSet rs2 = ContactQuery.getAllContacts();
 
         while (rs2.next()) {
@@ -482,7 +472,6 @@ public class Lists {
     }
 
     public static void countryResult() throws SQLException {
-
         ResultSet rs2 = CountryQuery.getAllCountries();
 
         while (rs2.next()) {
@@ -497,7 +486,6 @@ public class Lists {
     }
 
     public static void userResult() throws SQLException {
-
         ResultSet rs2 = UserQuery.getAllUsers();
 
         while (rs2.next()) {
@@ -512,7 +500,6 @@ public class Lists {
     }
 
     public static void divisionResultByCountry(int countryId) throws SQLException {
-
         ResultSet rs = FirstLevelDivQuery.getDivisionByCountry(countryId);
 
         while (rs.next()) {

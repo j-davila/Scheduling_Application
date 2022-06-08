@@ -15,7 +15,6 @@ public abstract class FirstLevelDivQuery {
     }
 
     public static ResultSet getDivisionByCountry(int country) throws SQLException {
-
         String query = "SELECT * FROM client_schedule.first_level_divisions WHERE Country_ID = ?";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
@@ -25,7 +24,6 @@ public abstract class FirstLevelDivQuery {
     }
 
     public static ResultSet getDivision(int divisionId) throws SQLException {
-
         String query = "SELECT * FROM client_schedule.first_level_divisions WHERE Division_ID = ?";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
@@ -33,5 +31,4 @@ public abstract class FirstLevelDivQuery {
 
         return statement.executeQuery();
     }
-
 }

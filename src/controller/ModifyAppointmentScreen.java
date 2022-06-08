@@ -64,7 +64,6 @@ public class ModifyAppointmentScreen implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         Lists.clearCustomerList();
 
         try {
@@ -88,13 +87,13 @@ public class ModifyAppointmentScreen implements Initializable {
         ZonedDateTime localStart = businessHrsStart.withZoneSameInstant(localZone);
         ZonedDateTime localEnd = businessHrsEnd.withZoneSameInstant(localZone);
 
-        LocalTime testStart = localStart.toLocalTime();
+        LocalTime startToLocal = localStart.toLocalTime();
 
-
-        while(testStart.isBefore(localEnd.toLocalTime().plusSeconds(1))){
-            startTimeCombo.getItems().add(testStart);
-            endTimeCombo.getItems().add(testStart);
-            testStart = testStart.plusMinutes(30);
+        // While loop used to populate time in the comboboxes. Modeled from Software 2 webinar
+        while(startToLocal .isBefore(localEnd.toLocalTime().plusSeconds(1))){
+            startTimeCombo.getItems().add(startToLocal );
+            endTimeCombo.getItems().add(startToLocal );
+            startToLocal  = startToLocal.plusMinutes(30);
         }
 
         try {
@@ -114,7 +113,6 @@ public class ModifyAppointmentScreen implements Initializable {
 
         userCombo.setItems(Lists.getAllusers());
         userCombo.setVisibleRowCount(5);
-
     }
 
     public void setFields(int id, String title, String location, String type, String description, LocalDate date, LocalTime start, LocalTime end, int customerId,
@@ -141,33 +139,25 @@ public class ModifyAppointmentScreen implements Initializable {
         User user = null;
 
         while(rs1.next()){
-
             customer = new Customer(rs1.getInt("Customer_ID"), rs1.getString("Customer_Name"), rs1.getString("Address"),
                     rs1.getString("Address"), rs1.getString("Phone"), rs1.getInt("Division_ID"), Lists.getAllAscAppointments());
         }
 
         while(rs2.next()){
-
             contact = new Contact(rs2.getInt("Contact_ID"), rs2.getString("Contact_Name"), rs2.getString("Email"));
-
         }
 
         while(rs3.next()){
-
             user = new User(rs3.getInt("User_ID"), rs3.getString("User_Name"));
-
         }
 
         customerCombo.setValue(customer);
         contactCombo.setValue(contact);
         userCombo.setValue(user);
-
     }
 
     public void saveAppointment(ActionEvent actionEvent) throws IOException {
-
         try {
-
             String title;
             String description;
             String location;
@@ -223,11 +213,8 @@ public class ModifyAppointmentScreen implements Initializable {
             }
 
             appId = Integer.parseInt(appIdTxt.getText());
-
             lastUpdated = ZonedDateTime.now();
-
             ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
-
             ZonedDateTime appointmentStart = ZonedDateTime.of(date, startTime,localZone);
             ZonedDateTime appointmentEnd = ZonedDateTime.of(date, endTime, localZone);
 
@@ -255,7 +242,6 @@ public class ModifyAppointmentScreen implements Initializable {
     }
 
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
-
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 1156, 752);

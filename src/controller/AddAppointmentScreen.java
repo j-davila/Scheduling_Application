@@ -1,7 +1,6 @@
 package controller;
 
 import database.AppointmentQuery;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,7 +15,6 @@ import utility.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
@@ -91,12 +89,14 @@ public class AddAppointmentScreen implements Initializable {
         ZonedDateTime localStart = businessHrsStart.withZoneSameInstant(localZone);
         ZonedDateTime localEnd = businessHrsEnd.withZoneSameInstant(localZone);
 
-        LocalTime testStart = localStart.toLocalTime();
+        LocalTime startToLocal = localStart.toLocalTime();
 
-        while(testStart.isBefore(localEnd.toLocalTime().plusSeconds(1))){
-            startTimeCombo.getItems().add(testStart);
-            endTimeCombo.getItems().add(testStart);
-            testStart = testStart.plusMinutes(30);
+
+        // While loop used to populate time in the comboboxes. Modeled from Software 2 webinar
+        while(startToLocal.isBefore(localEnd.toLocalTime().plusSeconds(1))){
+            startTimeCombo.getItems().add(startToLocal);
+            endTimeCombo.getItems().add(startToLocal);
+            startToLocal = startToLocal.plusMinutes(30);
         }
 
         startTimeCombo.getSelectionModel().selectFirst();
@@ -125,9 +125,7 @@ public class AddAppointmentScreen implements Initializable {
     }
 
     public void saveAppointment(ActionEvent actionEvent) throws IOException {
-
         try {
-
             String title;
             String location;
             String type;
@@ -158,7 +156,6 @@ public class AddAppointmentScreen implements Initializable {
                 location = locationTxt.getText();
             }
 
-
             if (startCalendar.getValue() == null) {
                 throw new NullPointerException("Please select a date.");
             }else {
@@ -186,9 +183,9 @@ public class AddAppointmentScreen implements Initializable {
 
             Lists.appTimeCompResult(Instant.from(appointmentStart), Instant.from(appointmentEnd));
 
-            ObservableList testAppoint = Lists.getAllAppointments();
+            ObservableList<Appointment> allAppointments = Lists.getAllAppointments();
 
-            if(testAppoint.isEmpty()){
+            if(allAppointments.isEmpty()){
                 contactId = contactCombo.getSelectionModel().getSelectedItem().getContactId();
 
                 customerId = customerCombo.getSelectionModel().getSelectedItem().getId();
@@ -207,10 +204,8 @@ public class AddAppointmentScreen implements Initializable {
 
             }else {
                 throw new IllegalArgumentException("The appointment times conflict with an existing appointment.");
-
             }
-
-        } catch(NullPointerException | IllegalArgumentException | SQLException e){
+        }catch(NullPointerException | IllegalArgumentException | SQLException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Input Error");
             alert.setHeaderText("Invalid Input");
@@ -221,7 +216,6 @@ public class AddAppointmentScreen implements Initializable {
     }
 
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
-
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 1156, 752);

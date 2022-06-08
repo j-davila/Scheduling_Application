@@ -73,9 +73,7 @@ public class AddCustomerScreen implements Initializable {
     }
 
     public void saveCustomer(ActionEvent actionEvent) throws IOException {
-
         try {
-
             String name;
             String address;
             String zip;
@@ -109,7 +107,8 @@ public class AddCustomerScreen implements Initializable {
             Division selectedDivision = firstlevelCombo.getSelectionModel().getSelectedItem();
             ZonedDateTime createDate = ZonedDateTime.now();
 
-            CustomerQuery.insert(name, address, zip, phoneNumber, Instant.from(createDate), MainScreen.currentUser, Timestamp.from(Instant.from(createDate)), MainScreen.currentUser, selectedDivision.getId());
+            CustomerQuery.insert(name, address, zip, phoneNumber, Instant.from(createDate), MainScreen.currentUser, Timestamp.from(Instant.from(createDate)),
+                    MainScreen.currentUser, selectedDivision.getId());
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -128,7 +127,6 @@ public class AddCustomerScreen implements Initializable {
     }
 
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
-
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 1156, 752);
@@ -141,7 +139,6 @@ public class AddCustomerScreen implements Initializable {
         Lists.clearDivisionList();
 
         Country selectedCountry = countryCombo.getSelectionModel().getSelectedItem();
-
         Lists.divisionResultByCountry(selectedCountry.getId());
 
         firstlevelCombo.setItems(Lists.getAlldivisions());

@@ -53,7 +53,6 @@ public class ModifyCustomerScreen implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         Lists.clearCountryList();
 
         try {
@@ -64,43 +63,35 @@ public class ModifyCustomerScreen implements Initializable {
 
         countryCombo.setItems(Lists.getAllCountries());
         countryCombo.setVisibleRowCount(5);
-
     }
 
     public void setFields(int id,String name, String address, String zip, String phone, int fld) throws SQLException {
-
         idTxt.setText(Integer.toString(id));
         nameTxt.setText(name);
         addressTxt.setText(address);
         zipTxt.setText(zip);
         numberTxt.setText(phone);
-
         ResultSet rs = FirstLevelDivQuery.getDivision(fld);
-
-        Division testDivision = null;
-        Country testCountry = null;
+        ResultSet rs2;
+        Division division = null;
+        Country country = null;
 
         while (rs.next()) {
-
-            testDivision = new Division(rs.getInt("Division_ID"),rs.getString("Division"), rs.getInt("Country_ID"));
+            division = new Division(rs.getInt("Division_ID"),rs.getString("Division"), rs.getInt("Country_ID"));
         }
-
-        ResultSet rs2 = CountryQuery.getCountry(testDivision.getCountryId());
+        rs2 = CountryQuery.getCountry(division.getCountryId());
 
         while (rs2.next()) {
 
-            testCountry = new Country(rs2.getInt("Country_ID"), rs2.getString("Country"));
+            country = new Country(rs2.getInt("Country_ID"), rs2.getString("Country"));
         }
 
-        firstlevelCombo.setValue(testDivision);
-        countryCombo.setValue(testCountry);
-
+        firstlevelCombo.setValue(division);
+        countryCombo.setValue(country);
     }
 
     public void saveCustomer(ActionEvent actionEvent) throws IOException {
-
         try {
-
             String name;
             String address;
             String zip;
@@ -135,11 +126,8 @@ public class ModifyCustomerScreen implements Initializable {
             }
 
             id = Integer.parseInt(idTxt.getText());
-
             divisionId = firstlevelCombo.getSelectionModel().getSelectedItem().getId();
-
             lastUpdated = ZonedDateTime.now();
-
             CustomerQuery.update(name, address, zip, phoneNumber, Timestamp.from(Instant.from(lastUpdated)), MainScreen.currentUser, divisionId, id);
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
@@ -159,7 +147,6 @@ public class ModifyCustomerScreen implements Initializable {
     }
 
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
-
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 1156, 752);
@@ -168,11 +155,8 @@ public class ModifyCustomerScreen implements Initializable {
     }
 
     public void changeCountry(ActionEvent actionEvent) throws SQLException {
-
         Lists.clearDivisionList();
-
         Country selectedCountry = countryCombo.getSelectionModel().getSelectedItem();
-
         Lists.divisionResultByCountry(selectedCountry.getId());
 
         firstlevelCombo.setItems(Lists.getAlldivisions());

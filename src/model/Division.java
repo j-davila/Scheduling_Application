@@ -1,7 +1,6 @@
 package model;
 
 public class Division {
-
     private int id;
     private String division;
     private int countryId;

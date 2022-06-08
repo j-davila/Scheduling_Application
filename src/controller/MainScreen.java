@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.Event;
 import javafx.scene.control.*;
@@ -27,7 +26,6 @@ import utility.Lists;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.*;
 import java.util.Objects;
 import java.util.Optional;
@@ -70,9 +68,6 @@ public class MainScreen implements Initializable {
 
     @FXML
     private TableColumn<Appointment, Integer> allUserIdColumn;
-
-    @FXML
-    private Tab weekTab;
 
     @FXML
     private Tab monthTab;
@@ -215,51 +210,50 @@ public class MainScreen implements Initializable {
         weekUserIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
         weekContactColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
 
-
         try {
             Lists.customerResult();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        FilteredList<Customer> filterTest = new FilteredList<>(Lists.getAllCustomers(), b -> true);
+        FilteredList<Customer> customerFilter = new FilteredList<>(Lists.getAllCustomers(), b -> true);
 
-        // The logic inside the predicate filters the content of the tableview using ID or part name.
-        customerSearch.textProperty().addListener((observable, oldValue, newValue) -> filterTest.setPredicate(customer -> {
+        // The logic inside the predicate filters the content of the tableview using id or customer name.
+        customerSearch.textProperty().addListener((observable, oldValue, newValue) -> customerFilter.setPredicate(customer -> {
             if (newValue == null || newValue.isEmpty()) {
                 return true;
             }
 
-                try {
-                    if (Lists.lookupCustomer(Integer.parseInt(newValue)).getId() == customer.getId()) {
-                        return true;
-                    }
-                } catch (NumberFormatException | NullPointerException e) {
-                    return false;
-                } finally {
-                    try{
-                        String lowerNewValue = newValue.toLowerCase();
-                        if (Lists.lookupCustomer(lowerNewValue).contains(customer)){
-                            return true;
-                        }
-                    }catch (NullPointerException e){
-                        return false;
-                    }
+            try {
+                if (Lists.lookupCustomer(Integer.parseInt(newValue)).getId() == customer.getId()) {
+                    return true;
                 }
+            } catch (NumberFormatException | NullPointerException e) {
+                return false;
+            } finally {
+                try{
+                    String lowerNewValue = newValue.toLowerCase();
+                    if (Lists.lookupCustomer(lowerNewValue).contains(customer)){
+                            return true;
+                    }
+                }catch (NullPointerException e){
+                    return false;
+                }
+            }
             return false;
         }));
 
-        SortedList<Customer> sortTest = new SortedList<>(filterTest);
-        sortTest.comparatorProperty().bind(customerTable.comparatorProperty());
-        customerTable.setItems(sortTest);
+        SortedList<Customer> customerSort = new SortedList<>(customerFilter);
+        customerSort.comparatorProperty().bind(customerTable.comparatorProperty());
+        customerTable.setItems(customerSort);
 
         try {
 
             Instant userLoginTime= Instant.now();
 
-            Appointment test = Lists.upcomingAppointment(userLoginTime);
+            Appointment upcomingAppointment = Lists.upcomingAppointment(userLoginTime);
 
-            if (test == null){
+            if (upcomingAppointment == null){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Appointment");
                 alert.setHeaderText("Upcoming Appointments");
@@ -271,7 +265,7 @@ public class MainScreen implements Initializable {
                 Alert appInfo = new Alert(Alert.AlertType.INFORMATION);
                 appInfo.setTitle("Appointment");
                 appInfo.setHeaderText("Upcoming Appointments");
-                appInfo.setContentText("Appointment ID: " + test.getId() + "\n" + "Appointment Time: " + test.getStartDate());
+                appInfo.setContentText("Appointment ID: " + upcomingAppointment.getId() + "\n" + "Appointment Time: " + upcomingAppointment.getStartDate());
                 appInfo.show();
 
             }
@@ -285,13 +279,11 @@ public class MainScreen implements Initializable {
             throw new RuntimeException(e);
         }
 
-        FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+        FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
-        SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
-        sortTest2.comparatorProperty().bind(allTable.comparatorProperty());
-        allTable.setItems(sortTest2);
-
-
+        SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+        appointmentSort.comparatorProperty().bind(allTable.comparatorProperty());
+        allTable.setItems(appointmentSort);
     }
 
     public void getCurrentUser(String user){
@@ -309,7 +301,6 @@ public class MainScreen implements Initializable {
     public void updateCustomer(ActionEvent actionEvent) throws IOException {
 
         try{
-
             int id = customerTable.getSelectionModel().getSelectedItem().getId();
             String name = customerTable.getSelectionModel().getSelectedItem().getName();
             String address = customerTable.getSelectionModel().getSelectedItem().getAddress();
@@ -357,9 +348,9 @@ public class MainScreen implements Initializable {
                     Lists.clearCustomerList();
                     Lists.customerResult();
 
-                    FilteredList<Customer> filterTest = new FilteredList<>(Lists.getAllCustomers(), b -> true);
+                    FilteredList<Customer> customerFilter = new FilteredList<>(Lists.getAllCustomers(), b -> true);
 
-                    SortedList<Customer> sortTest = new SortedList<>(filterTest);
+                    SortedList<Customer> sortTest = new SortedList<>(customerFilter);
                     sortTest.comparatorProperty().bind(customerTable.comparatorProperty());
                     customerTable.setItems(sortTest);
 
@@ -396,11 +387,8 @@ public class MainScreen implements Initializable {
     }
 
     public void updateAppointment(ActionEvent actionEvent) throws IOException {
-
         if(allTab.isSelected()){
-
             try{
-
                 int appId = allTable.getSelectionModel().getSelectedItem().getId();
                 String title = allTable.getSelectionModel().getSelectedItem().getTitle();
                 String location = allTable.getSelectionModel().getSelectedItem().getLocation();
@@ -428,9 +416,7 @@ public class MainScreen implements Initializable {
                 throw new RuntimeException(e);
             }
         } else if(monthTab.isSelected()){
-
             try{
-
                 int appId = monthTable.getSelectionModel().getSelectedItem().getId();
                 String title = monthTable.getSelectionModel().getSelectedItem().getTitle();
                 String location = monthTable.getSelectionModel().getSelectedItem().getLocation();
@@ -458,9 +444,7 @@ public class MainScreen implements Initializable {
                 throw new RuntimeException(e);
             }
         }else{
-
             try{
-
                 int appId = weekTable.getSelectionModel().getSelectedItem().getId();
                 String title = weekTable.getSelectionModel().getSelectedItem().getTitle();
                 String location = weekTable.getSelectionModel().getSelectedItem().getLocation();
@@ -491,11 +475,8 @@ public class MainScreen implements Initializable {
     }
 
     public void deleteAppointment(ActionEvent actionEvent) throws SQLException {
-
         try{
-
             if(allTab.isSelected()){
-
                 Appointment appointment = allTable.getSelectionModel().getSelectedItem();
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -509,11 +490,11 @@ public class MainScreen implements Initializable {
                     Lists.clearAppointmentList();
                     Lists.appointmentResult();
 
-                    FilteredList<Appointment> filterTest = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+                    FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
-                    SortedList<Appointment> sortTest = new SortedList<>(filterTest);
-                    sortTest.comparatorProperty().bind(allTable.comparatorProperty());
-                    allTable.setItems(sortTest);
+                    SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+                    appointmentSort.comparatorProperty().bind(allTable.comparatorProperty());
+                    allTable.setItems(appointmentSort);
 
                     Alert deletionInfo = new Alert(Alert.AlertType.INFORMATION);
                     deletionInfo.setTitle("Deletion Confirmation");
@@ -525,7 +506,6 @@ public class MainScreen implements Initializable {
                     alert.close();
                 }
             } else if(monthTab.isSelected()){
-
                 Appointment appointment = monthTable.getSelectionModel().getSelectedItem();
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -539,23 +519,21 @@ public class MainScreen implements Initializable {
                     Lists.clearAppointmentList();
                     Lists.appointmentResultMonth();
 
-                    FilteredList<Appointment> filterTest = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+                    FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
-                    SortedList<Appointment> sortTest = new SortedList<>(filterTest);
-                    sortTest.comparatorProperty().bind(monthTable.comparatorProperty());
-                    monthTable.setItems(sortTest);
+                    SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+                    appointmentSort.comparatorProperty().bind(monthTable.comparatorProperty());
+                    monthTable.setItems(appointmentSort);
 
                     Alert deletionInfo = new Alert(Alert.AlertType.INFORMATION);
                     deletionInfo.setTitle("Deletion Confirmation");
                     deletionInfo.setHeaderText("Appointment Details");
                     deletionInfo.setContentText("Appointment ID: " + appointment.getId() + "\n" + "Appointment Type: " + appointment.getType());
                     deletionInfo.show();
-
                 } else {
                     alert.close();
                 }
             } else {
-
                 Appointment appointment = weekTable.getSelectionModel().getSelectedItem();
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -569,17 +547,15 @@ public class MainScreen implements Initializable {
                     Lists.clearAppointmentList();
                     Lists.appointmentResultWeek();
 
-                    FilteredList<Appointment> filterTest = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+                    FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
-                    SortedList<Appointment> sortTest = new SortedList<>(filterTest);
-                    sortTest.comparatorProperty().bind(weekTable.comparatorProperty());
-                    weekTable.setItems(sortTest);
-
+                    SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+                    appointmentSort.comparatorProperty().bind(weekTable.comparatorProperty());
+                    weekTable.setItems(appointmentSort);
                 } else {
                     alert.close();
                 }
             }
-
         }catch (NullPointerException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -591,7 +567,6 @@ public class MainScreen implements Initializable {
     }
 
     public void toWeekTab(Event event) {
-
         Lists.clearAppointmentList();
 
         try {
@@ -600,16 +575,15 @@ public class MainScreen implements Initializable {
             throw new RuntimeException(e);
         }
 
-        FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+        FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
-        SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
-        sortTest2.comparatorProperty().bind(weekTable.comparatorProperty());
-        weekTable.setItems(sortTest2);
+        SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+        appointmentSort.comparatorProperty().bind(weekTable.comparatorProperty());
+        weekTable.setItems(appointmentSort);
 
     }
 
     public void toMonthTab(Event event) {
-
         Lists.clearAppointmentList();
 
         try {
@@ -618,15 +592,14 @@ public class MainScreen implements Initializable {
             throw new RuntimeException(e);
         }
 
-        FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+        FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
-        SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
-        sortTest2.comparatorProperty().bind(monthTable.comparatorProperty());
-        monthTable.setItems(sortTest2);
+        SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+        appointmentSort.comparatorProperty().bind(monthTable.comparatorProperty());
+        monthTable.setItems(appointmentSort);
     }
 
     public void toAllTab(Event event) {
-
         Lists.clearAppointmentList();
 
         try {
@@ -635,15 +608,14 @@ public class MainScreen implements Initializable {
             throw new RuntimeException(e);
         }
 
-        FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+        FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
-        SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
-        sortTest2.comparatorProperty().bind(allTable.comparatorProperty());
-        allTable.setItems(sortTest2);
+        SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+        appointmentSort.comparatorProperty().bind(allTable.comparatorProperty());
+        allTable.setItems(appointmentSort);
     }
 
     public void customerSelected(MouseEvent mouseEvent) throws SQLException {
-
         Lists.clearAscAppointmentList();
         Lists.clearAppointmentList();
 
@@ -655,19 +627,19 @@ public class MainScreen implements Initializable {
 
                 customerTable.getSelectionModel().getSelectedItem().setAppointments(Lists.getAllAscAppointments());
 
-                FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAscAppointments(), b -> true);
+                FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAscAppointments(), b -> true);
 
-                SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
-                sortTest2.comparatorProperty().bind(allTable.comparatorProperty());
-                allTable.setItems(sortTest2);
+                SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+                appointmentSort.comparatorProperty().bind(allTable.comparatorProperty());
+                allTable.setItems(appointmentSort);
             }else{
                 Lists.appointmentResult();
 
-                FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+                FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
-                SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
-                sortTest2.comparatorProperty().bind(allTable.comparatorProperty());
-                allTable.setItems(sortTest2);
+                SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+                appointmentSort.comparatorProperty().bind(allTable.comparatorProperty());
+                allTable.setItems(appointmentSort);
             }
         } else if(monthTab.isSelected()){
             if(customer != null){
@@ -675,46 +647,44 @@ public class MainScreen implements Initializable {
 
                 customerTable.getSelectionModel().getSelectedItem().setAppointments(Lists.getAllAscAppointments());
 
-                FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAscAppointments(), b -> true);
+                FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAscAppointments(), b -> true);
 
-                SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
-                sortTest2.comparatorProperty().bind(monthTable.comparatorProperty());
-                monthTable.setItems(sortTest2);
+                SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+                appointmentSort.comparatorProperty().bind(monthTable.comparatorProperty());
+                monthTable.setItems(appointmentSort);
             }else{
                 Lists.appointmentResult();
 
-                FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+                FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
-                SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
-                sortTest2.comparatorProperty().bind(monthTable.comparatorProperty());
-                monthTable.setItems(sortTest2);
+                SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+                appointmentSort.comparatorProperty().bind(monthTable.comparatorProperty());
+                monthTable.setItems(appointmentSort);
             }
         } else{
-
             if(customer != null){
                 Lists.ascAppointmentResults(customer.getId());
 
                 customerTable.getSelectionModel().getSelectedItem().setAppointments(Lists.getAllAscAppointments());
 
-                FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAscAppointments(), b -> true);
+                FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAscAppointments(), b -> true);
 
-                SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
-                sortTest2.comparatorProperty().bind(weekTable.comparatorProperty());
-                weekTable.setItems(sortTest2);
+                SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+                appointmentSort.comparatorProperty().bind(weekTable.comparatorProperty());
+                weekTable.setItems(appointmentSort);
             }else{
                 Lists.appointmentResult();
 
-                FilteredList<Appointment> filterTest2 = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+                FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
-                SortedList<Appointment> sortTest2 = new SortedList<>(filterTest2);
-                sortTest2.comparatorProperty().bind(weekTable.comparatorProperty());
-                weekTable.setItems(sortTest2);
+                SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+                appointmentSort.comparatorProperty().bind(weekTable.comparatorProperty());
+                weekTable.setItems(appointmentSort);
             }
         }
     }
 
     public void goToReports(ActionEvent actionEvent) throws IOException {
-
         Lists.clearContactList();
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ReportsScreen.fxml")));
@@ -725,7 +695,6 @@ public class MainScreen implements Initializable {
     }
 
     public void exitProgram(ActionEvent actionEvent) {
-
         JDBC.closeConnection();
 
         System.exit(0);

@@ -8,7 +8,6 @@ import java.util.TimeZone;
 public abstract class CustomerQuery {
 
     //Add, update, delete customer
-
     public static int insert(String name, String address, String postalCode, String phone, Instant createDate, String createdBy,
                              Timestamp lastUpdated, String lastUpdatedBy, int divisionId) throws SQLException {
 
@@ -48,7 +47,6 @@ public abstract class CustomerQuery {
 
        int rowsUpdated = statement.executeUpdate();
        return rowsUpdated;
-
    }
 
     public static int delete(int iD) throws SQLException {
@@ -80,14 +78,11 @@ public abstract class CustomerQuery {
     }
 
     public static ResultSet numberOfCustomers(int fldId ) throws SQLException {
-
         String query = "SELECT COUNT(DISTINCT(Customer_ID)) AS quantity FROM client_schedule.customers WHERE Division_ID = ?";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
         statement.setInt(1, fldId);
 
         return statement.executeQuery();
-
     }
-
 }

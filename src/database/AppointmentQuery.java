@@ -58,7 +58,6 @@ public abstract class AppointmentQuery {
         statement.setInt(12, iD);
 
         statement.executeUpdate();
-
     }
 
     public static void delete(int iD) throws SQLException {
@@ -77,36 +76,30 @@ public abstract class AppointmentQuery {
     }
 
     public static ResultSet relatedAppointments(int custId) throws SQLException {
-
         String query = "SELECT * FROM client_schedule.appointments WHERE Customer_ID = ?";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
         statement.setInt(1, custId);
 
         return statement.executeQuery();
-
     }
 
     public static ResultSet relatedAppointment(Instant appTime) throws SQLException {
-
         String query = "SELECT * FROM client_schedule.appointments WHERE TIMESTAMPDIFF(MINUTE,?, Start) BETWEEN 0 and 15 ";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
         statement.setTimestamp(1, Timestamp.from(appTime),  Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 
         return statement.executeQuery();
-
     }
 
     public static ResultSet contactAppointments(int contactId) throws SQLException {
-
         String query = "SELECT * FROM client_schedule.appointments WHERE Contact_ID = ?";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
         statement.setInt(1, contactId);
 
         return statement.executeQuery();
-
     }
 
     public static ResultSet getMonthAppointments() throws SQLException {
@@ -122,7 +115,6 @@ public abstract class AppointmentQuery {
     }
 
     public static ResultSet timeOverlap(Instant startTime, Instant endTime) throws SQLException {
-
         String query = "SELECT * FROM client_schedule.appointments WHERE (Start > ? and Start < ?) OR (End > ? and End < ?)";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
@@ -132,11 +124,9 @@ public abstract class AppointmentQuery {
         statement.setTimestamp(4, Timestamp.from(endTime), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 
         return statement.executeQuery();
-
     }
 
     public static ResultSet numberOfAppointments(String month, String type) throws SQLException {
-
         String query = "SELECT COUNT(TYPE) AS quantity FROM client_schedule.appointments WHERE MONTH(Start) = MONTH(str_to_date(?, '%M')) AND TYPE = ?";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
@@ -144,6 +134,5 @@ public abstract class AppointmentQuery {
         statement.setString(2, type);
 
         return statement.executeQuery();
-
     }
 }

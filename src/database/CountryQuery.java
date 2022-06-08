@@ -22,6 +22,4 @@ public abstract class CountryQuery {
 
         return statement.executeQuery();
     }
-
-
 }

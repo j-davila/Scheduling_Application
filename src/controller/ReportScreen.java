@@ -1,7 +1,5 @@
 package controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
@@ -15,12 +13,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.*;
 import utility.Lists;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -98,9 +94,9 @@ public class ReportScreen implements Initializable {
             throw new RuntimeException(e);
         }
 
-        FilteredList<Appointment> filterTest = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+        FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
-        contactCombo.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> filterTest.setPredicate(appointment -> {
+        contactCombo.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> appointmentFilter.setPredicate(appointment -> {
 
             try {
                 if (Lists.lookupContact(newValue).getContactId() == appointment.getContact()) {
@@ -112,10 +108,9 @@ public class ReportScreen implements Initializable {
             return false;
         }));
 
-        SortedList<Appointment> sortTest = new SortedList<>(filterTest);
-        sortTest.comparatorProperty().bind(contactTable.comparatorProperty());
-        contactTable.setItems(sortTest);
-
+        SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+        appointmentSort.comparatorProperty().bind(contactTable.comparatorProperty());
+        contactTable.setItems(appointmentSort);
 
         try {
             int test1 = Lists.numberOfAppointments(appMonthCombo.getSelectionModel().getSelectedItem(),appTypeCombo.getSelectionModel().getSelectedItem());
@@ -147,16 +142,14 @@ public class ReportScreen implements Initializable {
         fldCombo.getSelectionModel().selectFirst();
 
         try {
-            int test2 = Lists.numberOfCustomers(fldCombo.getSelectionModel().getSelectedItem().getId());
-            custTotalLbl.setText(String.valueOf(test2));
+            int numberOfCustomers = Lists.numberOfCustomers(fldCombo.getSelectionModel().getSelectedItem().getId());
+            custTotalLbl.setText(String.valueOf(numberOfCustomers));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public void changeContact(ActionEvent actionEvent) {
-
         Lists.clearAppointmentList();
 
         Contact test =  contactCombo.getSelectionModel().getSelectedItem();
@@ -165,9 +158,9 @@ public class ReportScreen implements Initializable {
             try {
                 Lists.contactSchedule(test.getContactId());
 
-                FilteredList<Appointment> filterTest = new FilteredList<>(Lists.getAllAppointments(), b -> true);
+                FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
-                contactCombo.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> filterTest.setPredicate(appointment -> {
+                contactCombo.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> appointmentFilter.setPredicate(appointment -> {
 
                     try {
                         if (Objects.requireNonNull(Lists.lookupContact(newValue)).getContactId() == appointment.getContact()) {
@@ -180,9 +173,9 @@ public class ReportScreen implements Initializable {
                     return false;
                 }));
 
-                SortedList<Appointment> sortTest = new SortedList<>(filterTest);
-                sortTest.comparatorProperty().bind(contactTable.comparatorProperty());
-                contactTable.setItems(sortTest);
+                SortedList<Appointment> appointmentSort = new SortedList<>(appointmentFilter);
+                appointmentSort.comparatorProperty().bind(contactTable.comparatorProperty());
+                contactTable.setItems(appointmentSort);
 
             } catch (SQLException | NullPointerException e) {
                 throw new RuntimeException(e);
@@ -191,7 +184,6 @@ public class ReportScreen implements Initializable {
     }
 
     public void exitScreen(ActionEvent actionEvent) throws IOException {
-
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 1156, 752);
@@ -201,8 +193,8 @@ public class ReportScreen implements Initializable {
 
     public void changeMonth(ActionEvent actionEvent) {
         try {
-            int test1 = Lists.numberOfAppointments(appMonthCombo.getSelectionModel().getSelectedItem(),appTypeCombo.getSelectionModel().getSelectedItem());
-            appTotalLbl.setText(String.valueOf(test1));
+            int numberOfAppointments = Lists.numberOfAppointments(appMonthCombo.getSelectionModel().getSelectedItem(),appTypeCombo.getSelectionModel().getSelectedItem());
+            appTotalLbl.setText(String.valueOf(numberOfAppointments));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -210,26 +202,23 @@ public class ReportScreen implements Initializable {
 
     public void changeType(ActionEvent actionEvent) {
         try {
-            int test1 = Lists.numberOfAppointments(appMonthCombo.getSelectionModel().getSelectedItem(),appTypeCombo.getSelectionModel().getSelectedItem());
-            appTotalLbl.setText(String.valueOf(test1));
+            int numberOfAppointments = Lists.numberOfAppointments(appMonthCombo.getSelectionModel().getSelectedItem(),appTypeCombo.getSelectionModel().getSelectedItem());
+            appTotalLbl.setText(String.valueOf(numberOfAppointments));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void changeFld(ActionEvent actionEvent) {
-
         Division testDivision = fldCombo.getSelectionModel().getSelectedItem();
 
         if(testDivision != null){
-
             try {
-                int test2 = Lists.numberOfCustomers(fldCombo.getSelectionModel().getSelectedItem().getId());
-                custTotalLbl.setText(String.valueOf(test2));
+                int numberOfCustomers = Lists.numberOfCustomers(fldCombo.getSelectionModel().getSelectedItem().getId());
+                custTotalLbl.setText(String.valueOf(numberOfCustomers));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-
         }
     }
 

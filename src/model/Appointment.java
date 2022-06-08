@@ -1,17 +1,12 @@
 package model;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.*;
-import java.util.Date;
-import java.util.TimeZone;
 
 public class Appointment {
     private int id;
     private String title;
     private String description;
     private String location;
-
     private String type;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -19,8 +14,8 @@ public class Appointment {
     private int userId;
     private int contact;
 
-    public Appointment(int id, String title, String description, String location,String type, LocalDateTime startDate, LocalDateTime endDate, int customerID, int userId, int contact){
-
+    public Appointment(int id, String title, String description, String location,String type, LocalDateTime startDate,
+                       LocalDateTime endDate, int customerID, int userId, int contact){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -34,7 +29,6 @@ public class Appointment {
     }
 
     public Appointment(int id, LocalDateTime startDate, LocalDateTime endDate){
-
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
