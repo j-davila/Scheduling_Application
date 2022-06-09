@@ -24,6 +24,12 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
+
+/**
+ *Controller class that will allow or deny a user to use the application. This screen will prompt the user for a user id and password.
+ *
+ *@author José L Dávila Montalvo
+ * */
 public class LoginScreen implements Initializable {
 
     @FXML
@@ -52,6 +58,7 @@ public class LoginScreen implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Depending on the users locale, the language will either be French or English
         if(local.getLanguage().equals("fr")){
             languageDisplay = ResourceBundle.getBundle("utility/Lang_Fr", local);
             usernameLbl.setText(languageDisplay.getString("usernameLbl"));
@@ -74,6 +81,7 @@ public class LoginScreen implements Initializable {
 
             if(rs.next() != false){
 
+                // gets the current user's username to use in the appointment object
                 user = userNameText.getText();
 
                 FileWriter loginAttempt = new FileWriter("D:\\College\\WGU - Computer Science\\C195 Software 2\\login_activity.txt", true);

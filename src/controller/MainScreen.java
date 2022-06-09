@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 import database.JDBC;
 import model.Customer;
 import utility.Lists;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -31,6 +30,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+
+/**
+ * Controller class where the user manages customers and appointments. In this screen the user can add/modify/delete customers and appointments. User can also
+ * access a report.
+ *
+ *@author José L Dávila Montalvo
+ * */
 public class MainScreen implements Initializable {
 
     @FXML
@@ -164,6 +170,12 @@ public class MainScreen implements Initializable {
 
     public static String currentUser;
 
+    /**
+     * This method initializes the screen.
+     * The first lambda expression makes the filtered list true which makes sure th entire list is displayed.
+     * The second lambda involving the predicate makes the tableview change depending on what is entered in the textfield.
+     *
+     * */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -286,10 +298,17 @@ public class MainScreen implements Initializable {
         allTable.setItems(appointmentSort);
     }
 
+    /**
+     * Method gets the name of the current user
+     * This is the user that is currently logged in
+     *
+     * @param user  The user that is logged in to the application
+     * */
     public void getCurrentUser(String user){
         currentUser = user;
     }
 
+    // Sends the user to the add customr screen
     public void addCustomer(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AddCustomerScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -298,6 +317,8 @@ public class MainScreen implements Initializable {
         stage.show();
     }
 
+    // Gathers the information from the selected object and sends it to the update screen. The user is taken to the update screen and
+    // displays the information from the selected customer object.
     public void updateCustomer(ActionEvent actionEvent) throws IOException {
 
         try{
@@ -331,6 +352,7 @@ public class MainScreen implements Initializable {
         }
     }
 
+    // Deletes the selected customer
     public void deleteCustomer(ActionEvent actionEvent) throws SQLException {
 
         try{
@@ -374,9 +396,10 @@ public class MainScreen implements Initializable {
 
             alert.showAndWait();
         }
-
     }
 
+
+    // Takes the user to the add appointment screen
     public void addAppointment(ActionEvent actionEvent) throws IOException {
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AddAppointmentScreen.fxml")));
@@ -386,6 +409,8 @@ public class MainScreen implements Initializable {
         stage.show();
     }
 
+    // Gathers the information from the selected object and sends it to the update screen. The user is taken to the update screen and
+    // displays the information from the selected appointment object.
     public void updateAppointment(ActionEvent actionEvent) throws IOException {
         if(allTab.isSelected()){
             try{
@@ -495,6 +520,7 @@ public class MainScreen implements Initializable {
         }
     }
 
+    // Deletes the selected appointment
     public void deleteAppointment(ActionEvent actionEvent) throws SQLException {
         try{
             if(allTab.isSelected()){
@@ -587,6 +613,7 @@ public class MainScreen implements Initializable {
         }
     }
 
+    // Switches the appointment tableview to the week tab
     public void toWeekTab(Event event) {
         Lists.clearAppointmentList();
 
@@ -604,6 +631,7 @@ public class MainScreen implements Initializable {
 
     }
 
+    // Switches the appointment tableview to the month tab
     public void toMonthTab(Event event) {
         Lists.clearAppointmentList();
 
@@ -620,6 +648,7 @@ public class MainScreen implements Initializable {
         monthTable.setItems(appointmentSort);
     }
 
+    // Switches the appointment tableview to the all tab
     public void toAllTab(Event event) {
         Lists.clearAppointmentList();
 
@@ -636,6 +665,7 @@ public class MainScreen implements Initializable {
         allTable.setItems(appointmentSort);
     }
 
+    // When the user selects a customer object, it will display all the appointments associated with that customer object.
     public void customerSelected(MouseEvent mouseEvent) throws SQLException {
         Lists.clearAscAppointmentList();
         Lists.clearAppointmentList();
@@ -705,6 +735,7 @@ public class MainScreen implements Initializable {
         }
     }
 
+    // Takes the user to the reports screen
     public void goToReports(ActionEvent actionEvent) throws IOException {
         Lists.clearContactList();
 
@@ -715,6 +746,7 @@ public class MainScreen implements Initializable {
         stage.show();
     }
 
+    // Closes the connection to the database and closes the program.
     public void exitProgram(ActionEvent actionEvent) {
         JDBC.closeConnection();
 

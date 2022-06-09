@@ -20,6 +20,12 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class that shows the customer various reports. Shows the user the number of appointments per month and type.
+ * Shows the user the number of customers per division. Shows the user the appointment schedule for all contacts.
+ *
+ * @author José L Dávila Montalvo
+ * */
 public class ReportScreen implements Initializable {
 
     @FXML
@@ -149,6 +155,7 @@ public class ReportScreen implements Initializable {
         }
     }
 
+    // Updates tableview based on contact used
     public void changeContact(ActionEvent actionEvent) {
         Lists.clearAppointmentList();
 
@@ -183,6 +190,7 @@ public class ReportScreen implements Initializable {
         }
     }
 
+    // Exits back to mainscreen
     public void exitScreen(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -191,6 +199,7 @@ public class ReportScreen implements Initializable {
         stage.show();
     }
 
+    // Updates the screen depending on month chosen
     public void changeMonth(ActionEvent actionEvent) {
         try {
             int numberOfAppointments = Lists.numberOfAppointments(appMonthCombo.getSelectionModel().getSelectedItem(),appTypeCombo.getSelectionModel().getSelectedItem());
@@ -200,6 +209,7 @@ public class ReportScreen implements Initializable {
         }
     }
 
+    // Updates the screen depending on appointment type chosen
     public void changeType(ActionEvent actionEvent) {
         try {
             int numberOfAppointments = Lists.numberOfAppointments(appMonthCombo.getSelectionModel().getSelectedItem(),appTypeCombo.getSelectionModel().getSelectedItem());
@@ -209,6 +219,7 @@ public class ReportScreen implements Initializable {
         }
     }
 
+    // Updates the screen depending on first-level division chosen
     public void changeFld(ActionEvent actionEvent) {
         Division testDivision = fldCombo.getSelectionModel().getSelectedItem();
 
@@ -222,6 +233,7 @@ public class ReportScreen implements Initializable {
         }
     }
 
+    // Updates the screen depending on country chosen
     public void changeCountry(ActionEvent actionEvent) throws SQLException {
         Lists.clearDivisionList();
 

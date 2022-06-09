@@ -22,6 +22,11 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
+/**
+ * Controller class that allows the user to add an appointment. In this screen the user can add an appointment.
+ *
+ * @author José L Dávila Montalvo
+ * */
 public class AddAppointmentScreen implements Initializable {
 
     @FXML
@@ -57,6 +62,7 @@ public class AddAppointmentScreen implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        // Clears lists so the wrong objects dont get loaded or lists dont get duplicated
         Lists.clearTypeList();
         Lists.clearCustomerList();
         Lists.clearAppointmentList();
@@ -120,9 +126,9 @@ public class AddAppointmentScreen implements Initializable {
         userCombo.setItems(Lists.getAllusers());
         userCombo.setVisibleRowCount(5);
         userCombo.getSelectionModel().selectFirst();
-
     }
 
+    // When the user presses the button, the information is saved to the database using the insert query.
     public void saveAppointment(ActionEvent actionEvent) throws IOException {
         try {
             String title;
@@ -214,6 +220,7 @@ public class AddAppointmentScreen implements Initializable {
         }
     }
 
+    // Takes user back to the mainscreen
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();

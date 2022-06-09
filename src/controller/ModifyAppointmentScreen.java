@@ -16,7 +16,6 @@ import model.Contact;
 import model.Customer;
 import model.User;
 import utility.*;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -27,6 +26,11 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
+/**
+ * Controller class that allows the user to modify an appointment. In this screen the user can make changes to an appointment object.
+ *
+ * @author José L Dávila Montalvo
+ * */
 public class ModifyAppointmentScreen implements Initializable {
 
     @FXML
@@ -64,6 +68,8 @@ public class ModifyAppointmentScreen implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        // Clears lists so the wrong objects dont get loaded or lists dont get duplicated
         Lists.clearCustomerList();
         Lists.clearContactList();
         Lists.clearTypeList();
@@ -77,15 +83,19 @@ public class ModifyAppointmentScreen implements Initializable {
         contactCombo.setItems(Lists.getAllContacts());
         contactCombo.setVisibleRowCount(5);
 
+        // Establishes EST zone and local zone
         ZoneId estZone = ZoneId.of("America/New_York");
         ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
 
+        // Defines business hours
         LocalTime start = LocalTime.of(8, 0);
         LocalTime end = LocalTime.of(22,0);
 
+        // Creates zonedatetime object for EST hours
         ZonedDateTime businessHrsStart = ZonedDateTime.of(LocalDate.now(), start, estZone);
         ZonedDateTime businessHrsEnd = ZonedDateTime.of(LocalDate.now(), end, estZone);
 
+        // Converts the EST business hours to localtime
         ZonedDateTime localStart = businessHrsStart.withZoneSameInstant(localZone);
         ZonedDateTime localEnd = businessHrsEnd.withZoneSameInstant(localZone);
 
@@ -117,6 +127,24 @@ public class ModifyAppointmentScreen implements Initializable {
         userCombo.setVisibleRowCount(5);
     }
 
+    /**
+     * Method gets the data from the mainscreen for the appointment object.
+     * The data is displayed in the appropriate fields for the user to update
+     *
+     * @param id Appointment ID
+     * @param title Title for the appointment
+     * @param location Location for the appointment
+     * @param type Appointment type
+     * @param description Appointment description
+     * @param date The last date the appointment was updated
+     * @param start Start datetime of the appointment
+     * @param end End datetime of the appointment
+     * @param customerId Id of the customer the appointment is for
+     * @param contactId Id of the organization contact
+     * @param userId Id of the user that modified the appointment.
+     *
+     * @author José L Dávila Montalvo
+     * */
     public void setFields(int id, String title, String location, String type, String description, LocalDate date, LocalTime start, LocalTime end, int customerId,
                           int contactId, int userId) throws SQLException {
 
@@ -158,6 +186,7 @@ public class ModifyAppointmentScreen implements Initializable {
         userCombo.setValue(user);
     }
 
+    // Saves the updated information
     public void saveAppointment(ActionEvent actionEvent) throws IOException {
         try {
             String title;
@@ -239,6 +268,7 @@ public class ModifyAppointmentScreen implements Initializable {
         }
     }
 
+    // Takes the user to the mainscreen
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -247,6 +277,7 @@ public class ModifyAppointmentScreen implements Initializable {
         stage.show();
     }
 
+    // Makes sure all the types are displayed if it needs to be changed
     public void changeType(ActionEvent actionEvent) {
 
         typeCombo.setItems(Lists.getAllTypes());

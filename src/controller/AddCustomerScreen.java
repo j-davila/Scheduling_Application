@@ -15,7 +15,6 @@ import model.Country;
 import model.Division;
 import database.CustomerQuery;
 import utility.Lists;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -25,6 +24,11 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class that allows the user to add a customer. in this screen the user can add a customer.
+ *
+ * @author José L Dávila Montalvo
+ * */
 public class AddCustomerScreen implements Initializable {
 
     @FXML
@@ -72,6 +76,7 @@ public class AddCustomerScreen implements Initializable {
 
     }
 
+    // When the user presses the button, the information is saved to the database using the insert query.
     public void saveCustomer(ActionEvent actionEvent) throws IOException {
         try {
             String name;
@@ -126,6 +131,7 @@ public class AddCustomerScreen implements Initializable {
         }
     }
 
+    // Takes user back to the mainscreen
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -134,6 +140,7 @@ public class AddCustomerScreen implements Initializable {
         stage.show();
     }
 
+    // If the country is changed it will update the division combobox with the appropriate divisions
     public void changeCountry(ActionEvent actionEvent) throws SQLException {
 
         Lists.clearDivisionList();

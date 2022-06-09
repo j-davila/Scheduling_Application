@@ -8,9 +8,18 @@ import java.time.Instant;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+/**
+ * Abstract database class for all queries related to appointments. This class contains all appointment queries.
+ *
+ * @author José L Dávila Montalvo
+ * */
 public abstract class AppointmentQuery {
 
-    //add, update, delete appointment
+    /**
+     *
+     *
+     *
+     * */
     public static void insert(String title, String description, String location, String type, Instant startDate, Instant endDate,
                               Instant createDate, String createdBy, Timestamp lastUpdated, String lastUpdatedBy, int customerId,
                               int userId, int contactId) throws SQLException {

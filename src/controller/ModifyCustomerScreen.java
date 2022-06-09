@@ -17,7 +17,6 @@ import database.CountryQuery;
 import database.CustomerQuery;
 import database.FirstLevelDivQuery;
 import utility.Lists;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -28,6 +27,11 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class that allows the user to modify a customer. In this screen the user can make changes to an customer object.
+ *
+ * @author José L Dávila Montalvo
+ * */
 public class ModifyCustomerScreen implements Initializable {
 
     @FXML
@@ -65,6 +69,19 @@ public class ModifyCustomerScreen implements Initializable {
         countryCombo.setVisibleRowCount(5);
     }
 
+    /**
+     * Method gets the data from the mainscreen for the customer object.
+     * The data is displayed in the appropriate fields for the user to update
+     *
+     * @param id Customer ID
+     * @param name Customer name
+     * @param address Customer address
+     * @param zip Customr postal code
+     * @param phone Customer pone number
+     * @param fld First-level division where the customer is located in
+     *
+     * @author José L Dávila Montalvo
+     * */
     public void setFields(int id,String name, String address, String zip, String phone, int fld) throws SQLException {
         idTxt.setText(Integer.toString(id));
         nameTxt.setText(name);
@@ -90,6 +107,7 @@ public class ModifyCustomerScreen implements Initializable {
         countryCombo.setValue(country);
     }
 
+    // Saves the updated information
     public void saveCustomer(ActionEvent actionEvent) throws IOException {
         try {
             String name;
@@ -146,6 +164,7 @@ public class ModifyCustomerScreen implements Initializable {
         }
     }
 
+    // Takes the user to the mainscreen
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
@@ -154,6 +173,7 @@ public class ModifyCustomerScreen implements Initializable {
         stage.show();
     }
 
+    // Updates the division when the country is changed
     public void changeCountry(ActionEvent actionEvent) throws SQLException {
 
         Lists.clearDivisionList();

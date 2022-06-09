@@ -8,34 +8,34 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="533.0" prefWidth="681.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddAppointmentScreen">
+<AnchorPane prefHeight="518.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AddAppointmentScreen">
    <children>
-      <AnchorPane layoutX="42.0" layoutY="33.0" prefHeight="475.0" prefWidth="612.0">
+      <AnchorPane layoutY="29.0" prefHeight="475.0" prefWidth="612.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="14.0">
          <children>
-            <ComboBox fx:id="contactCombo" layoutX="396.0" layoutY="176.0" prefWidth="150.0" />
-            <Label layoutX="416.0" layoutY="155.0" text="Contact Name" />
-            <TextField fx:id="appIdTxt" disable="true" editable="false" layoutX="34.0" layoutY="54.0" />
-            <TextField fx:id="locationTxt" layoutX="34.0" layoutY="163.0" />
-            <TextField fx:id="titleTxt" layoutX="34.0" layoutY="107.0" />
-            <Label layoutX="54.0" layoutY="138.0" text="Location" />
-            <Label layoutX="34.0" layoutY="268.0" text="Description" />
-            <Label layoutX="64.0" layoutY="29.0" text="Appointment ID" />
-            <Label layoutX="65.0" layoutY="88.0" text="Title" />
-            <Button fx:id="saveBtn" layoutX="101.0" layoutY="436.0" mnemonicParsing="false" onAction="#saveAppointment" text="Save" />
-            <Button fx:id="cancelBtn" layoutX="231.0" layoutY="436.0" mnemonicParsing="false" onAction="#cancelAdd" text="Cancel" />
-            <Label layoutX="41.0" layoutY="202.0" text="Type" />
-            <Label layoutX="241.0" layoutY="29.0" text="Date" />
-            <Label layoutX="224.0" layoutY="155.0" text="Customer" />
-            <TextArea fx:id="descriptionTxt" layoutX="22.0" layoutY="299.0" prefHeight="112.0" prefWidth="337.0" />
-            <Label layoutX="248.0" layoutY="221.0" text="User" />
-            <ComboBox fx:id="customerCombo" layoutX="216.0" layoutY="176.0" prefWidth="150.0" />
-            <ComboBox fx:id="userCombo" layoutX="216.0" layoutY="242.0" prefWidth="150.0" />
-            <DatePicker fx:id="startCalendar" layoutX="222.0" layoutY="54.0" />
-            <ComboBox fx:id="startTimeCombo" layoutX="219.0" layoutY="115.0" prefWidth="150.0" />
-            <ComboBox fx:id="endTimeCombo" layoutX="404.0" layoutY="115.0" prefWidth="150.0" />
-            <Label layoutX="227.0" layoutY="88.0" text="Start Time" />
-            <Label layoutX="427.0" layoutY="88.0" text="End Time" />
-            <ComboBox fx:id="typeCombo" layoutX="34.0" layoutY="230.0" prefWidth="150.0" />
+            <ComboBox fx:id="contactCombo" layoutX="406.0" layoutY="164.0" prefWidth="150.0" />
+            <Label layoutX="406.0" layoutY="138.0" text="Contact Name" />
+            <TextField fx:id="appIdTxt" disable="true" editable="false" layoutX="21.0" layoutY="42.0" text="Auto Generated" />
+            <TextField fx:id="locationTxt" layoutX="21.0" layoutY="164.0" />
+            <TextField fx:id="titleTxt" layoutX="21.0" layoutY="103.0" />
+            <Label layoutX="21.0" layoutY="138.0" text="Location" />
+            <Label layoutX="21.0" layoutY="268.0" text="Description" />
+            <Label layoutX="21.0" layoutY="21.0" text="Appointment ID" />
+            <Label layoutX="21.0" layoutY="80.0" text="Title" />
+            <Button fx:id="saveBtn" layoutX="231.0" layoutY="430.0" mnemonicParsing="false" onAction="#saveAppointment" prefHeight="25.0" prefWidth="61.0" text="Save" />
+            <Button fx:id="cancelBtn" layoutX="317.0" layoutY="430.0" mnemonicParsing="false" onAction="#cancelAdd" prefHeight="25.0" prefWidth="61.0" text="Cancel" />
+            <Label layoutX="21.0" layoutY="202.0" text="Type" />
+            <Label layoutX="219.0" layoutY="21.0" text="Date" />
+            <Label layoutX="219.0" layoutY="138.0" text="Customer" />
+            <TextArea fx:id="descriptionTxt" layoutX="21.0" layoutY="299.0" prefHeight="112.0" prefWidth="337.0" />
+            <Label layoutX="219.0" layoutY="202.0" text="User" />
+            <ComboBox fx:id="customerCombo" layoutX="219.0" layoutY="164.0" prefWidth="150.0" />
+            <ComboBox fx:id="userCombo" layoutX="219.0" layoutY="230.0" prefWidth="150.0" />
+            <DatePicker fx:id="startCalendar" layoutX="219.0" layoutY="42.0" />
+            <ComboBox fx:id="startTimeCombo" layoutX="219.0" layoutY="103.0" prefWidth="150.0" />
+            <ComboBox fx:id="endTimeCombo" layoutX="406.0" layoutY="103.0" prefWidth="150.0" />
+            <Label layoutX="219.0" layoutY="80.0" text="Start Time" />
+            <Label layoutX="406.0" layoutY="80.0" text="End Time" />
+            <ComboBox fx:id="typeCombo" layoutX="21.0" layoutY="230.0" prefWidth="150.0" />
          </children>
       </AnchorPane>
    </children>
