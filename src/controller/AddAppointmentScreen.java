@@ -60,8 +60,7 @@ public class AddAppointmentScreen implements Initializable {
         Lists.clearTypeList();
         Lists.clearCustomerList();
         Lists.clearAppointmentList();
-
-        Lists.getAllTypes();
+        Lists.clearContactList();
 
         typeCombo.setItems(Lists.getAllTypes());
         typeCombo.setVisibleRowCount(5);
@@ -198,7 +197,7 @@ public class AddAppointmentScreen implements Initializable {
 
                 Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
                 Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-                Scene scene = new Scene(root, 1156, 752);
+                Scene scene = new Scene(root, 1128, 793);
                 stage.setScene(scene);
                 stage.show();
 
@@ -218,7 +217,7 @@ public class AddAppointmentScreen implements Initializable {
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1156, 752);
+        Scene scene = new Scene(root, 1128, 793);
         stage.setScene(scene);
         stage.show();
     }

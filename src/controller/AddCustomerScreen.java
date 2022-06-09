@@ -81,25 +81,25 @@ public class AddCustomerScreen implements Initializable {
 
             // if-else statements validate user input and throw detailed exceptions specific to the invalid entry.
             if(nameTxt.getText().isEmpty()){
-                throw new NullPointerException("Please enter a part name in the Name field");
+                throw new NullPointerException("Please enter a name in the Name field");
             }else{
                 name = nameTxt.getText();
             }
 
             if (addressTxt.getText().isEmpty()) {
-                throw new NullPointerException("Please enter a part name in the Name field");
+                throw new NullPointerException("Please enter a address in the Address field");
             }else {
                 address = addressTxt.getText();
             }
 
             if (zipTxt.getText().isEmpty()) {
-                throw new NullPointerException("Please enter a part name in the Name field");
+                throw new NullPointerException("Please enter a postal code in the Postal Code field");
             }else {
                 zip = zipTxt.getText();
             }
 
             if (phoneTxt.getText().isEmpty()) {
-                throw new NullPointerException("Please enter a part name in the Name field");
+                throw new NullPointerException("Please enter a phone number in the Phone field");
             }else {
                 phoneNumber = phoneTxt.getText();
             }
@@ -112,7 +112,7 @@ public class AddCustomerScreen implements Initializable {
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1156, 752);
+            Scene scene = new Scene(root, 1128, 793);
             stage.setScene(scene);
             stage.show();
 
@@ -129,7 +129,7 @@ public class AddCustomerScreen implements Initializable {
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1156, 752);
+        Scene scene = new Scene(root, 1128, 793);
         stage.setScene(scene);
         stage.show();
     }

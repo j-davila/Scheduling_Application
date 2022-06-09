@@ -186,7 +186,7 @@ public class ReportScreen implements Initializable {
     public void exitScreen(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1156, 752);
+        Scene scene = new Scene(root, 1128, 793);
         stage.setScene(scene);
         stage.show();
     }

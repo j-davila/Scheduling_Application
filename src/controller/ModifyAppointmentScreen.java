@@ -42,7 +42,7 @@ public class ModifyAppointmentScreen implements Initializable {
     private TextField titleTxt;
 
     @FXML
-    private TextField typeTxt;
+    private ComboBox<String> typeCombo;
 
     @FXML
     private TextArea descriptionTxt;
@@ -65,6 +65,8 @@ public class ModifyAppointmentScreen implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Lists.clearCustomerList();
+        Lists.clearContactList();
+        Lists.clearTypeList();
 
         try {
             Lists.contactResult();
@@ -123,7 +125,7 @@ public class ModifyAppointmentScreen implements Initializable {
         appIdTxt.setText(Integer.toString(id));
         titleTxt.setText(title);
         locationTxt.setText(location);
-        typeTxt.setText(type);
+        typeCombo.setValue(type);
         descriptionTxt.setText(description);
         startCalendar.setValue(date);
         startTimeCombo.setValue(start);
@@ -190,12 +192,6 @@ public class ModifyAppointmentScreen implements Initializable {
                 location = locationTxt.getText();
             }
 
-            if (typeTxt.getText().isEmpty()) {
-                throw new NullPointerException("Please enter a type in the Type field.");
-            }else {
-                type = typeTxt.getText();
-            }
-
             if (startCalendar.getValue() == null) {
                 throw new NullPointerException("Please select a date.");
             }else {
@@ -212,6 +208,8 @@ public class ModifyAppointmentScreen implements Initializable {
                 startTime = startTimeCombo.getValue();
             }
 
+            type = typeCombo.getSelectionModel().getSelectedItem();
+
             appId = Integer.parseInt(appIdTxt.getText());
             lastUpdated = ZonedDateTime.now();
             ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
@@ -227,7 +225,7 @@ public class ModifyAppointmentScreen implements Initializable {
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1156, 752);
+            Scene scene = new Scene(root, 1128, 793);
             stage.setScene(scene);
             stage.show();
 
@@ -244,8 +242,15 @@ public class ModifyAppointmentScreen implements Initializable {
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1156, 752);
+        Scene scene = new Scene(root, 1128, 793);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void changeType(ActionEvent actionEvent) {
+
+        typeCombo.setItems(Lists.getAllTypes());
+        typeCombo.setVisibleRowCount(5);
+
     }
 }

@@ -12,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import database.UserQuery;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,7 +20,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -67,89 +65,70 @@ public class LoginScreen implements Initializable {
     }
 
     public void userLogin(ActionEvent actionEvent) throws IOException, SQLException {
-        /*Remove after testing*/
-        String user = userNameText.getText();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
-        Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
-        Parent root = loader.load();
+        Instant loginTime = Instant.now();
 
-        Scene scene = new Scene(root,1156,762);
-        stage.setScene(scene);
+        try{
 
-        MainScreen mainScreen = loader.getController();
-        mainScreen.getCurrentUser(user);
+            ResultSet rs = UserQuery.getUser(userNameText.getText(), passwordText.getText());
 
-        stage.show();
-        /*Remove after testing*/
+            if(rs.next() != false){
 
+                user = userNameText.getText();
 
-        //Login code
-        // If login successful then go to mainScreen
+                FileWriter loginAttempt = new FileWriter("D:\\College\\WGU - Computer Science\\C195 Software 2\\login_activity.txt", true);
+                BufferedWriter bw = new BufferedWriter(loginAttempt);
+                bw.write(user + " " + loginTime + " UTC," + " login successfull");
+                bw.newLine();
+                bw.close();
 
-//        Instant loginTime = Instant.now();
-//
-//        try{
-//
-//            ResultSet rs = UserQuery.getUser(userNameText.getText(), passwordText.getText());
-//
-//            if(rs.next() != false){
-//
-//                user = userNameText.getText();
-//
-//                FileWriter loginAttempt = new FileWriter("D:\\College\\WGU - Computer Science\\C195 Software 2\\login_activity.txt", true);
-//                BufferedWriter bw = new BufferedWriter(loginAttempt);
-//                bw.write(user + " " + loginTime + " UTC," + " login successfull");
-//                bw.newLine();
-//                bw.close();
-//
-//                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
-//                Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
-//                Parent root = loader.load();
-//
-//                Scene scene = new Scene(root,1156,762);
-//                stage.setScene(scene);
-//
-//                MainScreen mainScreen = loader.getController();
-//                mainScreen.getCurrentUser(user);
-//
-//                stage.show();
-//            }else if(userNameText.getText().isEmpty()){
-//
-//                FileWriter loginAttempt = new FileWriter("D:\\College\\WGU - Computer Science\\C195 Software 2\\login_activity.txt", true);
-//                BufferedWriter bw = new BufferedWriter(loginAttempt);
-//                bw.write(user + " " + loginTime + " UTC," + " login unsuccessfull");
-//                bw.newLine();
-//                bw.close();
-//
-//                throw new NullPointerException(test.getString("usernameError"));
-//            } else if (passwordText.getText().isEmpty()) {
-//
-//                FileWriter loginAttempt = new FileWriter("D:\\College\\WGU - Computer Science\\C195 Software 2\\login_activity.txt", true);
-//                BufferedWriter bw = new BufferedWriter(loginAttempt);
-//                bw.write(user + " " + loginTime + " UTC," + " login unsuccessfull");
-//                bw.newLine();
-//                bw.close();
-//
-//                throw new NullPointerException(test.getString("passwordError"));
-//            }else{
-//
-//                FileWriter loginAttempt = new FileWriter("D:\\College\\WGU - Computer Science\\C195 Software 2\\login_activity.txt", true);
-//                BufferedWriter bw = new BufferedWriter(loginAttempt);
-//                bw.write(user + " " + loginTime + " login unsuccessfull");
-//                bw.newLine();
-//                bw.close();
-//
-//                throw new NullPointerException(test.getString("nullError"));
-//            }
-//
-//        }catch(NullPointerException e){
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setTitle(test.getString("inputError"));
-//            alert.setHeaderText(test.getString("invalidInput"));
-//            alert.setContentText(e.getMessage());
-//
-//            alert.showAndWait();
-//        }
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
+                Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+                Parent root = loader.load();
+
+                Scene scene = new Scene(root,1128,793);
+                stage.setScene(scene);
+
+                MainScreen mainScreen = loader.getController();
+                mainScreen.getCurrentUser(user);
+
+                stage.show();
+            }else if(userNameText.getText().isEmpty()){
+
+                FileWriter loginAttempt = new FileWriter("D:\\College\\WGU - Computer Science\\C195 Software 2\\login_activity.txt", true);
+                BufferedWriter bw = new BufferedWriter(loginAttempt);
+                bw.write(user + " " + loginTime + " UTC," + " login unsuccessfull");
+                bw.newLine();
+                bw.close();
+
+                throw new NullPointerException(languageDisplay.getString("usernameError"));
+            } else if (passwordText.getText().isEmpty()) {
+
+                FileWriter loginAttempt = new FileWriter("D:\\College\\WGU - Computer Science\\C195 Software 2\\login_activity.txt", true);
+                BufferedWriter bw = new BufferedWriter(loginAttempt);
+                bw.write(user + " " + loginTime + " UTC," + " login unsuccessfull");
+                bw.newLine();
+                bw.close();
+
+                throw new NullPointerException(languageDisplay.getString("passwordError"));
+            }else{
+
+                FileWriter loginAttempt = new FileWriter("D:\\College\\WGU - Computer Science\\C195 Software 2\\login_activity.txt", true);
+                BufferedWriter bw = new BufferedWriter(loginAttempt);
+                bw.write(user + " " + loginTime + " login unsuccessfull");
+                bw.newLine();
+                bw.close();
+
+                throw new NullPointerException(languageDisplay.getString("nullError"));
+            }
+
+        }catch(NullPointerException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(languageDisplay.getString("inputError"));
+            alert.setHeaderText(languageDisplay.getString("invalidInput"));
+            alert.setContentText(e.getMessage());
+
+            alert.showAndWait();
+        }
     }
 }

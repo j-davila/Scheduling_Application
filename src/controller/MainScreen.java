@@ -414,6 +414,13 @@ public class MainScreen implements Initializable {
 
             }catch (SQLException e){
                 throw new RuntimeException(e);
+            }catch (NullPointerException e){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Invalid Selection");
+                alert.setContentText("Please select a customer from the table");
+
+                alert.showAndWait();
             }
         } else if(monthTab.isSelected()){
             try{
@@ -442,6 +449,13 @@ public class MainScreen implements Initializable {
 
             }catch (SQLException e){
                 throw new RuntimeException(e);
+            }catch (NullPointerException e){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Invalid Selection");
+                alert.setContentText("Please select a customer from the table");
+
+                alert.showAndWait();
             }
         }else{
             try{
@@ -470,6 +484,13 @@ public class MainScreen implements Initializable {
 
             }catch (SQLException e){
             throw new RuntimeException(e);
+            }catch (NullPointerException e){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Invalid Selection");
+                alert.setContentText("Please select a customer from the table");
+
+                alert.showAndWait();
             }
         }
     }
@@ -689,7 +710,7 @@ public class MainScreen implements Initializable {
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ReportsScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 839, 597);
+        Scene scene = new Scene(root, 910, 597);
         stage.setScene(scene);
         stage.show();
     }

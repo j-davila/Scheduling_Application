@@ -132,7 +132,7 @@ public class ModifyCustomerScreen implements Initializable {
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1156, 752);
+            Scene scene = new Scene(root, 1128, 793);
             stage.setScene(scene);
             stage.show();
 
@@ -149,18 +149,22 @@ public class ModifyCustomerScreen implements Initializable {
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root, 1156, 752);
+        Scene scene = new Scene(root, 1128, 793);
         stage.setScene(scene);
         stage.show();
     }
 
     public void changeCountry(ActionEvent actionEvent) throws SQLException {
+
         Lists.clearDivisionList();
         Country selectedCountry = countryCombo.getSelectionModel().getSelectedItem();
-        Lists.divisionResultByCountry(selectedCountry.getId());
 
-        firstlevelCombo.setItems(Lists.getAlldivisions());
-        firstlevelCombo.setVisibleRowCount(5);
-        firstlevelCombo.getSelectionModel().selectFirst();
+        if(selectedCountry != null){
+            Lists.divisionResultByCountry(selectedCountry.getId());
+
+            firstlevelCombo.setItems(Lists.getAlldivisions());
+            firstlevelCombo.setVisibleRowCount(5);
+            firstlevelCombo.getSelectionModel().getSelectedItem();
+        }
     }
 }
