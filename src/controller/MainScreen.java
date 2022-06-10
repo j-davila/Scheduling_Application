@@ -457,7 +457,7 @@ public class MainScreen implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("Invalid Selection");
-                alert.setContentText("Please select a customer from the table");
+                alert.setContentText("Please select an appointment from the table");
 
                 alert.showAndWait();
             }

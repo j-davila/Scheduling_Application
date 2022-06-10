@@ -97,7 +97,7 @@ public class LoginScreen implements Initializable {
                 // gets the current user's username to use in the appointment object
                 user = userNameText.getText();
 
-                FileWriter loginAttempt = new FileWriter("D:\\College\\WGU - Computer Science\\C195 Software 2\\login_activity.txt", true);
+                FileWriter loginAttempt = new FileWriter("login_activity.txt", true);
                 BufferedWriter bw = new BufferedWriter(loginAttempt);
                 bw.write(user + " " + loginTime + " UTC," + " login successfull");
                 bw.newLine();
@@ -116,7 +116,7 @@ public class LoginScreen implements Initializable {
                 stage.show();
             }else if(userNameText.getText().isEmpty()){
 
-                FileWriter loginAttempt = new FileWriter("D:\\College\\WGU - Computer Science\\C195 Software 2\\login_activity.txt", true);
+                FileWriter loginAttempt = new FileWriter("login_activity.txt", true);
                 BufferedWriter bw = new BufferedWriter(loginAttempt);
                 bw.write(user + " " + loginTime + " UTC," + " login unsuccessfull");
                 bw.newLine();
@@ -125,7 +125,7 @@ public class LoginScreen implements Initializable {
                 throw new NullPointerException(languageDisplay.getString("usernameError"));
             } else if (passwordText.getText().isEmpty()) {
 
-                FileWriter loginAttempt = new FileWriter("D:\\College\\WGU - Computer Science\\C195 Software 2\\login_activity.txt", true);
+                FileWriter loginAttempt = new FileWriter("login_activity.txt", true);
                 BufferedWriter bw = new BufferedWriter(loginAttempt);
                 bw.write(user + " " + loginTime + " UTC," + " login unsuccessfull");
                 bw.newLine();
@@ -134,7 +134,7 @@ public class LoginScreen implements Initializable {
                 throw new NullPointerException(languageDisplay.getString("passwordError"));
             }else{
 
-                FileWriter loginAttempt = new FileWriter("D:\\College\\WGU - Computer Science\\C195 Software 2\\login_activity.txt", true);
+                FileWriter loginAttempt = new FileWriter("login_activity.txt", true);
                 BufferedWriter bw = new BufferedWriter(loginAttempt);
                 bw.write(user + " " + loginTime + " login unsuccessfull");
                 bw.newLine();
