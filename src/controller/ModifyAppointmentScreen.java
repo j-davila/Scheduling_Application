@@ -66,6 +66,12 @@ public class ModifyAppointmentScreen implements Initializable {
     @FXML
     private ComboBox<LocalTime> endTimeCombo;
 
+    /**
+     * Initializes screen
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -187,6 +193,13 @@ public class ModifyAppointmentScreen implements Initializable {
     }
 
     // Saves the updated information
+
+    /**
+     * Saves appointment data
+     *
+     * @param actionEvent
+     * @throws IOException
+     */
     public void saveAppointment(ActionEvent actionEvent) throws IOException {
         try {
             String title;

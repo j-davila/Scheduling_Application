@@ -49,6 +49,12 @@ public class AddCustomerScreen implements Initializable {
     @FXML
     private TextField nameTxt;
 
+    /**
+     * Initializes add customer screen
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -77,6 +83,13 @@ public class AddCustomerScreen implements Initializable {
     }
 
     // When the user presses the button, the information is saved to the database using the insert query.
+
+    /**
+     * Saves customer data
+     *
+     * @param actionEvent
+     * @throws IOException
+     */
     public void saveCustomer(ActionEvent actionEvent) throws IOException {
         try {
             String name;
@@ -132,6 +145,13 @@ public class AddCustomerScreen implements Initializable {
     }
 
     // Takes user back to the mainscreen
+
+    /**
+     * Cancels adding a customer
+     *
+     * @param actionEvent
+     * @throws IOException
+     */
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();

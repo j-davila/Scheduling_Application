@@ -56,6 +56,12 @@ public class LoginScreen implements Initializable {
 
     private String user;
 
+    /**
+     * Initializes login screen
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Depending on the users locale, the language will either be French or English
@@ -71,6 +77,13 @@ public class LoginScreen implements Initializable {
         zoneLabel.setText(String.valueOf(localZone));
     }
 
+    /**
+     * Checks for valid data entry when user logs in
+     *
+     * @param actionEvent
+     * @throws IOException
+     * @throws SQLException
+     */
     public void userLogin(ActionEvent actionEvent) throws IOException, SQLException {
 
         Instant loginTime = Instant.now();

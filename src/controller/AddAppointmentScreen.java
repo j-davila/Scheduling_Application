@@ -59,8 +59,15 @@ public class AddAppointmentScreen implements Initializable {
     @FXML
     private TextArea descriptionTxt;
 
+    /**
+     * Initializes add screen
+     *
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
 
         // Clears lists so the wrong objects dont get loaded or lists dont get duplicated
         Lists.clearTypeList();
@@ -129,6 +136,13 @@ public class AddAppointmentScreen implements Initializable {
     }
 
     // When the user presses the button, the information is saved to the database using the insert query.
+
+    /**
+     * Saves a new appointment
+     *
+     * @param actionEvent
+     * @throws IOException
+     */
     public void saveAppointment(ActionEvent actionEvent) throws IOException {
         try {
             String title;
@@ -221,6 +235,13 @@ public class AddAppointmentScreen implements Initializable {
     }
 
     // Takes user back to the mainscreen
+
+    /**
+     * Cancels adding an appointment
+     *
+     * @param actionEvent
+     * @throws IOException
+     */
     public void cancelAdd(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
         Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();

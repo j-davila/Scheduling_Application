@@ -175,7 +175,9 @@ public class MainScreen implements Initializable {
      * The first lambda expression makes the filtered list true which makes sure th entire list is displayed.
      * The second lambda involving the predicate makes the tableview change depending on what is entered in the textfield.
      *
-     * */
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -319,6 +321,12 @@ public class MainScreen implements Initializable {
 
     // Gathers the information from the selected object and sends it to the update screen. The user is taken to the update screen and
     // displays the information from the selected customer object.
+
+    /**
+     *
+     * @param actionEvent
+     * @throws IOException
+     */
     public void updateCustomer(ActionEvent actionEvent) throws IOException {
 
         try{
@@ -411,6 +419,12 @@ public class MainScreen implements Initializable {
 
     // Gathers the information from the selected object and sends it to the update screen. The user is taken to the update screen and
     // displays the information from the selected appointment object.
+
+    /**
+     *
+     * @param actionEvent
+     * @throws IOException
+     */
     public void updateAppointment(ActionEvent actionEvent) throws IOException {
         if(allTab.isSelected()){
             try{
@@ -736,6 +750,12 @@ public class MainScreen implements Initializable {
     }
 
     // Takes the user to the reports screen
+
+    /**
+     *
+     * @param actionEvent
+     * @throws IOException
+     */
     public void goToReports(ActionEvent actionEvent) throws IOException {
         Lists.clearContactList();
 
