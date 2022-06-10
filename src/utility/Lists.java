@@ -11,6 +11,12 @@ import java.time.*;
 import java.util.Locale;
 import java.util.TimeZone;
 
+/**
+ * List class that creates and manipulates observable array lists. This class populates observable array lists manually or with result sets from the database.
+ * Class also has methods to clear lists or to search the lists.
+ *
+ * @author José L Dávila Montalvo
+ */
 public class Lists {
     private static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
     private static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
@@ -22,6 +28,11 @@ public class Lists {
     private static ObservableList<String> types = FXCollections.observableArrayList();
     private static ObservableList<String> months = FXCollections.observableArrayList();
 
+    /**
+     * Method populates and returns types. This method populates and returns appointments types
+     *
+     * @return Appointment types
+     * */
     public static ObservableList<String> getAllTypes(){
         types.add("Planning Session");
         types.add("De-Briefing");
@@ -37,6 +48,10 @@ public class Lists {
         return types;
     }
 
+    /**
+     * Method populates a list with all months. Method populates a list with all the names of months in a year.
+     *
+     * */
     public static void setAllMonths(){
         months.add("January");
         months.add("February");
@@ -52,94 +67,195 @@ public class Lists {
         months.add("December");
     }
 
+    /**
+     * Method clears the list of types. Method clears the appointment types list.
+     * */
     public static void clearTypeList(){
         types.clear();
     }
 
-    public static ObservableList<String> getAllMonths(){
-        return months;
-    }
-
-    public static ObservableList<Customer> getAllCustomers() {
-        return allCustomers;
-    }
-
-    public static void addCustomer(Customer customer){
-        allCustomers.add(customer);
-    }
-
-    public static void clearCustomerList(){
-        allCustomers.clear();
-    }
-
-    public static ObservableList<Appointment> getAllAppointments() {
-        return allAppointments;
-    }
-
-    public static ObservableList<Appointment> getAllAscAppointments() {
-        return associatedAppointments;
-    }
-
-    public static void addAppointment(Appointment appointment){
-        allAppointments.add(appointment);
-    }
-
-    public static void addAscAppointment(Appointment appointment){
-        associatedAppointments.add(appointment);
-    }
-
-    public static void clearAppointmentList(){
-        allAppointments.clear();
-    }
-
-    public static void clearAscAppointmentList(){
-        associatedAppointments.clear();
-    }
-
-    public static void addContact(Contact contact){
-        allContacts.add(contact);
-    }
-
-    public static ObservableList<Contact> getAllContacts(){
-        return allContacts;
-    }
-
-    public static void addCountry(Country country){
-        allCountries.add(country);
-    }
-
-    public static ObservableList<Country> getAllCountries(){
-        return allCountries;
-    }
-
-    public static void clearCountryList(){
-        allCountries.clear();
-    }
-
-    public static ObservableList<User> getAllusers() {
-        return allUsers;
-    }
-
-    public static void addUser(User user){
-        allUsers.add(user);
-    }
-
-    public static ObservableList<Division> getAlldivisions() {
-        return allDivisions;
-    }
-
-    public static void addDivision(Division division){
-        allDivisions.add(division);
-    }
-
+    /**
+     * Method clears the list of divisions. Method clears the first-level division list.
+     * */
     public static void clearDivisionList(){
         allDivisions.clear();
     }
 
+    /**
+     * Method clears the list of contacts. Method clears the contact list.
+     * */
     public static void clearContactList(){
         allContacts.clear();
     }
 
+    /**
+     * Method clears the list of customers. Method clears the customer list.
+     * */
+    public static void clearCustomerList(){
+        allCustomers.clear();
+    }
+
+    /**
+     * Method clears the list of associated appointments. Method clears the associated appointments list.
+     * */
+    public static void clearAscAppointmentList(){
+        associatedAppointments.clear();
+    }
+
+    /**
+     * Method clears the list of appointments. Method clears the appointment list.
+     * */
+    public static void clearAppointmentList(){
+        allAppointments.clear();
+    }
+
+    /**
+     * Method clears the list of countries. Method clears the country list.
+     * */
+    public static void clearCountryList(){
+        allCountries.clear();
+    }
+
+    /**
+     * Method gets the list of months. Method returns the list that contains all months.
+     *
+     * @return All months
+     * */
+    public static ObservableList<String> getAllMonths(){
+        return months;
+    }
+
+    /**
+     * Method gets the list of customers. Method returns the list that contains all customers.
+     *
+     * @return All customers
+     * */
+    public static ObservableList<Customer> getAllCustomers() {
+        return allCustomers;
+    }
+
+    /**
+     * Method gets the list of appointments. Method returns the list that contains all appointments.
+     *
+     * @return All appointments
+     * */
+    public static ObservableList<Appointment> getAllAppointments() {
+        return allAppointments;
+    }
+
+    /**
+     * Method gets the list of associated appointments. Method returns the list that contains all associated appointments.
+     *
+     * @return All appointments
+     * */
+    public static ObservableList<Appointment> getAllAscAppointments() {
+        return associatedAppointments;
+    }
+
+    /**
+     * Method gets the list of contacts. Method returns the list that contains all contacts.
+     *
+     * @return All contacts
+     * */
+    public static ObservableList<Contact> getAllContacts(){
+        return allContacts;
+    }
+
+    /**
+     * Method gets the list of countries. Method returns the list that contains all countries.
+     *
+     * @return All countries
+     * */
+    public static ObservableList<Country> getAllCountries(){
+        return allCountries;
+    }
+
+    /**
+     * Method gets the list of users. Method returns the list that contains all users.
+     *
+     * @return All users
+     * */
+    public static ObservableList<User> getAllusers() {
+        return allUsers;
+    }
+
+    /**
+     * Method gets the list of divisions. Method returns the list that contains all divisions.
+     *
+     * @return All divisions
+     * */
+    public static ObservableList<Division> getAlldivisions() {
+        return allDivisions;
+    }
+
+    /**
+     * Method adds a customer to a list. Method adds a customer to the customer list.
+     *
+     * @param customer Customer to be added to the list
+     * */
+    public static void addCustomer(Customer customer){
+        allCustomers.add(customer);
+    }
+
+    /**
+     * Method adds a appointment to a list. Method adds a appointment to the appointment list.
+     *
+     * @param appointment Appointment to be added to the list
+     * */
+    public static void addAppointment(Appointment appointment){
+        allAppointments.add(appointment);
+    }
+
+    /**
+     * Method adds a associated appointment to a list. Method adds a appointment to the associated appointment list.
+     *
+     * @param appointment Appointment to be added to the list
+     * */
+    public static void addAscAppointment(Appointment appointment){
+        associatedAppointments.add(appointment);
+    }
+
+    /**
+     * Method adds a contact to a list. Method adds a contact to the contact list.
+     *
+     * @param contact Contact to be added to the list
+     * */
+    public static void addContact(Contact contact){
+        allContacts.add(contact);
+    }
+
+    /**
+     * Method adds a country to a list. Method adds a country to the country list.
+     *
+     * @param country Country to be added to the list
+     * */
+    public static void addCountry(Country country){
+        allCountries.add(country);
+    }
+
+    /**
+     * Method adds a user to a list. Method adds a user to the user list.
+     *
+     * @param user User to be added to the list
+     * */
+    public static void addUser(User user){
+        allUsers.add(user);
+    }
+
+    /**
+     * Method adds a division to a list. Method adds a first-level division to the division list.
+     *
+     * @param division Division to be added to the list
+     * */
+    public static void addDivision(Division division){
+        allDivisions.add(division);
+    }
+
+    /**
+     * Method searches the customer list for a specific customer. Method uses customer id to find the customer.
+     *
+     * @return Returns the customer if found or null if nothing is found.
+     * */
     public static Customer lookupCustomer(int id) throws NumberFormatException, NullPointerException{
         ObservableList<Customer> tempCustomer = getAllCustomers();
         for(int i = 0; i < tempCustomer.size(); i++){
@@ -151,17 +267,11 @@ public class Lists {
         return null;
     }
 
-    public static Contact lookupContact(Contact contact) throws NumberFormatException, NullPointerException{
-        ObservableList<Contact> tempContact = getAllContacts();
-        for(int i = 0; i < tempContact.size(); i++){
-            Contact thisContact = tempContact.get(i);
-            if(thisContact.getContactId() == contact.getContactId()){
-                return thisContact;
-            }
-        }
-        return null;
-    }
-
+    /**
+     * Method searches the customer list for a specific customer. Method uses customer name to find the customer.
+     *
+     * @return Returns a customer list with any customers found
+     * */
     public static ObservableList<Customer> lookupCustomer(String customerName){
         ObservableList<Customer> tempAllCustomers = getAllCustomers();
         ObservableList<Customer> returnList = FXCollections.observableArrayList();
@@ -173,9 +283,29 @@ public class Lists {
         return FXCollections.observableArrayList(returnList);
     }
 
+    /**
+     * Method searches the contact list for a specific contact. Method uses contact id getter method to find the contact.
+     *
+     * @return Returns the contact if found or null if nothing is found.
+     * */
+    public static Contact lookupContact(Contact contact) throws NumberFormatException, NullPointerException{
+        ObservableList<Contact> tempContact = getAllContacts();
+        for(int i = 0; i < tempContact.size(); i++){
+            Contact thisContact = tempContact.get(i);
+            if(thisContact.getContactId() == contact.getContactId()){
+                return thisContact;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Void method that adds an appointment to the list. Method gets a result set from a query and populates an appointment object with the result set data.
+     * The result set for this method contains all appointments.
+     * */
     public static void appointmentResult() throws SQLException {
 
-            // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
+        // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
        ResultSet rs2 = AppointmentQuery.getAllAppointments();
 
         while (rs2.next()) {
@@ -209,6 +339,10 @@ public class Lists {
        }
     }
 
+    /**
+     * Void method that adds an appointment to the list. Method gets a result set from a query and populates an appointment object with the result set data.
+     * The result set for this method contains appointments for the current month.
+     * */
     public static void appointmentResultMonth() throws SQLException {
 
         // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
@@ -245,6 +379,10 @@ public class Lists {
         }
     }
 
+    /**
+     * Void method that adds an appointment to the list. Method gets a result set from a query and populates an appointment object with the result set data.
+     * The result set for this method contains appointments for the current week.
+     * */
     public static void appointmentResultWeek() throws SQLException {
 
         // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
@@ -281,6 +419,12 @@ public class Lists {
         }
     }
 
+    /**
+     * Method that adds an appointment to the list. Method gets a result set from a query and populates an appointment object with the result set data.
+     * The result set for this method contains appointments associated to a customer.
+     *
+     * @param custId Id of customer
+     * */
     public static void ascAppointmentResults(int custId) throws SQLException {
 
         // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
@@ -317,6 +461,13 @@ public class Lists {
         }
     }
 
+    /**
+     * Method that adds an appointment to the list. Method gets a result set from a query and populates an appointment object with the result set data.
+     * The result set for this method contains appointments that overlap.
+     *
+     * @param startTime Start time of an appointment
+     * @param endTime End time of an appointment
+     * */
     public static void appTimeCompResult(Instant startTime, Instant endTime) throws SQLException {
 
         // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
@@ -353,6 +504,14 @@ public class Lists {
         }
     }
 
+    /**
+     * Method that returns an appointment. Method gets a result set from a query and populates an appointment object with the result set data.
+     * The result set for this method contains an upcoming appointment.
+     *
+     * @param instant Start time of an appointment
+     *
+     * @return Returns an appointment that will begin in 15 minutes of the saved start time.
+     * */
     public static Appointment upcomingAppointment(Instant instant) throws SQLException {
 
         // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
@@ -382,6 +541,15 @@ public class Lists {
         return appointment;
     }
 
+    /**
+     * Method that returns an integer. Method gets a result set from a query and returns a number.
+     * The result set for this method contains the number of appointments for the indicated month and type.
+     *
+     * @param month Month the appointment is scheduled for
+     * @param type Type of appointment
+     *
+     * @return Returns the number of appointments for the month and type
+     * */
     public static Integer numberOfAppointments(String month, String type) throws SQLException {
         ResultSet rs2 = AppointmentQuery.numberOfAppointments(month, type);
 
@@ -393,9 +561,13 @@ public class Lists {
         return count;
     }
 
+    /**
+     * Void method that adds a customer to the list. Method gets a result set from a query and populates a customer object with the result set data.
+     * The result set for this method contains all customers.
+     * */
     public static void customerResult() throws SQLException {
 
-            // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
+        // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
         ResultSet rs = CustomerQuery.getAllCustomers();
 
         while (rs.next()) {
@@ -412,6 +584,14 @@ public class Lists {
         }
     }
 
+    /**
+     * Method that returns an integer. Method gets a result set from a query and returns a number.
+     * The result set for this method contains the number of customers for the indicated first-level division.
+     *
+     * @param fldID First-level division the customer resides in.
+     *
+     * @return Returns the number of customers that reside in the division.
+     * */
     public static Integer numberOfCustomers(int fldID) throws SQLException {
         ResultSet rs2 = CustomerQuery.numberOfCustomers(fldID);
 
@@ -423,6 +603,12 @@ public class Lists {
         return count;
     }
 
+    /**
+     * Method that adds an appointment to the list. Method gets a result set from a query and populates an appointment object with the result set data.
+     * The result set for this method contains appointments that match with a contact.
+     *
+     * @param contactId Id of contact
+     * */
     public static void contactSchedule(int contactId) throws SQLException {
 
         // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
@@ -456,6 +642,10 @@ public class Lists {
         }
     }
 
+    /**
+     * Void method that adds a contact to the list. Method gets a result set from a query and populates an contact object with the result set data.
+     * The result set for this method contains all contacts.
+     * */
     public static void contactResult() throws SQLException {
        ResultSet rs2 = ContactQuery.getAllContacts();
 
@@ -471,6 +661,10 @@ public class Lists {
         }
     }
 
+    /**
+     * Void method that adds a country to the list. Method gets a result set from a query and populates an country object with the result set data.
+     * The result set for this method contains all countries.
+     * */
     public static void countryResult() throws SQLException {
         ResultSet rs2 = CountryQuery.getAllCountries();
 
@@ -485,6 +679,10 @@ public class Lists {
         }
     }
 
+    /**
+     * Void method that adds a user to the list. Method gets a result set from a query and populates a user object with the result set data.
+     * The result set for this method contains all users.
+     * */
     public static void userResult() throws SQLException {
         ResultSet rs2 = UserQuery.getAllUsers();
 
@@ -499,6 +697,12 @@ public class Lists {
         }
     }
 
+    /**
+     * Method that adds a division to the list. Method gets a result set from a query and populates a division object with the result set data.
+     * The result set for this method contains divisions that match with a coumtry id.
+     *
+     * @param countryId Id of a country
+     * */
     public static void divisionResultByCountry(int countryId) throws SQLException {
         ResultSet rs = FirstLevelDivQuery.getDivisionByCountry(countryId);
 

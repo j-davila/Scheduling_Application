@@ -9,6 +9,12 @@ import database.JDBC;
 
 import java.util.Objects;
 
+/**
+ * Main entry point of the program before passing onto the MainScreen controller.
+ * Program allows a user to manage customers and manage appointments scheduled for those customers.
+ *
+ * @author José L Dávila Montalvo
+ * */
 public class Main extends Application {
 
     @Override

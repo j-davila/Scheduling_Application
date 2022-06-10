@@ -16,8 +16,21 @@ import java.util.TimeZone;
 public abstract class AppointmentQuery {
 
     /**
+     * This method inserts appointment data into the database. Data collected from the user is entered in the INSERT query and added to the database.
      *
-     *
+     * @param title Appointment title
+     * @param description Appointment description
+     * @param location Appointment location
+     * @param type Appointment type
+     * @param startDate Start Instant of the appointment
+     * @param endDate End Instant of the appointment
+     * @param createDate Instant when appointment was created
+     * @param createdBy Username of the appointment creator
+     * @param lastUpdated Instant of the last update
+     * @param lastUpdatedBy Username of who updated it last
+     * @param customerId Id of the customer
+     * @param userId Id of the user
+     * @param contactId Id of the contact
      *
      * */
     public static void insert(String title, String description, String location, String type, Instant startDate, Instant endDate,
@@ -45,6 +58,23 @@ public abstract class AppointmentQuery {
         statement.executeUpdate();
     }
 
+    /**
+     * This method updates an existing appointment. Data collected from the user is entered in the UPDATE query and updates the corresponding appointment.
+     *
+     * @param title Appointment title
+     * @param description Appointment description
+     * @param location Appointment location
+     * @param type Appointment type
+     * @param startDate Start Instant of the appointment
+     * @param endDate End Instant of the appointment
+     * @param lastUpdated Instant of the last update
+     * @param lastUpdatedBy Username of who updated it last
+     * @param customerId Id of the customer
+     * @param userId Id of the user
+     * @param contactId Id of the contact
+     * @param iD Appointment Id used in WHERE statement to match the correct appointment being updated
+     *
+     * */
     public static void update(String title, String description, String location, String type, Instant startDate, Instant endDate,
                              Timestamp lastUpdated, String lastUpdatedBy, int customerId,
                              int userId, int contactId, int iD) throws SQLException {
@@ -69,6 +99,11 @@ public abstract class AppointmentQuery {
         statement.executeUpdate();
     }
 
+    /**
+     * This method deletes an existing appointment. The user will delete a selected appointment.
+     *
+     * @param iD Appointment Id for the appointment that will be deleted
+     * */
     public static void delete(int iD) throws SQLException {
         String query = "DELETE from client_schedule.appointments WHERE Appointment_ID = ?";
 
@@ -78,12 +113,24 @@ public abstract class AppointmentQuery {
         statement.executeUpdate();
     }
 
+    /**
+     * Method that returns all appointments. This method returns all the appointments in the database.
+     *
+     * @return returns a result set from the query
+     * */
     public static ResultSet getAllAppointments() throws SQLException {
         String query = "SELECT * FROM client_schedule.appointments ORDER BY START";
 
         return JDBC.connection.createStatement().executeQuery(query);
     }
 
+    /**
+     * Method that returns related appointments. This method will return all appointments that have the same customer id.
+     *
+     * @param custId Id of the customer
+     *
+     * @return returns a result set from the query
+     * */
     public static ResultSet relatedAppointments(int custId) throws SQLException {
         String query = "SELECT * FROM client_schedule.appointments WHERE Customer_ID = ?";
 
@@ -93,6 +140,13 @@ public abstract class AppointmentQuery {
         return statement.executeQuery();
     }
 
+    /**
+     * Method that returns related appointments. This method will return appointments where the start time is within 15 minutes of the time entered.
+     *
+     * @param appTime Local time
+     *
+     * @return returns a result set from the query
+     * */
     public static ResultSet relatedAppointment(Instant appTime) throws SQLException {
         String query = "SELECT * FROM client_schedule.appointments WHERE TIMESTAMPDIFF(MINUTE,?, Start) BETWEEN 0 and 15 ";
 
@@ -102,6 +156,13 @@ public abstract class AppointmentQuery {
         return statement.executeQuery();
     }
 
+    /**
+     * Method that returns related appointments. This method will return appointments where the contact id is the same.
+     *
+     * @param contactId Id of the contact
+     *
+     * @return returns a result set from the query
+     * */
     public static ResultSet contactAppointments(int contactId) throws SQLException {
         String query = "SELECT * FROM client_schedule.appointments WHERE Contact_ID = ?";
 
@@ -111,18 +172,36 @@ public abstract class AppointmentQuery {
         return statement.executeQuery();
     }
 
+    /**
+     * Method that returns all appointments. This method returns all the appointments for the current month.
+     *
+     * @return returns a result set from the query
+     * */
     public static ResultSet getMonthAppointments() throws SQLException {
         String query = "SELECT * FROM client_schedule.appointments WHERE MONTH(START) = MONTH(NOW())";
 
         return JDBC.connection.createStatement().executeQuery(query);
     }
 
+    /**
+     * Method that returns all appointments. This method returns all the appointments for the current week.
+     *
+     * @return returns a result set from the query
+     * */
     public static ResultSet getWeekAppointments() throws SQLException {
         String query = "SELECT * FROM client_schedule.appointments WHERE WEEK(START) = WEEK(NOW())";
 
         return JDBC.connection.createStatement().executeQuery(query);
     }
 
+    /**
+     * Method that returns all appointments. This method returns all overlapping appointments.
+     *
+     * @param startTime Start time of selected appointment
+     * @param endTime End time of selected appointment
+     *
+     * @return returns a result set from the query
+     * */
     public static ResultSet timeOverlap(Instant startTime, Instant endTime) throws SQLException {
         String query = "SELECT * FROM client_schedule.appointments WHERE (Start > ? and Start < ?) OR (End > ? and End < ?)";
 
@@ -135,6 +214,14 @@ public abstract class AppointmentQuery {
         return statement.executeQuery();
     }
 
+    /**
+     * Method returns number of appointments. The number of appointments returned depend on the month and appointment type selected.
+     *
+     * @param month Month of selected appointment
+     * @param type Type of selected appointment
+     *
+     * @return returns a result set from the query
+     * */
     public static ResultSet numberOfAppointments(String month, String type) throws SQLException {
         String query = "SELECT COUNT(TYPE) AS quantity FROM client_schedule.appointments WHERE MONTH(Start) = MONTH(str_to_date(?, '%M')) AND TYPE = ?";
 

@@ -5,9 +5,28 @@ import java.time.Instant;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+/**
+ * Abstract database class for all queries related to customers. This class contains all customer queries.
+ *
+ * @author José L Dávila Montalvo
+ * */
 public abstract class CustomerQuery {
 
-    //Add, update, delete customer
+    /**
+     * This method inserts customer data into the database. Data collected from the user is entered in the INSERT query and added to the database.
+     *
+     * @param name Customer name
+     * @param address Customer address
+     * @param postalCode Customer postal code
+     * @param phone Customer phone number
+     * @param createDate Instant when customer was created
+     * @param createdBy Username of the customer creator
+     * @param lastUpdated Instant of the last update
+     * @param lastUpdatedBy Username of who updated it last
+     * @param divisionId Id of the first-level division where the customr is located at
+     *
+     * @return number of rows updated
+     * */
     public static int insert(String name, String address, String postalCode, String phone, Instant createDate, String createdBy,
                              Timestamp lastUpdated, String lastUpdatedBy, int divisionId) throws SQLException {
 
@@ -25,10 +44,23 @@ public abstract class CustomerQuery {
         statement.setString(8, lastUpdatedBy);
         statement.setInt(9, divisionId);
 
-        int rowsUpdated = statement.executeUpdate();
-        return rowsUpdated;
+        return statement.executeUpdate();
    }
 
+    /**
+     * This method updates customer data into the database. Data collected from the user is entered in the UPDATE query and updates the selected customer.
+     *
+     * @param name Customer name
+     * @param address Customer address
+     * @param postalCode Customer postal code
+     * @param phone Customer phone number
+     * @param lastUpdated Instant of the last update
+     * @param lastUpdatedBy Username of who updated it last
+     * @param divisionId Id of the first-level division where the customr is located at
+     * @param id Id of the customer to update
+     *
+     * @return number of rows updated
+     * */
    public static int update(String name, String address, String postalCode, String phone,
                             Timestamp lastUpdated, String lastUpdatedBy, int divisionId, int id) throws SQLException {
 
@@ -45,29 +77,43 @@ public abstract class CustomerQuery {
        statement.setInt(7, divisionId);
        statement.setInt(8, id);
 
-       int rowsUpdated = statement.executeUpdate();
-       return rowsUpdated;
+       return statement.executeUpdate();
    }
 
+    /**
+     * This method deletes an existing customer. The user will delete a selected customer.
+     *
+     * @param iD Id for the customer that will be deleted
+     *
+     * @return number of rows updated
+     * */
     public static int delete(int iD) throws SQLException {
         String query = "DELETE from client_schedule.customers WHERE Customer_ID = ?";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
         statement.setInt(1, iD);
 
-        int rowsUpdated = statement.executeUpdate();
-        return rowsUpdated;
+        return statement.executeUpdate();
     }
 
-    // query gathers all customer records from the database
+    /**
+     * Method that returns all customers. This method returns all the customers in the database.
+     *
+     * @return returns a result set from the query
+     * */
     public static ResultSet getAllCustomers() throws SQLException {
         String query = "SELECT * FROM client_schedule.customers";
 
-        ResultSet results = JDBC.connection.createStatement().executeQuery(query);
-
-        return results;
+        return JDBC.connection.createStatement().executeQuery(query);
     }
 
+    /**
+     * Method that returns related customers. This method will return all customers that have the same customer id.
+     *
+     * @param customerId Id of the customer
+     *
+     * @return returns a result set from the query
+     * */
     public static ResultSet getCustomer(int customerId) throws SQLException {
         String query = "SELECT * FROM client_schedule.customers WHERE Customer_ID = ?";
 
@@ -77,6 +123,13 @@ public abstract class CustomerQuery {
         return statement.executeQuery();
     }
 
+    /**
+     * Method returns number of customers. The number of customers returned depends on the first-level division selected.
+     *
+     * @param fldId First-level division id
+     *
+     * @return returns a result set from the query
+     * */
     public static ResultSet numberOfCustomers(int fldId ) throws SQLException {
         String query = "SELECT COUNT(DISTINCT(Customer_ID)) AS quantity FROM client_schedule.customers WHERE Division_ID = ?";
 

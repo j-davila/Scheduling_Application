@@ -3,6 +3,12 @@ package database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/**
+ * Abstract database interface class. This class allows the program to connect to a database and manipulate data within Java.
+ * Code copied from Software 2 code repository
+ *
+ * @author José L Dávila Montalvo
+ * */
 public abstract class JDBC {
 
     private static final String protocol = "jdbc";
@@ -12,9 +18,14 @@ public abstract class JDBC {
     private static final String jdbcUrl = protocol + vendor + location + databaseName + "?connectionTimeZone = SERVER"; // LOCAL
     private static final String driver = "com.mysql.cj.jdbc.Driver"; // Driver reference
     private static final String userName = "sqlUser"; // Username
-    private static String password = "Passw0rd!"; // Password
+    private static final String password = "Passw0rd!"; // Password
+
     public static Connection connection;  // Connection Interface
 
+    /**
+     * Method opens the connections to the database
+     *
+     * */
     public static void openConnection()
     {
         try {
@@ -28,6 +39,10 @@ public abstract class JDBC {
         }
     }
 
+    /**
+     * Method closes the connections to the database
+     *
+     * */
     public static void closeConnection() {
         try {
             connection.close();
