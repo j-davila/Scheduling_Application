@@ -18,6 +18,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
+import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -93,7 +94,7 @@ public class AddAppointmentScreen implements Initializable {
         ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
 
         LocalTime start = LocalTime.of(8, 0);
-        LocalTime end = LocalTime.of(22,0);
+        LocalTime end = LocalTime.of(22, 0);
 
         ZonedDateTime businessHrsStart = ZonedDateTime.of(LocalDate.now(), start, estZone);
         ZonedDateTime businessHrsEnd = ZonedDateTime.of(LocalDate.now(), end, estZone);
@@ -105,7 +106,7 @@ public class AddAppointmentScreen implements Initializable {
 
 
         // While loop used to populate time in the comboboxes. Modeled from Software 2 webinar
-        while(startToLocal.isBefore(localEnd.toLocalTime().plusSeconds(1))){
+        while (startToLocal.isBefore(localEnd.toLocalTime().plusSeconds(1))) {
             startTimeCombo.getItems().add(startToLocal);
             endTimeCombo.getItems().add(startToLocal);
             startToLocal = startToLocal.plusMinutes(30);
@@ -133,6 +134,7 @@ public class AddAppointmentScreen implements Initializable {
         userCombo.setItems(Lists.getAllusers());
         userCombo.setVisibleRowCount(5);
         userCombo.getSelectionModel().selectFirst();
+
     }
 
     // When the user presses the button, the information is saved to the database using the insert query.
@@ -157,37 +159,37 @@ public class AddAppointmentScreen implements Initializable {
             String description;
 
             // if-else statements validate user input and throw detailed exceptions specific to the invalid entry.
-            if(titleTxt.getText().isEmpty()){
+            if (titleTxt.getText().isEmpty()) {
                 throw new NullPointerException("Please enter a title in the Title field.");
-            }else{
-               title = titleTxt.getText();
+            } else {
+                title = titleTxt.getText();
             }
 
-            if(descriptionTxt.getText().isEmpty()){
+            if (descriptionTxt.getText().isEmpty()) {
                 throw new NullPointerException("Please enter a description in the Description field.");
-            }else{
+            } else {
                 description = descriptionTxt.getText();
             }
 
             if (locationTxt.getText().isEmpty()) {
                 throw new NullPointerException("Please enter a location in the Location field.");
-            }else {
+            } else {
                 location = locationTxt.getText();
             }
 
-            if (startCalendar.getValue() == null) {
+            if (startCalendar.getValue() == null){
                 throw new NullPointerException("Please select a date.");
-            }else {
-                startDate =  startCalendar.getValue();
+            }else{
+                startDate = startCalendar.getValue();
             }
 
             endTime = endTimeCombo.getValue();
 
-            if(startTimeCombo.getValue().isAfter(endTime)){
+            if (startTimeCombo.getValue().isAfter(endTime)) {
                 throw new IllegalArgumentException("Start time is after end time.");
-            }else if(startTimeCombo.getValue().equals(endTime)){
+            } else if (startTimeCombo.getValue().equals(endTime)) {
                 throw new IllegalArgumentException("Start time is equal to end time.");
-            }else{
+            } else {
                 startTime = startTimeCombo.getValue();
             }
 
@@ -197,22 +199,22 @@ public class AddAppointmentScreen implements Initializable {
 
             ZonedDateTime createDate = ZonedDateTime.now();
 
-            ZonedDateTime appointmentStart = ZonedDateTime.of(startDate, startTime,localZone);
+            ZonedDateTime appointmentStart = ZonedDateTime.of(startDate, startTime, localZone);
             ZonedDateTime appointmentEnd = ZonedDateTime.of(startDate, endTime, localZone);
 
             Lists.appTimeCompResult(Instant.from(appointmentStart), Instant.from(appointmentEnd));
 
             ObservableList<Appointment> allAppointments = Lists.getAllAppointments();
 
-            if(allAppointments.isEmpty()){
+            if (allAppointments.isEmpty()) {
                 contactId = contactCombo.getSelectionModel().getSelectedItem().getContactId();
 
                 customerId = customerCombo.getSelectionModel().getSelectedItem().getId();
 
                 userId = userCombo.getSelectionModel().getSelectedItem().getUserId();
 
-                AppointmentQuery.insert(title, description, location, type,Instant.from(appointmentStart),
-                        Instant.from(appointmentEnd),Instant.from(createDate), MainScreen.currentUser,Timestamp.from(Instant.from(createDate)),
+                AppointmentQuery.insert(title, description, location, type, Instant.from(appointmentStart),
+                        Instant.from(appointmentEnd), Instant.from(createDate), MainScreen.currentUser, Timestamp.from(Instant.from(createDate)),
                         MainScreen.currentUser, customerId, userId, contactId);
 
                 Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
@@ -221,10 +223,11 @@ public class AddAppointmentScreen implements Initializable {
                 stage.setScene(scene);
                 stage.show();
 
-            }else {
+            } else {
                 throw new IllegalArgumentException("The appointment times conflict with an existing appointment.");
             }
-        }catch(NullPointerException | IllegalArgumentException | SQLException e){
+        } catch (NullPointerException | IllegalArgumentException |
+                 SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Input Error");
             alert.setHeaderText("Invalid Input");
@@ -250,3 +253,4 @@ public class AddAppointmentScreen implements Initializable {
         stage.show();
     }
 }
+

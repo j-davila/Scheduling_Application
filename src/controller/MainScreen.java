@@ -404,6 +404,14 @@ public class MainScreen implements Initializable {
 
             alert.showAndWait();
         }
+
+        Alert alert2 = new Alert(Alert.AlertType.INFORMATION);
+        alert2.setTitle("Deletion");
+        alert2.setHeaderText("Deletion Confirmation");
+        alert2.setContentText("Customer has been deleted.");
+
+        alert2.showAndWait();
+
     }
 
 

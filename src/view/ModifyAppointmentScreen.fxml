@@ -30,7 +30,7 @@
             <Label layoutX="219.0" layoutY="202.0" text="User" />
             <ComboBox fx:id="customerCombo" layoutX="219.0" layoutY="164.0" prefWidth="150.0" />
             <ComboBox fx:id="userCombo" layoutX="219.0" layoutY="230.0" prefWidth="150.0" />
-            <DatePicker fx:id="startCalendar" layoutX="219.0" layoutY="42.0" />
+            <DatePicker fx:id="startCalendar" editable="false" layoutX="219.0" layoutY="42.0" />
             <ComboBox fx:id="startTimeCombo" layoutX="219.0" layoutY="103.0" prefWidth="150.0" />
             <ComboBox fx:id="endTimeCombo" layoutX="406.0" layoutY="103.0" prefWidth="150.0" />
             <Label layoutX="219.0" layoutY="80.0" text="Start Time" />
