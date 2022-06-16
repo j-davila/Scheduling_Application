@@ -145,7 +145,6 @@ public class AddCustomerScreen implements Initializable {
     }
 
     // Takes user back to the mainscreen
-
     /**
      * Cancels adding a customer
      *

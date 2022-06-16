@@ -540,7 +540,7 @@ public class Lists {
             ZonedDateTime localStartTime = utcStart.withZoneSameInstant(localZone);
             ZonedDateTime localEndTime = utcEnd.withZoneSameInstant(localZone);
 
-            // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
+            // convert timestamp to instant, instant to ZoneDateTime, then apply current zone id
 
             appointment = new Appointment(id,Instant.from(localStartTime),Instant.from(localEndTime));
         }
@@ -629,19 +629,7 @@ public class Lists {
                 Timestamp end = rs2.getTimestamp("End");
                 int customerId = rs2.getInt("Customer_ID");
 
-                ZoneId utcZone = ZoneId.of("UTC");
-
-                ZonedDateTime utcStart = start.toInstant().atZone(utcZone);
-                ZonedDateTime utcEnd = end.toInstant().atZone(utcZone);
-
-                ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
-
-                ZonedDateTime localStartTime = utcStart.withZoneSameInstant(localZone);
-                ZonedDateTime localEndTime = utcEnd.withZoneSameInstant(localZone);
-
-                // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
-
-                Appointment appointment = new Appointment(id, title, description, type, Instant.from(localStartTime),Instant.from(localEndTime), customerId);
+                Appointment appointment = new Appointment(id, title, description, type, start,end, customerId);
 
                 addAppointment(appointment);
             }

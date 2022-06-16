@@ -79,6 +79,13 @@ public class Appointment {
         this.endDate = endDate;
     }
 
+
+    public Appointment(int id, Timestamp startDateTbl, Timestamp endDateTbl){
+        this.id = id;
+        this.startDateTbl = startDateTbl;
+        this.endDateTbl = endDateTbl;
+    }
+
     /**
      * Constructor for appointment objects. This object is used to find appointments attached to a specific contact.
      *
@@ -90,13 +97,13 @@ public class Appointment {
      * @param endDate Appointment end datetime
      * @param customerID Customer id
      * */
-    public Appointment(int id, String title, String description,String type, Instant startDate, Instant endDate, int customerID){
+    public Appointment(int id, String title, String description,String type, Timestamp startDate, Timestamp endDate, int customerID){
         this.id = id;
         this.title = title;
         this.description = description;
         this.type = type;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDateTbl = startDate;
+        this.endDateTbl = endDate;
         this.customerID = customerID;
     }
 

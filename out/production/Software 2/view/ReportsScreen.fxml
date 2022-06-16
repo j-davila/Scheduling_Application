@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane prefHeight="597.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportScreen">
+<AnchorPane prefHeight="597.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportScreen">
    <children>
       <Pane layoutX="15.0" layoutY="32.0" prefHeight="551.0" prefWidth="867.0" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="32.0">
          <children>
@@ -17,10 +17,10 @@
                 <TableColumn fx:id="appIdColumn" editable="false" prefWidth="28.0" resizable="false" text="ID" />
                 <TableColumn fx:id="titleColumn" editable="false" prefWidth="147.0" resizable="false" sortable="false" text="Title" />
                   <TableColumn fx:id="typeColumn" editable="false" prefWidth="161.0" resizable="false" text="Type" />
-                  <TableColumn fx:id="descrColumn" editable="false" prefWidth="226.0" resizable="false" sortable="false" text="Description" />
-                  <TableColumn fx:id="startColumn" editable="false" prefWidth="105.0" resizable="false" text="Start" />
-                  <TableColumn fx:id="endColumn" editable="false" prefWidth="106.0" resizable="false" text="End" />
-                  <TableColumn fx:id="customerColumn" editable="false" prefWidth="65.0" resizable="false" text="Customer" />
+                  <TableColumn fx:id="descrColumn" editable="false" prefWidth="217.0" resizable="false" sortable="false" text="Description" />
+                  <TableColumn fx:id="startColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="111.0" prefWidth="111.0" text="Start" />
+                  <TableColumn fx:id="endColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="111.0" prefWidth="111.0" text="End" />
+                  <TableColumn fx:id="customerColumn" editable="false" prefWidth="63.0" resizable="false" text="Customer" />
               </columns>
             </TableView>
             <ComboBox fx:id="contactCombo" layoutX="14.0" layoutY="251.0" onAction="#changeContact" prefWidth="150.0" />

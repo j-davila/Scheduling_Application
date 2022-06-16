@@ -137,7 +137,6 @@ public class AddAppointmentScreen implements Initializable {
     }
 
     // When the user presses the button, the information is saved to the database using the insert query.
-
     /**
      * Saves a new appointment
      *
@@ -201,6 +200,7 @@ public class AddAppointmentScreen implements Initializable {
             ZonedDateTime appointmentStart = ZonedDateTime.of(startDate, startTime, localZone);
             ZonedDateTime appointmentEnd = ZonedDateTime.of(startDate, endTime, localZone);
 
+            // Checks for appintment conflict
             Lists.appTimeCompResult(Instant.from(appointmentStart), Instant.from(appointmentEnd));
 
             ObservableList<Appointment> allAppointments = Lists.getAllAppointments();

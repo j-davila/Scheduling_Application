@@ -4,6 +4,7 @@ import database.AppointmentQuery;
 import database.ContactQuery;
 import database.CustomerQuery;
 import database.UserQuery;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Appointment;
 import model.Contact;
 import model.Customer;
 import model.User;
@@ -165,6 +167,7 @@ public class ModifyAppointmentScreen implements Initializable {
         startTimeCombo.setValue(start);
         endTimeCombo.setValue(end);
 
+        // Updates combo boxes with corresponding information from the appointment
         ResultSet rs1 = CustomerQuery.getCustomer(customerId);
         ResultSet rs2 = ContactQuery.getContact(contactId);
         ResultSet rs3 = UserQuery.getUser(userId);
@@ -258,19 +261,27 @@ public class ModifyAppointmentScreen implements Initializable {
             ZonedDateTime appointmentStart = ZonedDateTime.of(date, startTime,localZone);
             ZonedDateTime appointmentEnd = ZonedDateTime.of(date, endTime, localZone);
 
-            customerId = customerCombo.getSelectionModel().getSelectedItem().getId();
-            contactId = contactCombo.getSelectionModel().getSelectedItem().getContactId();
-            userId = userCombo.getSelectionModel().getSelectedItem().getUserId();
+            Lists.appTimeCompResult(Instant.from(appointmentStart), Instant.from(appointmentEnd));
 
-            AppointmentQuery.update(title, description, location, type, Instant.from(appointmentStart), Instant.from(appointmentEnd), Timestamp.from(Instant.from(lastUpdated)), MainScreen.currentUser,
-                    customerId, userId, contactId, appId);
+            ObservableList<Appointment> allAppointments = Lists.getAllAppointments();
 
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
-            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root, 1128, 793);
-            stage.setScene(scene);
-            stage.show();
+            // Checks for appointment conflict
+            if (allAppointments.isEmpty()) {
+                customerId = customerCombo.getSelectionModel().getSelectedItem().getId();
+                contactId = contactCombo.getSelectionModel().getSelectedItem().getContactId();
+                userId = userCombo.getSelectionModel().getSelectedItem().getUserId();
 
+                AppointmentQuery.update(title, description, location, type, Instant.from(appointmentStart), Instant.from(appointmentEnd), Timestamp.from(Instant.from(lastUpdated)), MainScreen.currentUser,
+                        customerId, userId, contactId, appId);
+
+                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainScreen.fxml")));
+                Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root, 1128, 793);
+                stage.setScene(scene);
+                stage.show();
+            } else {
+                throw new IllegalArgumentException("The appointment times conflict with an existing appointment.");
+            }
         } catch(NullPointerException | IllegalArgumentException | SQLException e){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Input Error");

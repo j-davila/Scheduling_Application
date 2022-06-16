@@ -183,6 +183,13 @@ public abstract class AppointmentQuery {
         return JDBC.connection.createStatement().executeQuery(query);
     }
 
+    /**
+     * Method that returns all appointments. This method returns all the appointments for the current month for a specific customer.
+     *
+     * @param customerID Id of the customer being searched for.
+     *
+     * @return returns a result set from the query
+     * */
     public static ResultSet getMonthAppointments(int customerID) throws SQLException {
         String query = "SELECT * FROM client_schedule.appointments WHERE MONTH(START) = MONTH(NOW()) AND Customer_ID = ?";
 
@@ -203,6 +210,13 @@ public abstract class AppointmentQuery {
         return JDBC.connection.createStatement().executeQuery(query);
     }
 
+    /**
+     * Method that returns all appointments. This method returns all the appointments for the current week for a specific customer.
+     *
+     * @param customerId id of the customer being searched for
+     *
+     * @return returns a result set from the query
+     * */
     public static ResultSet getWeekAppointments(int customerId) throws SQLException {
         String query = "SELECT * FROM client_schedule.appointments WHERE WEEK(START) = WEEK(NOW()) AND Customer_ID = ?";
 

@@ -70,8 +70,8 @@ public class ReportScreen implements Initializable {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         descrColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        startColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-        endColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        startColumn.setCellValueFactory(new PropertyValueFactory<>("startDateTbl"));
+        endColumn.setCellValueFactory(new PropertyValueFactory<>("endDateTbl"));
         customerColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
 
         Lists.setAllMonths();

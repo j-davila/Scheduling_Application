@@ -186,7 +186,7 @@ public class MainScreen implements Initializable {
         Lists.clearCustomerList();
         Lists.clearAppointmentList();
 
-        // sets table columns
+        // sets table columns using parameters from the models
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
@@ -234,9 +234,11 @@ public class MainScreen implements Initializable {
             throw new RuntimeException(e);
         }
 
+        // First lambda
         FilteredList<Customer> customerFilter = new FilteredList<>(Lists.getAllCustomers(), b -> true);
 
         // The logic inside the predicate filters the content of the tableview using id or customer name.
+        // Second lambda
         customerSearch.textProperty().addListener((observable, oldValue, newValue) -> customerFilter.setPredicate(customer -> {
             if (newValue == null || newValue.isEmpty()) {
                 return true;
@@ -284,7 +286,7 @@ public class MainScreen implements Initializable {
                 Alert appInfo = new Alert(Alert.AlertType.INFORMATION);
                 appInfo.setTitle("Appointment");
                 appInfo.setHeaderText("Upcoming Appointments");
-                appInfo.setContentText("Appointment ID: " + upcomingAppointment.getId() + "\n" + "Appointment Time: " + upcomingAppointment.getStartDate());
+                appInfo.setContentText("Appointment ID: " + upcomingAppointment.getId() + "\n" + "Appointment Time: " + Timestamp.from(upcomingAppointment.getStartDate()));
                 appInfo.show();
 
             }
