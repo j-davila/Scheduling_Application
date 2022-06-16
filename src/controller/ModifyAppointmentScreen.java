@@ -89,7 +89,7 @@ public class ModifyAppointmentScreen implements Initializable {
         contactCombo.setItems(Lists.getAllContacts());
         contactCombo.setVisibleRowCount(5);
 
-        // Establishes EST zone and local zone
+//         Establishes EST zone and local zone
         ZoneId estZone = ZoneId.of("America/New_York");
         ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
 

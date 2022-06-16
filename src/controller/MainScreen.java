@@ -25,10 +25,12 @@ import utility.Lists;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.*;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 
 /**
@@ -184,6 +186,7 @@ public class MainScreen implements Initializable {
         Lists.clearCustomerList();
         Lists.clearAppointmentList();
 
+        // sets table columns
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
@@ -196,8 +199,8 @@ public class MainScreen implements Initializable {
         allDescrColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         allLocColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
         allTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        allStartColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-        allEndColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        allStartColumn.setCellValueFactory(new PropertyValueFactory<>("startDateTbl"));
+        allEndColumn.setCellValueFactory(new PropertyValueFactory<>("endDateTbl"));
         allCustIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         allUserIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
         allCntColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
@@ -207,8 +210,8 @@ public class MainScreen implements Initializable {
         monthDescrColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         monthLocColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
         monthTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        monthStartColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-        monthEndColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        monthStartColumn.setCellValueFactory(new PropertyValueFactory<>("startDateTbl"));
+        monthEndColumn.setCellValueFactory(new PropertyValueFactory<>("endDateTbl"));
         monthCustIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         monthUserIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
         monthCntColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
@@ -218,12 +221,13 @@ public class MainScreen implements Initializable {
         weekDescrColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         weekLocColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
         weekTypeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        weekStartColumn.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-        weekEndColumn.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        weekStartColumn.setCellValueFactory(new PropertyValueFactory<>("startDateTbl"));
+        weekEndColumn.setCellValueFactory(new PropertyValueFactory<>("endDateTbl"));
         weekCustIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         weekUserIdColumn.setCellValueFactory(new PropertyValueFactory<>("userId"));
         weekContactColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
 
+        // Populates customer table
         try {
             Lists.customerResult();
         } catch (SQLException e) {
@@ -261,6 +265,7 @@ public class MainScreen implements Initializable {
         customerSort.comparatorProperty().bind(customerTable.comparatorProperty());
         customerTable.setItems(customerSort);
 
+        // Checks for upcoming appointments
         try {
 
             Instant userLoginTime= Instant.now();
@@ -287,8 +292,9 @@ public class MainScreen implements Initializable {
             throw new RuntimeException(e);
         }
 
+        // Populates appointment table
         try {
-            Lists.appointmentResult();
+            Lists.appointmentResultTable();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -434,6 +440,7 @@ public class MainScreen implements Initializable {
      * @throws IOException
      */
     public void updateAppointment(ActionEvent actionEvent) throws IOException {
+
         if(allTab.isSelected()){
             try{
                 int appId = allTable.getSelectionModel().getSelectedItem().getId();
@@ -441,9 +448,9 @@ public class MainScreen implements Initializable {
                 String location = allTable.getSelectionModel().getSelectedItem().getLocation();
                 String type = allTable.getSelectionModel().getSelectedItem().getType();
                 String description = allTable.getSelectionModel().getSelectedItem().getDescription();
-                LocalDate date = allTable.getSelectionModel().getSelectedItem().getStartDate().toLocalDate();
-                LocalTime startTime = allTable.getSelectionModel().getSelectedItem().getStartDate().toLocalTime();
-                LocalTime endTime = allTable.getSelectionModel().getSelectedItem().getEndDate().toLocalTime();
+                LocalDate date = LocalDate.now();
+                LocalTime startTime = allTable.getSelectionModel().getSelectedItem().getStartDateTbl().toLocalDateTime().toLocalTime();
+                LocalTime endTime = allTable.getSelectionModel().getSelectedItem().getEndDateTbl().toLocalDateTime().toLocalTime();
                 int customerId = allTable.getSelectionModel().getSelectedItem().getCustomerID();
                 int contactId = allTable.getSelectionModel().getSelectedItem().getContact();
                 int userId = allTable.getSelectionModel().getSelectedItem().getUserId();
@@ -476,9 +483,9 @@ public class MainScreen implements Initializable {
                 String location = monthTable.getSelectionModel().getSelectedItem().getLocation();
                 String type = monthTable.getSelectionModel().getSelectedItem().getType();
                 String description = monthTable.getSelectionModel().getSelectedItem().getDescription();
-                LocalDate date = monthTable.getSelectionModel().getSelectedItem().getStartDate().toLocalDate();
-                LocalTime startTime = monthTable.getSelectionModel().getSelectedItem().getStartDate().toLocalTime();
-                LocalTime endTime = monthTable.getSelectionModel().getSelectedItem().getEndDate().toLocalTime();
+                LocalDate date = LocalDate.now();
+                LocalTime startTime = monthTable.getSelectionModel().getSelectedItem().getStartDateTbl().toLocalDateTime().toLocalTime();
+                LocalTime endTime = monthTable.getSelectionModel().getSelectedItem().getEndDateTbl().toLocalDateTime().toLocalTime();
                 int customerId = monthTable.getSelectionModel().getSelectedItem().getCustomerID();
                 int contactId = monthTable.getSelectionModel().getSelectedItem().getContact();
                 int userId = monthTable.getSelectionModel().getSelectedItem().getUserId();
@@ -511,9 +518,9 @@ public class MainScreen implements Initializable {
                 String location = weekTable.getSelectionModel().getSelectedItem().getLocation();
                 String type = weekTable.getSelectionModel().getSelectedItem().getType();
                 String description = weekTable.getSelectionModel().getSelectedItem().getDescription();
-                LocalDate date = monthTable.getSelectionModel().getSelectedItem().getStartDate().toLocalDate();
-                LocalTime startTime = monthTable.getSelectionModel().getSelectedItem().getStartDate().toLocalTime();
-                LocalTime endTime = monthTable.getSelectionModel().getSelectedItem().getEndDate().toLocalTime();
+                LocalDate date = LocalDate.now();
+                LocalTime startTime = weekTable.getSelectionModel().getSelectedItem().getStartDateTbl().toLocalDateTime().toLocalTime();
+                LocalTime endTime = weekTable.getSelectionModel().getSelectedItem().getEndDateTbl().toLocalDateTime().toLocalTime();
                 int customerId = weekTable.getSelectionModel().getSelectedItem().getCustomerID();
                 int contactId = weekTable.getSelectionModel().getSelectedItem().getContact();
                 int userId = weekTable.getSelectionModel().getSelectedItem().getUserId();
@@ -557,7 +564,7 @@ public class MainScreen implements Initializable {
                 if (result.get() == ButtonType.OK){
                     AppointmentQuery.delete(appointment.getId());
                     Lists.clearAppointmentList();
-                    Lists.appointmentResult();
+                    Lists.appointmentResultTable();
 
                     FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
@@ -675,7 +682,7 @@ public class MainScreen implements Initializable {
         Lists.clearAppointmentList();
 
         try {
-            Lists.appointmentResult();
+            Lists.appointmentResultTable();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -706,7 +713,7 @@ public class MainScreen implements Initializable {
                 appointmentSort.comparatorProperty().bind(allTable.comparatorProperty());
                 allTable.setItems(appointmentSort);
             }else{
-                Lists.appointmentResult();
+                Lists.appointmentResultTable();
 
                 FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
@@ -716,7 +723,7 @@ public class MainScreen implements Initializable {
             }
         } else if(monthTab.isSelected()){
             if(customer != null){
-                Lists.ascAppointmentResults(customer.getId());
+                Lists.appointmentResultMonth(customer.getId());
 
                 customerTable.getSelectionModel().getSelectedItem().setAppointments(Lists.getAllAscAppointments());
 
@@ -726,7 +733,7 @@ public class MainScreen implements Initializable {
                 appointmentSort.comparatorProperty().bind(monthTable.comparatorProperty());
                 monthTable.setItems(appointmentSort);
             }else{
-                Lists.appointmentResult();
+                Lists.appointmentResultMonth();
 
                 FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 
@@ -736,7 +743,7 @@ public class MainScreen implements Initializable {
             }
         } else{
             if(customer != null){
-                Lists.ascAppointmentResults(customer.getId());
+                Lists.appointmentResultWeek(customer.getId());
 
                 customerTable.getSelectionModel().getSelectedItem().setAppointments(Lists.getAllAscAppointments());
 
@@ -746,7 +753,7 @@ public class MainScreen implements Initializable {
                 appointmentSort.comparatorProperty().bind(weekTable.comparatorProperty());
                 weekTable.setItems(appointmentSort);
             }else{
-                Lists.appointmentResult();
+                Lists.appointmentResultWeek();
 
                 FilteredList<Appointment> appointmentFilter = new FilteredList<>(Lists.getAllAppointments(), b -> true);
 

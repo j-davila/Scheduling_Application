@@ -303,10 +303,10 @@ public class Lists {
      * Void method that adds an appointment to the list. Method gets a result set from a query and populates an appointment object with the result set data.
      * The result set for this method contains all appointments.
      * */
-    public static void appointmentResult() throws SQLException {
+    public static void appointmentResultTable() throws SQLException {
 
         // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
-       ResultSet rs2 = AppointmentQuery.getAllAppointments();
+        ResultSet rs2 = AppointmentQuery.getAllAppointments();
 
         while (rs2.next()) {
             int id = rs2.getInt("Appointment_ID");
@@ -320,23 +320,11 @@ public class Lists {
             int userId = rs2.getInt("User_ID");
             int contactId = rs2.getInt("Contact_ID");
 
-            ZoneId utcZone = ZoneId.of("UTC");
-
-            ZonedDateTime utcStart = start.toLocalDateTime().atZone(utcZone);
-            ZonedDateTime utcEnd = end.toLocalDateTime().atZone(utcZone);
-
-            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
-
-            ZonedDateTime localStartTime = utcStart.withZoneSameInstant(localZone);
-            ZonedDateTime localEndTime = utcEnd.withZoneSameInstant(localZone);
-
-            // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
-
-            Appointment appointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),
+            Appointment appointment = new Appointment(id,title,description,location,type, start,end,
                     customerId,userId,contactId);
 
             addAppointment(appointment);
-       }
+        }
     }
 
     /**
@@ -360,22 +348,38 @@ public class Lists {
             int userId = rs2.getInt("User_ID");
             int contactId = rs2.getInt("Contact_ID");
 
-            ZoneId utcZone = ZoneId.of("UTC");
-
-            ZonedDateTime utcStart = start.toLocalDateTime().atZone(utcZone);
-            ZonedDateTime utcEnd = end.toLocalDateTime().atZone(utcZone);
-
-            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
-
-            ZonedDateTime localStartTime = utcStart.withZoneSameInstant(localZone);
-            ZonedDateTime localEndTime = utcEnd.withZoneSameInstant(localZone);
-
-            // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
-
-            Appointment appointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),
+            Appointment appointment = new Appointment(id,title,description,location,type, start,end,
                     customerId,userId,contactId);
 
             addAppointment(appointment);
+        }
+    }
+
+    /**
+     * Overloaded void method that adds an associated appointment to the list. Method gets a result set from a query and populates an appointment object with the result set data.
+     * The result set for this method contains appointments for the current month for a specific customer.
+     * */
+    public static void appointmentResultMonth(int custId) throws SQLException {
+
+        // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
+        ResultSet rs2 = AppointmentQuery.getMonthAppointments(custId);
+
+        while (rs2.next()) {
+            int id = rs2.getInt("Appointment_ID");
+            String title = rs2.getString("Title");
+            String description = rs2.getString("Description");
+            String location = rs2.getString("Location");
+            String type = rs2.getString("Type");
+            Timestamp start = rs2.getTimestamp("Start");
+            Timestamp end = rs2.getTimestamp("End");
+            int customerId = rs2.getInt("Customer_ID");
+            int userId = rs2.getInt("User_ID");
+            int contactId = rs2.getInt("Contact_ID");
+
+            Appointment appointment = new Appointment(id,title,description,location,type, start,end,
+                    customerId,userId,contactId);
+
+            addAscAppointment(appointment);
         }
     }
 
@@ -400,22 +404,38 @@ public class Lists {
             int userId = rs2.getInt("User_ID");
             int contactId = rs2.getInt("Contact_ID");
 
-            ZoneId utcZone = ZoneId.of("UTC");
-
-            ZonedDateTime utcStart = start.toLocalDateTime().atZone(utcZone);
-            ZonedDateTime utcEnd = end.toLocalDateTime().atZone(utcZone);
-
-            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
-
-            ZonedDateTime localStartTime = utcStart.withZoneSameInstant(localZone);
-            ZonedDateTime localEndTime = utcEnd.withZoneSameInstant(localZone);
-
-            // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
-
-            Appointment appointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),
+            Appointment appointment = new Appointment(id,title,description,location,type, start,end,
                     customerId,userId,contactId);
 
             addAppointment(appointment);
+        }
+    }
+
+    /**
+     * Overloaded void method that adds an associated appointment to the list. Method gets a result set from a query and populates an appointment object with the result set data.
+     * The result set for this method contains appointments for the current week for a specific customer.
+     * */
+    public static void appointmentResultWeek(int custId) throws SQLException {
+
+        // code example from https://stackoverflow.com/questions/1966836/resultset-to-list
+        ResultSet rs2 = AppointmentQuery.getWeekAppointments(custId);
+
+        while (rs2.next()) {
+            int id = rs2.getInt("Appointment_ID");
+            String title = rs2.getString("Title");
+            String description = rs2.getString("Description");
+            String location = rs2.getString("Location");
+            String type = rs2.getString("Type");
+            Timestamp start = rs2.getTimestamp("Start");
+            Timestamp end = rs2.getTimestamp("End");
+            int customerId = rs2.getInt("Customer_ID");
+            int userId = rs2.getInt("User_ID");
+            int contactId = rs2.getInt("Contact_ID");
+
+            Appointment appointment = new Appointment(id,title,description,location,type, start,end,
+                    customerId,userId,contactId);
+
+            addAscAppointment(appointment);
         }
     }
 
@@ -442,19 +462,7 @@ public class Lists {
             int userId = rs2.getInt("User_ID");
             int contactId = rs2.getInt("Contact_ID");
 
-            ZoneId utcZone = ZoneId.of("UTC");
-
-            ZonedDateTime utcStart = start.toLocalDateTime().atZone(utcZone);
-            ZonedDateTime utcEnd = end.toLocalDateTime().atZone(utcZone);
-
-            ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
-
-            ZonedDateTime localStartTime = utcStart.withZoneSameInstant(localZone);
-            ZonedDateTime localEndTime = utcEnd.withZoneSameInstant(localZone);
-
-            // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
-
-            Appointment appointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),
+            Appointment appointment = new Appointment(id,title,description,location,type, start,end,
                     customerId,userId,contactId);
 
             addAscAppointment(appointment);
@@ -487,17 +495,15 @@ public class Lists {
 
             ZoneId utcZone = ZoneId.of("UTC");
 
-            ZonedDateTime utcStart = start.toLocalDateTime().atZone(utcZone);
-            ZonedDateTime utcEnd = end.toLocalDateTime().atZone(utcZone);
+            ZonedDateTime utcStart = start.toInstant().atZone(utcZone);
+            ZonedDateTime utcEnd = end.toInstant().atZone(utcZone);
 
             ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
 
             ZonedDateTime localStartTime = utcStart.withZoneSameInstant(localZone);
             ZonedDateTime localEndTime = utcEnd.withZoneSameInstant(localZone);
 
-            // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
-
-            Appointment appointment = new Appointment(id,title,description,location,type, localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime(),
+            Appointment appointment = new Appointment(id,title,description,location,type, Instant.from(localStartTime),Instant.from(localEndTime),
                     customerId,userId,contactId);
 
             addAppointment(appointment);
@@ -526,8 +532,8 @@ public class Lists {
 
             ZoneId utcZone = ZoneId.of("UTC");
 
-            ZonedDateTime utcStart = start.toLocalDateTime().atZone(utcZone);
-            ZonedDateTime utcEnd = end.toLocalDateTime().atZone(utcZone);
+            ZonedDateTime utcStart = start.toInstant().atZone(utcZone);
+            ZonedDateTime utcEnd = end.toInstant().atZone(utcZone);
 
             ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
 
@@ -536,7 +542,7 @@ public class Lists {
 
             // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
 
-            appointment = new Appointment(id,localStartTime.toLocalDateTime(),localEndTime.toLocalDateTime());
+            appointment = new Appointment(id,Instant.from(localStartTime),Instant.from(localEndTime));
         }
         return appointment;
     }
@@ -625,8 +631,8 @@ public class Lists {
 
                 ZoneId utcZone = ZoneId.of("UTC");
 
-                ZonedDateTime utcStart = start.toLocalDateTime().atZone(utcZone);
-                ZonedDateTime utcEnd = end.toLocalDateTime().atZone(utcZone);
+                ZonedDateTime utcStart = start.toInstant().atZone(utcZone);
+                ZonedDateTime utcEnd = end.toInstant().atZone(utcZone);
 
                 ZoneId localZone = ZoneId.of(TimeZone.getDefault().getID());
 
@@ -635,7 +641,7 @@ public class Lists {
 
                 // convert timestamp to instant, instant to ZoneDateTime, apply current zone id, then display in localdatetime
 
-                Appointment appointment = new Appointment(id, title, description, type, localStartTime.toLocalDateTime(), localEndTime.toLocalDateTime(), customerId);
+                Appointment appointment = new Appointment(id, title, description, type, Instant.from(localStartTime),Instant.from(localEndTime), customerId);
 
                 addAppointment(appointment);
             }

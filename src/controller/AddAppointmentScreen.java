@@ -104,7 +104,6 @@ public class AddAppointmentScreen implements Initializable {
 
         LocalTime startToLocal = localStart.toLocalTime();
 
-
         // While loop used to populate time in the comboboxes. Modeled from Software 2 webinar
         while (startToLocal.isBefore(localEnd.toLocalTime().plusSeconds(1))) {
             startTimeCombo.getItems().add(startToLocal);

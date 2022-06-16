@@ -183,6 +183,15 @@ public abstract class AppointmentQuery {
         return JDBC.connection.createStatement().executeQuery(query);
     }
 
+    public static ResultSet getMonthAppointments(int customerID) throws SQLException {
+        String query = "SELECT * FROM client_schedule.appointments WHERE MONTH(START) = MONTH(NOW()) AND Customer_ID = ?";
+
+        PreparedStatement statement = JDBC.connection.prepareStatement(query);
+        statement.setInt(1, customerID);
+
+        return statement.executeQuery();
+    }
+
     /**
      * Method that returns all appointments. This method returns all the appointments for the current week.
      *
@@ -194,6 +203,15 @@ public abstract class AppointmentQuery {
         return JDBC.connection.createStatement().executeQuery(query);
     }
 
+    public static ResultSet getWeekAppointments(int customerId) throws SQLException {
+        String query = "SELECT * FROM client_schedule.appointments WHERE WEEK(START) = WEEK(NOW()) AND Customer_ID = ?";
+
+        PreparedStatement statement = JDBC.connection.prepareStatement(query);
+        statement.setInt(1, customerId);
+
+        return statement.executeQuery();
+    }
+
     /**
      * Method that returns all appointments. This method returns all overlapping appointments.
      *
@@ -203,13 +221,15 @@ public abstract class AppointmentQuery {
      * @return returns a result set from the query
      * */
     public static ResultSet timeOverlap(Instant startTime, Instant endTime) throws SQLException {
-        String query = "SELECT * FROM client_schedule.appointments WHERE (Start > ? and Start < ?) OR (End > ? and End < ?)";
+        String query = "SELECT * FROM client_schedule.appointments WHERE (Start > ? and Start < ?) OR (End > ? and End < ?) OR (Start = ? and End = ?)";
 
         PreparedStatement statement = JDBC.connection.prepareStatement(query);
         statement.setTimestamp(1, Timestamp.from(startTime), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
         statement.setTimestamp(2, Timestamp.from(endTime), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
         statement.setTimestamp(3, Timestamp.from(startTime), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
         statement.setTimestamp(4, Timestamp.from(endTime), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
+        statement.setTimestamp(5, Timestamp.from(startTime), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
+        statement.setTimestamp(6, Timestamp.from(endTime), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 
         return statement.executeQuery();
     }

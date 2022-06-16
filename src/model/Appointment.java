@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.*;
 
 /**
@@ -13,8 +15,10 @@ public class Appointment {
     private String description;
     private String location;
     private String type;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private Instant startDate;
+    private Instant endDate;
+    private Timestamp startDateTbl;
+    private Timestamp endDateTbl;
     private int customerID;
     private int userId;
     private int contact;
@@ -34,8 +38,8 @@ public class Appointment {
      * @param contact Id of the contact
      *
      * */
-    public Appointment(int id, String title, String description, String location,String type, LocalDateTime startDate,
-                       LocalDateTime endDate, int customerID, int userId, int contact){
+    public Appointment(int id, String title, String description, String location,String type, Instant startDate,
+                       Instant endDate, int customerID, int userId, int contact){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -48,6 +52,20 @@ public class Appointment {
         this.contact = contact;
     }
 
+    public Appointment(int id, String title, String description, String location, String type, Timestamp startDateTbl,
+                       Timestamp endDateTbl, int customerID, int userId, int contact){
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.type = type;
+        this.startDateTbl = startDateTbl;
+        this.endDateTbl = endDateTbl;
+        this.customerID = customerID;
+        this.userId = userId;
+        this.contact = contact;
+    }
+
     /**
      * Constructor for appointment objects. This object is used to find upcoming appointments.
      *
@@ -55,7 +73,7 @@ public class Appointment {
      * @param startDate Appointment start datetime
      * @param endDate Appointment and datetime
      * */
-    public Appointment(int id, LocalDateTime startDate, LocalDateTime endDate){
+    public Appointment(int id, Instant startDate, Instant endDate){
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -72,7 +90,7 @@ public class Appointment {
      * @param endDate Appointment end datetime
      * @param customerID Customer id
      * */
-    public Appointment(int id, String title, String description,String type, LocalDateTime startDate, LocalDateTime endDate, int customerID){
+    public Appointment(int id, String title, String description,String type, Instant startDate, Instant endDate, int customerID){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -159,7 +177,7 @@ public class Appointment {
      *
      * @return returns appointment start
      * */
-    public LocalDateTime getStartDate() {
+    public Instant getStartDate() {
         return startDate;
     }
 
@@ -168,7 +186,7 @@ public class Appointment {
      *
      * @param startDate Appointment location
      * */
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(Instant startDate) {
         this.startDate = startDate;
     }
 
@@ -177,7 +195,7 @@ public class Appointment {
      *
      * @return returns appointment end
      * */
-    public LocalDateTime getEndDate() {
+    public Instant getEndDate() {
         return endDate;
     }
 
@@ -186,7 +204,7 @@ public class Appointment {
      *
      * @param endDate Appointment location
      * */
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(Instant endDate) {
         this.endDate = endDate;
     }
 
@@ -260,5 +278,21 @@ public class Appointment {
      * */
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Timestamp getStartDateTbl() {
+        return startDateTbl;
+    }
+
+    public void setStartDateTbl(Timestamp startDateTbl) {
+        this.startDateTbl = startDateTbl;
+    }
+
+    public Timestamp getEndDateTbl() {
+        return endDateTbl;
+    }
+
+    public void setEndDateTbl(Timestamp endDateTbl) {
+        this.endDateTbl = endDateTbl;
     }
 }
