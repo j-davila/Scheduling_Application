@@ -81,6 +81,7 @@ public class ModifyAppointmentScreen implements Initializable {
         Lists.clearCustomerList();
         Lists.clearContactList();
         Lists.clearTypeList();
+        Lists.clearAppointmentList();
 
         try {
             Lists.contactResult();

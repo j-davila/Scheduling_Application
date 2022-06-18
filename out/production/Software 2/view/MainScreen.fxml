@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="762.0" prefWidth="1156.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainScreen">
+<AnchorPane prefHeight="762.0" prefWidth="1156.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainScreen">
    <children>
       <AnchorPane layoutX="14.0" layoutY="9.0" prefHeight="793.0" prefWidth="1128.0" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="9.0">
          <children>
@@ -44,8 +44,8 @@
                                     <TableColumn fx:id="allDescrColumn" editable="false" prefWidth="180.0" text="Description" />
                                     <TableColumn fx:id="allLocColumn" editable="false" prefWidth="119.0" resizable="false" text="Location" />
                                     <TableColumn fx:id="allTypeColumn" editable="false" prefWidth="128.0" resizable="false" text="Type" />
-                                    <TableColumn fx:id="allStartColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="111.0" resizable="false" text="Start" />
-                                    <TableColumn fx:id="allEndColumn" editable="false" maxWidth="1.7976931348623157E308" prefWidth="111.0" resizable="false" text="End" />
+                                    <TableColumn fx:id="allStartColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="111.0" text="Start" />
+                                    <TableColumn fx:id="allEndColumn" editable="false" maxWidth="1.7976931348623157E308" prefWidth="111.0" text="End" />
                                     <TableColumn fx:id="allCustIdColumn" editable="false" minWidth="9.0" prefWidth="81.0" resizable="false" text="Customer ID" />
                                     <TableColumn fx:id="allUserIdColumn" editable="false" minWidth="0.0" prefWidth="50.0" resizable="false" text="User ID" />
                                     <TableColumn fx:id="allCntColumn" editable="false" minWidth="0.0" prefWidth="72.0" resizable="false" text="Contact ID" />
